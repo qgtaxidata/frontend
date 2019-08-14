@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
+    <title>QG出租车大数据系统</title>
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <link rel="stylesheet" type="text/css" href="css/search.css">
+    <link rel="stylesheet" type="text/css" href="css/heatmap.css">
+    <link rel="stylesheet" type="text/css" href="css/route.css">
+    <link rel="stylesheet" type="text/css" href="css/region.css">
+    <link rel="stylesheet" type="text/css" href="css/set.css">
+    <script src="https://webapi.amap.com/maps?v=1.4.15&key=96229f005826740eab888ed632918943"></script>
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script src="js/echarts.js"></script>
+
+</head>
+<body>
+    <div id="map-container"></div>
+    <img class="sidebar-click" src="images/功能分类按钮.png">
+    <div class="sidebar" tle="hiden" style="height:0rem;overflow: hidden;">
+        <div class="on-sidebar"  tle="search">搜索</div>
+        <div tle="heatmap">区域出租车热力图</div>
+        <div tle="region">区域分析
+            <ul class="bar-reg-list" style="height: 0">
+                <li class=" on-region">出租车司机收入排行榜</li>
+                <li>出租车收入分析与预测</li>
+                <li>区域道路质量分析</li>
+                <li>车辆利用率</li>
+                <li>异常情况</li>
+            </ul>
+        </div>
+        <div tle="route">路径可视化</div>
+        <div tle="set">设置</div>
+    </div>
+
+    <div class="search" style="display: block;">
+        <div class="search-container">
+            <div id="taxi-status" class="taxi-status-hidden">
+                <div class="status-choice">出租车状态</div>
+                <div class="status-choice">空载</div>
+                <div class="status-choice">非空载</div>
+                <img src="images/xiala.png" alt="xiala" class="xiala">
+            </div>
+
+            <input class="input-start-hidden" placeholder="请输入起点" id="start">
+
+            <div class="input-start-end-contaniner">
+                <div class="arrow-images"></div>
+                <div class="circle red"></div>
+                <div class="input-departure">
+                    <input placeholder="请输入起点" value="" id="input-departure" maxlength="40">
+                    <div class="cha-icon"></div>
+                </div>
+                <div class="circle green"></div>
+                <div class="input-departure">
+                    <input placeholder="请输入终点" id="input-destination" value="" maxlength="40">
+                    <div class="cha-icon" ></div>
+                </div>
+            </div>
+
+            <div class="button-contaniner">
+                <div class="clear-routes-btn">清除路线</div>
+                <div class="search-btn" name="loadroute">搜索</div>
+            </div>
+        </div>
+        <div class="fuzzy-contaniner" id = "fuzzy-search-contanier"></div>
+
+        <!-- 热点推荐 -->
+        <div class="hot-point-container">
+            <!-- <div class="method-recommand-container">
+                <div class="method-recommand">方案一</div>
+                <ul class="method-recommand method-recommand-ul">
+                    <li>32分钟</li>
+                    <li>|</li>
+                    <li>18公里</li>
+                </ul>
+            </div>
+
+            <div class="method-recommand-container">
+                <div class="method-recommand">方案一</div>
+                <ul class="method-recommand method-recommand-ul">
+                    <li>32分钟</li>
+                    <li>|</li>
+                    <li>18公里</li>
+                </ul>
+            </div>
+            <div class="hot-point-recommand">
+                <div class="hot-point-icon">
+                    <div class="show-lng-lat">
+                        北纬23°47’59” 东经23°47’59”
+                    </div>
+                    <div class="show-shot-rank">
+                        热度值:9
+                    </div>
+                </div>
+            </div>
+
+            <div class="hot-point-recommand">
+                <div class="hot-point-icon">
+                    <div class="show-lng-lat">
+                        北纬23°47’59” 东经23°47’59”
+                    </div>
+                    <div class="show-shot-rank">
+                        热度值:9
+                    </div>
+                </div>
+            </div>
+
+            <div class="hot-point-recommand">
+                <div class="hot-point-icon">
+                    <div class="show-lng-lat">
+                        北纬23°47’59” 东经23°47’59”
+                    </div>
+                    <div class="show-shot-rank">
+                        热度值:9
+                    </div>
+                </div>
+            </div> -->
+        </div>
+
+        <!-- 非空载下的路径可视化 -->
+        <div class="load">
+            <div class="load-ul">
+            </div>
+        </div>
+    </div>
+    <div class="heatmap" style="display: none;">
+        <div class="time-judge"></div>
+        <div class="region-choice">
+            <input class="region-value " type="text" disabled="disabled" value="全广州" tle="0">
+            <img src="./images/xiala.png" style="display: block;">
+            <img src="./images/shouqi.png" style="display: none;">
+            <ul title="hiden" style="height: 0">
+                <li tle="0">全广州</li>
+                <li tle="1">花都区</li>
+                <li tle="2">南沙区</li>
+                <li tle="3">增城区</li>
+                <li tle="4">从化区</li>
+                <li tle="5">番禺区</li>
+                <li tle="6">白云区</li>
+                <li tle="7">黄埔区</li>
+                <li tle="8">荔湾区</li>
+                <li tle="9">海珠区</li>
+                <li tle="10">天河区</li>
+                <li tle="11">越秀区</li>
+            </ul>
+        </div>
+        <div class="time-container">
+            <input type="text" class="time-value time-correct" disabled="disabled">
+            <div class="time-picker"></div>
+        </div>
+        <div class="time-choice">
+            <button class="time-pass ">历史</button>
+            <button class="time-now time-onChoose">实时</button>
+            <button class="time-future ">未来</button>
+        </div>
+        <div class="algorithm-choice" style="display: none">
+            <input class="algorithm-value" type="text" disabled="disabled" value="A算法" tle="0">
+            <img src="./images/xiala.png" style="display: block;">
+            <img src="./images/shouqi.png" style="display: none;">
+            <ul title="hiden">
+                <li>A算法</li>
+                <li>B算法</li>
+                <li>C算法</li>
+            </ul>
+        </div>
+        <div class="button-judge"></div>
+        <button class="heatmap-show" style="display: block;">显示</button>
+        <button class="heatmap-hide" style="display: none;">关闭</button>
+        <img class="analyse" src="images/道路质量分析.png" style="display: none;">
+    </div>
+    <div class="region" style="display: none;">
+        <div class="region-choice">
+            <input class="region-value " type="text" disabled="disabled" value="花都区" tle="1">
+            <img src="./images/xiala.png" style="display: block;">
+            <img src="./images/shouqi.png" style="display: none;">
+            <ul title="hiden" style="height: 0">
+                <li tle="1">花都区</li>
+                <li tle="2">南沙区</li>
+                <li tle="3">增城区</li>
+                <li tle="4">从化区</li>
+                <li tle="5">番禺区</li>
+                <li tle="6">白云区</li>
+                <li tle="7">黄埔区</li>
+                <li tle="8">荔湾区</li>
+                <li tle="9">海珠区</li>
+                <li tle="10">天河区</li>
+                <li tle="11">越秀区</li>
+            </ul>
+        </div>
+        <div class="date-choice">
+            <input class="date-value " type="text" disabled="disabled">
+            <img src="./images/xiala.png" style="display: block;">
+            <img src="./images/shouqi.png" style="display: none;">
+            <ul title="hiden" style="height: 0">
+            </ul>
+        </div>
+        <div class="refresh">刷新</div>
+        <div class="data-container">
+            <!-- <div class="item-name">
+                <span style="width: 4rem">排名</span>
+                <span style="width: 6rem">司机编号</span>
+                <span style="width: 4rem">收入</span>
+            </div>
+            <ul class="data" style="overflow-x: hidden; max-height: 20rem">
+                <li>
+                    <span style="width: 4rem">1</span>
+                    <span style="width: 6rem">A11111</span>
+                    <span style="width: 4rem">2000</span>
+                </li>
+               
+            </ul> -->
+        </div>
+    </div>
+    <div class="route" style="display: none;">
+        <div class="time-judge"></div>
+        <div class="region-choice">
+            <input class="region-value " type="text" disabled="disabled" value="全广州" tle="0">
+            <img src="./images/xiala.png" style="display: block;">
+            <img src="./images/shouqi.png" style="display: none;">
+            <ul title="hiden" style="height: 0">
+                <li tle="0">全广州</li>
+                <li tle="1">花都区</li>
+                <li tle="2">南沙区</li>
+                <li tle="3">增城区</li>
+                <li tle="4">从化区</li>
+                <li tle="5">番禺区</li>
+                <li tle="6">白云区</li>
+                <li tle="7">黄埔区</li>
+                <li tle="8">荔湾区</li>
+                <li tle="9">海珠区</li>
+                <li tle="10">天河区</li>
+                <li tle="11">越秀区</li>
+            </ul>
+        </div>
+        <div class="time-container">
+            <input type="text" class="time-value time-correct" disabled="disabled">
+            <div class="time-picker"></div>
+        </div>
+        <div class="time-choice">
+            <button class="time-pass ">历史</button>
+            <button class="time-now time-onChoose">实时</button>
+        </div>
+
+        <div class="refresh-clear-btn">
+            <div class="clear-btn">清除当前显示路径</div>
+            <div class="refresh-btn">刷新</div>
+        </div>
+
+        <div class="taxi-information-container">
+            <div class="taxi-number-notice">车牌号码</div>
+        </div>
+    </div>
+    <div class="set" style="display: none;"></div>
+    <div class="form-container" style="display: none;">
+        <img title="关闭" class="form-close" src="./images/关闭.png">
+        <img class="form-pre" src="./images/上一个.png">
+        <img class="form-next" src="./images/下一个.png">
+        <div class="echartsCon onShow"></div>
+        <div class="echartsCon"></div>
+        <div class="echartsCon"></div>
+    </div>
+</body>
+<script type="text/javascript" src="js/picker.change.js"></script> 
+<script type="text/javascript" data-main="js/config.js" src="js/require.js"></script>
+
+</html>

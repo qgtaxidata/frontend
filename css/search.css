@@ -1,0 +1,376 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+li {list-style-type:none;}
+
+html{
+    font-size: 16px;
+}
+
+input{
+    border: 0;
+    outline: none;
+}
+#map-container{
+    position: absolute;
+    height: 100%;
+    width: 100%;
+}
+.search {
+    position: fixed;
+    right: 2%;
+    top: 5%;
+    width:  23rem;
+    max-height: 34rem;
+    border-radius: 6px;
+    background: #fff;
+    box-shadow:0px 20px 10px -20px #ccc;
+}
+
+.search-container{
+    position: relative;
+    border-radius: 8px;
+    
+    /* min-height: 15rem; */
+    height: auto;
+    width: 23rem;
+    
+    background-color: #4f93fd;
+    z-index: 10;
+}
+
+#taxi-status{
+    position: absolute;
+    top: 1rem;
+    left: 1.5rem;
+    /* margin: auto;
+    margin-top: 1rem; */
+
+    /* height: 2rem; */
+    border-radius: 6px;
+
+    width: 20rem;
+
+    text-align: center;
+    /* color: #999999; */
+    line-height: 1.8rem;
+    font-size: 0.9rem;
+
+    /* background-color: #ffffff; */
+    transition: all 0.3s; 
+
+    overflow: hidden;
+}
+.taxi-status-hidden {
+    height: 1.8rem;
+    color: #999999;
+    background-color: #ffffff;
+}
+.taxi-status-show {
+    height: 5.4rem;
+    color: #4c4c4c;
+    background-color: #f5f5f5;
+}
+#taxi-status div{
+    /* display: none; */
+    /* position: absolute;
+    top:100%; */
+    margin: 0 auto;
+    width: 30%;
+    height: 1.8rem;
+    /* border-radius: 6px; */
+    cursor: pointer;
+}
+
+.fuzzy-contaniner{
+    width: 20rem;
+    margin: auto;
+}
+
+
+.xiala{
+    display: block;
+    position: absolute;
+    right: 0.6rem;
+    top: 0.7rem;
+    height: 0.6rem;  
+    cursor: pointer;  
+}
+
+.input-site-container{
+    height: 1.8rem;
+    width: 20rem;
+    background-color:#4f93fd;
+    border-bottom:2px solid rgb(255,255,255,0.35); 
+}
+
+.input-start{
+    display: block;
+    height: 2rem;
+    width: 20rem;
+    margin: auto;
+    background-color:#4f93fd;
+    text-indent: 1rem;
+    padding: 4rem 0 0 0;
+    margin: 0 auto;
+    margin-bottom: 1rem;
+    border-bottom: 2px solid rgb(255,255,255,0.35);
+    color:#ffffff;
+}
+
+.input-start-hidden{
+    display: none;
+}
+
+input::-webkit-input-placeholder{
+    color: rgb(255,255,255,0.35);
+}
+
+.button-contaniner{
+    height: 2.3rem;
+    width: 20rem;
+    margin: auto;
+    padding: 1rem 0 1.5rem 0;
+}
+
+.clear-routes-btn{
+    display: inline-block;
+    height: 100%;
+    width: 25%;
+    margin-left: 1.5rem;
+    text-align: center;
+    line-height: 2.5rem;
+    color: #ffffff;
+    cursor: pointer;
+}
+
+.search-btn{
+    display: inline-block;
+    height: 100%;
+    width: 25%;
+    background-color: #ffffff;
+    text-align: center;
+    line-height: 2.3rem;
+    color: #4c93fd;
+    border-radius: 5px;
+    margin-left: 7.8rem;
+    cursor: pointer;
+}
+
+.input-start-end-contaniner{
+    height: 4rem;
+    width: 20rem;
+    padding: 4rem 1.5rem 0 1.5rem;
+}
+
+.arrow-images{
+    float: left;
+    width: 2rem;
+    height: 100%;
+    background-image: url(../images/transfor.png);
+    background-repeat: no-repeat;
+    background-position: left;
+    background-size: 50%;
+}
+
+.circle{
+    float: left;
+    margin: 0.6rem 0;
+    margin-right: 0.5rem;
+    height: 0.8rem;
+    border-radius: 50%;
+    width: 0.8rem;
+}
+
+.red{
+    background-color: #ff5c5c;
+}
+
+.green{
+    background-color: #5cff8a;
+}
+
+.input-departure{
+    float: left;
+    height: 2rem;
+    width: 16.7rem;
+}
+
+.input-departure input{
+    display: block;
+    float: left;
+    height: 1.85rem;
+    width: 15.2rem;
+    border-bottom: 2px solid rgb(255,255,255,0.35);
+    background-color: #4c93fd;
+    color:white;
+}
+
+.cha-icon{
+    float: left;
+    height: 1.85rem;
+    width: 1.2rem;
+    background-image: url(../images/clear.png);
+    background-repeat: no-repeat;
+    background-position: left;
+    background-size: 70%;
+    border-bottom: 2px solid rgb(255,255,255,0.35);
+    cursor: pointer;
+}
+
+#amap-sug9{
+    margin-bottom: 1rem;
+}
+#amap-sug0{
+    margin-top: 1rem;
+}
+
+.position-icon{
+    display: inline-block;
+    height: 0.8rem;
+    width: 0.8rem
+}
+
+.hot-point-container{
+    height: auto;
+    width: 20rem;
+    margin: auto;
+}
+
+.hot-point-recommand{
+    width: 20rem;
+    height: 2.5rem;
+    margin-top: 1rem; 
+    cursor: pointer;
+}
+
+.hot-point-icon{
+    height: 100%;
+    width: 1.5rem;
+    background-image: url(../images/hotpoint.png);
+    background-repeat: no-repeat;
+    background-position: left;
+    background-size: 60%;
+}
+
+.show-lng-lat{
+    height: 50%;
+    width: 18.5rem;
+    top: 0;
+    color: #4c93fd;
+    font-size: 0.8rem;
+    line-height: 1.25rem;
+    margin-left: 1.5rem;
+}
+
+.show-shot-rank{
+    height: 50%;
+    width: 18.5rem;
+    top: 50%;
+    left: 1.5rem;
+    font-size: 0.8rem;
+    line-height: 1.25rem;
+    color: #4d4d4d;
+    margin-left: 1.5rem
+}
+
+.load{
+    width: 23rem;
+    max-height: 21rem;
+    margin: auto;
+    overflow: auto;
+}
+
+.load-ul{
+    display: none;
+    height: 21rem;
+    width: 20rem;
+    margin: auto;
+}
+.load::-webkit-scrollbar {
+    width: 7px;    
+}
+
+.load::-webkit-scrollbar-thumb {
+    border-radius: 8px;
+    background: rgba(184,184,184);
+}
+
+.load::-webkit-scrollbar-track {
+    border-bottom-right-radius: 8px;  
+    background: rgba(235,235,235);
+}
+
+.load-state-container{
+    height: auto;
+    width: 20rem;
+    margin: auto;
+}
+
+.method-recommand-container{
+    position: relative;
+    height: 2.7rem;
+    width: 20rem;
+    padding-top: 1rem;
+    /* transition: all 0.3s; */
+    /* overflow: hidden; */
+    cursor: pointer;
+}
+/* 
+.method-recommand-container-show{
+    position: relative;
+    height: 11rem;
+    width: 20rem;
+    padding-top: 1rem;
+     transition: all 0.3s;
+}  */
+
+.method-recommand{
+    height: 1.2rem;
+    width: 100%;
+    font-size: 0.9rem;
+    line-height: 1.2rem;
+}
+
+.method-recommand-ul li{
+    float: left;
+    margin-right: 0.3em;
+    font-size: 1rem;
+    font-size: 0.9rem;
+}
+
+.method-recommand-ul {
+    margin-top: 0.3rem
+}
+
+/* .method-arrow-icon{
+    display: block;
+    position: absolute;
+    height: 0.5rem;
+    width: 0.9rem;
+    right: 0.5rem;
+    top: 1.7rem;
+    cursor: pointer;
+} */
+
+/* .road-information-hidden{
+    height: auto;
+    width: 20rem;
+} */
+
+/* .road-information-show{
+    height: 3.6rem;
+    width: 20rem;
+    transition: all 0.3s;
+} */
+
+/* .congestion-degree,.traffic-flow,.speed{
+    height: 1.2rem;
+    font-size: 0.8rem;
+}
+
+.congestion-degree,.traffic-flow{
+    margin-bottom: 2rem;
+} */

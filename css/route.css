@@ -1,0 +1,274 @@
+.route {
+	position: fixed;
+	top: 2%;
+	right: 2%;
+}
+.route .time-judge {
+	position: absolute;
+	top: 0;
+	right: 19rem;
+	padding: 0.4rem;
+	width: 15rem;
+	color: #ff2828;
+	font-size: 1.2rem;
+	font-weight: bold;
+	text-align: right;
+	text-shadow: 0px 2px 0px #fff;
+}
+.route .region-choice {
+	position: absolute;
+	top: 2.5rem;
+	right: 12.8rem;
+}
+.route .region-choice input {
+	padding: 0.5rem;
+	width: 4rem;
+	outline: none;
+	border: 0.1rem solid #4c93fd;
+	border-radius: 0.5rem;
+	background-color: #fff;
+}
+.route .region-choice img {
+	position: absolute;
+	top: 0.9rem;
+	right: 0.6rem;
+	height: 0.5rem;
+	cursor: pointer;
+}
+.route .region-choice ul {
+	position: absolute;
+	z-index: -1;
+	top: 1rem;
+	width: 5rem;
+	height: 0;
+	border: 0.1rem solid #d4d4d4;
+	border-radius: 0.5rem;
+	background-color: #fff;
+	transition: all 0.8s;
+	overflow-x: hidden;
+}
+.route .region-choice li {
+	padding: 0.4rem; 
+	width: 4rem;
+	font-size: 0.8rem;
+	cursor: pointer;
+	border-radius: 0.5rem;
+}
+.route .region-choice li:hover {
+	color: #4c93fd;
+}
+.route .time-container {
+	position: absolute;
+	top: 0;
+	right: 0;
+	background-color: #fff;
+	text-align: center;
+	overflow: hidden;
+	border-radius: 0.5rem;
+	box-shadow: 0 0 0.1rem #999;
+}
+.route .time-value {
+	margin: 0 auto;
+	padding: 0.4rem;
+	width: 17.2rem;
+	text-indent: 0.5rem;
+	font-size: 1rem;
+	outline: none;
+	border-radius: 0.5rem;
+	background-size: 0.9rem 0.9rem;
+	background-position: 16rem;
+	background-color: #fff;
+	background-repeat: no-repeat;
+}
+.route .time-correct {
+	color: #4c93fd;
+	border: 0.1rem solid #4c93fd;
+	background-image: url(../images/Calendar.png);
+}
+.route .time-error {
+	color: #ff2828;
+	border: 0.1rem solid #ff2828;
+	background-image: url(../images/errorCal.png);
+}
+.route .time-picker {
+	height: 0;
+	transition: all 0.5s;
+}
+.route .time-container:hover .time-picker {
+	height: 8.5rem;
+}
+.picker-header{
+	display: none;
+}
+.picker-cell {
+	display: inline-block;
+	margin: 1rem 0.3rem;
+	padding: 0.5rem;
+	border-radius: 0.5rem;
+	border: 1px solid #999;
+}
+.picker-item {
+	width: 2.5rem;
+	padding: 0.2rem 0;
+	text-align: left;
+}
+.picker-picked {
+	border-top: 1px solid #4c93fd;
+	border-bottom: 1px solid #4c93fd;
+	background-size: 0.8rem 0.8rem;
+	background-position:  1.5rem 0.5rem;
+	background-repeat: no-repeat;
+	cursor: pointer;
+}
+.picker-days .picker-picked{
+	background-image: url(../images/日.png);
+}
+.picker-hours .picker-picked{
+	background-image: url(../images/时.png);
+}
+.picker-minutes .picker-picked{
+	background-image: url(../images/分.png);
+}
+.picker-seconds .picker-picked{
+	background-image: url(../images/秒.png);
+}
+.picker-footer button:hover {
+	color: #fff;
+	background-color: #4c93fd;
+}
+.route .choose-time {
+	position: absolute;
+	top: 0.5rem;
+	right: 1rem;
+	display: block;
+	width: 0.9rem;
+	cursor: pointer;
+}
+.route .time-choice {
+	position: absolute;
+	z-index: -1;
+	top: 2.5rem;
+	right: 0;
+	width: 18rem;
+	text-align: right;
+	border-radius: 0.5rem; 
+}
+.route .time-choice button {
+	display: inline-block;
+	margin: 0 0;
+	padding: 0.5rem 1rem; 
+	width: 4rem;
+	color: #4c93fd;
+	outline: none;
+	border: none;
+	cursor: pointer;
+	text-align: center;
+	border-radius: 0.5rem;
+	background-color: #fff; 
+}
+.route .time-choice button:hover,
+.route .time-choice .time-onChoose {
+	color: #fff;
+	background-color: #4c93fd;
+}
+
+.refresh-clear-btn {
+    z-index: -2;
+    top: 5.5rem;
+    position: absolute;
+    height: 2rem;
+    width: 16rem;
+    right: 0;
+    font-size: 0;
+}
+
+.clear-btn {
+    display: inline-block;
+    width: 10rem;
+    height: 100%;
+    background-color: #4c93fd;
+    text-align: center;
+    border-radius: 6px;
+    color: white;
+    line-height: 2rem;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.refresh-btn {
+    display: inline-block;
+    height: 100%;
+    width: 4rem;
+    background-color: #4c93fd;
+    text-align: center;
+    border-radius: 6px;
+    color: white;
+    line-height: 2rem;
+    font-size: 1rem;
+    margin-left: 2rem;
+    cursor: pointer;
+}
+
+.taxi-information-container {
+    display: none;
+    z-index: -1;
+    position: absolute;
+    top: 9rem;
+    right: 0;
+    height: auto;
+    max-height: 30rem;
+    overflow: auto;
+    width: 10rem;
+    background-color: white;
+    border-radius: 8px;
+}
+
+.taxi-information-container::-webkit-scrollbar {
+    width: 7px;    
+}
+
+.taxi-information-container::-webkit-scrollbar-thumb {
+    border-radius: 8px;
+    background: rgba(184,184,184);
+}
+
+.taxi-information-container::-webkit-scrollbar-track {
+    border-bottom-right-radius: 8px;  
+    background: rgba(235,235,235);
+}
+
+.taxi-number-notice {
+    height: 2rem;
+    width: 5rem;
+    margin: auto;
+    line-height: 1rem;
+    color: #4c93fd;
+    font-size: 1rem;
+    line-height: 2rem;
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.taxi-number {
+    height: 2rem;
+    width: 6rem;
+    margin: auto;
+    line-height: 1rem;
+    color: black;
+    font-size: 1rem;
+    line-height: 2rem;
+    text-align: center;
+    cursor: pointer;
+}
+.route .region-choice ul::-webkit-scrollbar{
+    width: 7px;    
+}
+.route .region-choice ul::-webkit-scrollbar-thumb  {
+    border-radius: 8px;
+    background: rgba(184,184,184);
+}
+.route .region-choice ul::-webkit-scrollbar-track {
+    border-bottom-right-radius: 8px;  
+    background: rgba(235,235,235);
+}
+
