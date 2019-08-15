@@ -26,17 +26,7 @@ define(["require", "tools"], function (require) {
  	let dateList = dateCon.getElementsByTagName('ul')[0];
 
 
-  	// barRegList.onclick = function() {
-  	// 	if (event.target && event.target.nodeName == "LI") {
-  	// 		let pre = barRegList.getElementsByClassName("on-region")[0];
-  	// 		let now = event.target;
-  	// 		if (pre == now) {
-  	// 			return;
-  	// 		}
-  	// 		pre.classList.remove("on-region");
-  	// 		now.classList.add("on-region");
-  	// 	}
-  	// }
+  	
   	regChoice[0].onclick = function() {
 
   			regChoice[0].style.display = "none";
@@ -82,12 +72,23 @@ define(["require", "tools"], function (require) {
 
   	let dataCon = con.getElementsByClassName("data-container")[0];
   	let refresh = con.getElementsByClassName('refresh')[0];
+  	let sendClickJudge = true; 
     // 收入排行榜
-    barRegList.children[0].onclick = function() {
-    	console.log(refresh.onclick);
-    	refresh.onclick();
-    }
     refresh.onclick = function() {
+    	let onRegion = barRegList.getElementsByClassName("on-region")[0] || null;
+    	if (onRegion) {
+    		console.log(onRegion.innerText);
+    		onRegion.onclick();
+    	}
+    }
+    barRegList.children[0].onclick = function() {
+    	if (!sendClickJudge) {
+    		return;
+    	}
+    	sendClickJudge = false;
+    	setTimeout(function() {
+    		sendClickJudge = true;
+    	}, 800);
     	let area = regValue.getAttribute("tle");
     	let date = dateValue.value
     	let send = {
@@ -142,6 +143,14 @@ define(["require", "tools"], function (require) {
     	}
     }
     function getDriver() {
+    	if (!sendClickJudge) {
+    		return;
+    	}
+    	sendClickJudge = false;
+    	setTimeout(function() {
+    		sendClickJudge = true;
+    	}, 800);
+
     	if (event.target.getAttribute("clk") == "show") {
     		var list = event.target;
     	} else if(event.target.parentNode.getAttribute("clk") == "show") {
@@ -230,11 +239,27 @@ define(["require", "tools"], function (require) {
 
     // 出租车收入分析和预测
     barRegList.children[1].onclick = function() {
+    	if (!sendClickJudge) {
+    		return;
+    	}
+    	sendClickJudge = false;
+    	setTimeout(function() {
+    		sendClickJudge = true;
+    	}, 800);
+
     	dataCon.style.display = "none";
     	console.log("出租车收入分析和预测");
     }
     // 区域道路质量分析
     barRegList.children[2].onclick = function() {
+    	if (!sendClickJudge) {
+    		return;
+    	}
+    	sendClickJudge = false;
+    	setTimeout(function() {
+    		sendClickJudge = true;
+    	}, 800);
+
     	dataCon.style.display = "none";
     	let formCon = document.getElementsByClassName("form-container")[0];
     	formCon.style.display = "block";
@@ -246,6 +271,8 @@ define(["require", "tools"], function (require) {
 						        <div class="echartsCon"></div>
 						        <div class="echartsCon"></div>`;
     	let formList = formCon.getElementsByClassName("echartsCon");
+    	onShow = 0;
+    	console.log("重置过后的的",onShow);
     	var firstChart = echarts.init(formList[2]);
     	var option1 = {
     		title:{
@@ -413,6 +440,14 @@ define(["require", "tools"], function (require) {
     }
     // 车辆利用率
     barRegList.children[3].onclick = function() {
+    	if (!sendClickJudge) {
+    		return;
+    	}
+    	sendClickJudge = false;
+    	setTimeout(function() {
+    		sendClickJudge = true;
+    	}, 800);
+
     	dataCon.style.display = "none";
     	let formCon = document.getElementsByClassName("form-container")[0];
     	formCon.style.display = "block";
@@ -424,7 +459,9 @@ define(["require", "tools"], function (require) {
 						        <div class="echartsCon"></div>
 						        <div class="echartsCon"></div>`;
 
-    	let formList = formCon.getElementsByClassName("echartsCon");
+    	let formList = formCon.getElementsByClassName("echartsCon"); 
+    	onShow = 0;
+    	console.log("重置过后的的",onShow);
     	var firstChart = echarts.init(formList[0]);
     	var option1 = {
     		title:{
@@ -592,6 +629,14 @@ define(["require", "tools"], function (require) {
     }
     // 异常情况
     barRegList.children[4].onclick = function() {
+    	if (!sendClickJudge) {
+    		return;
+    	}
+    	sendClickJudge = false;
+    	setTimeout(function() {
+    		sendClickJudge = true;
+    	}, 800);
+
     	dataCon.style.display = "none";
     	console.log("异常情况");
     }
@@ -638,8 +683,6 @@ define(["require", "tools"], function (require) {
       map.setFitView();
     }
   }
-
-
 
 // document.getElementsByClassName('sidebar')[0].children[2].
 
