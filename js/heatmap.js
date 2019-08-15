@@ -444,7 +444,37 @@ define(["require", "tools"], function (require) {
   }
   
   regAnaly.onclick = function() {
-    document.getElementsByClassName("form-container")[0].style.display="block";
+    let formCon = document.getElementsByClassName("form-container")[0];
+    formCon.style.display = "block";
+    formCon.innerHTML = ""
+    formCon.innerHTML += `<img title="关闭" class="form-close" src="./images/关闭.png" onclick="formClose()"><div class="echartsCon onShow"></div>`;
+    let chartCon = formCon.getElementsByClassName("onShow")[0];
+    let chart =  echarts.init(chartCon);
+    var option = {
+      title:{
+        text:'QG实习生需求量分析',
+      },
+      tooltip:{
+      },
+      legend:{
+        data:['需求量'],
+      },
+      xAxis:{
+        data:['第一天','第二天','第三天','第四天','第五天','第六天','第七天','第n天']
+      },
+      yAxis:{
+      },
+      series:[
+      {
+        name:'需求量',
+        type:'line',
+        data:[33,22,16,28,32,39,23,999]
+      }
+      ]
+    };
+    chart.setOption(option);
+
+
   }
 
 });

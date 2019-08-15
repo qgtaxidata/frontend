@@ -90,6 +90,11 @@ define(["require", "tools"], function (require) {
   			regValue.value = event.target.innerText;
   			regValue.setAttribute('tle', event.target.getAttribute('tle'));
   			showRegList();
+        if (regValue.value == "全广州") {
+          changeView("广州");
+        } else {
+          changeView(regValue.value);
+        }
   		}
   	}
 
@@ -484,12 +489,53 @@ define(["require", "tools"], function (require) {
 
     //点击按钮清除当前显示路径同时停止计时器
     route.getElementsByClassName("clear-btn")[0].onclick = function() {
-        console.log("我已经清除计时器")
-        if(timeout != null) {
-            clearInterval(timeout);
-        }
-        map.clearMap();   
+      console.log("我已经清除计时器")
+      if(timeout != null) {
+        clearInterval(timeout);
+      }
+      map.clearMap();   
     }
+    
+
+    // 选择地区跳转视图
+    var opts = {
+      extensions: 'all',      
+    };
+    let polygons = [];
+
+    function changeView(districtName) {
+      for (let i = 0; i < polygons.length; i++) {
+        polygons[i].setMap(null);
+      }
+      polygons = [];
+      var district = new AMap.DistrictSearch(opts);
+      district.search(districtName, function(status, result) {
+        if(status=='complete'){
+          getData(result.districtList[0]);
+        }
+      });
+      setTimeout(function() {
+        map.setFitView();
+      }, 500);
+    }
+    function getData(data) {
+      var bounds = data.boundaries;
+      if (bounds) {
+        for (var i = 0; i < bounds.length; i ++) {
+          var polygon = new AMap.Polygon({
+            map: map,
+            strokeWeight: 0,
+            strokeColor: 'rgba(1, 1, 1, 0)',
+            fillColor: '#80d8ff',
+            fillOpacity: 0,
+            path: bounds[i]
+          });
+          polygons.push(polygon);
+        }
+        map.setFitView();
+      }
+    }
+
 
 
   var path= {

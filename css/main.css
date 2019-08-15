@@ -84,9 +84,9 @@ html {
 	margin-left:  -20rem;
 	width: 40rem;
 	height: 30rem;
-	background-color: rgba(255,255,255,0.7);
-	border-radius: 1rem;
-	/*box-shadow: 0 0 0.3rem #9d9d9d;*/
+	background-color: rgba(255, 255, 255, 1);
+	border-radius: 0.3rem;
+	box-shadow: 0 0 0.3rem #9d9d9d;
 }
 .form-container .form-close{
 	position: absolute;
@@ -103,6 +103,7 @@ html {
 	padding: 2rem 0.5rem;
 	width: 2rem;
 	cursor: pointer;
+	transition: all 0.3s;
 }
 .form-container .form-next{
 	position: absolute;
@@ -111,11 +112,13 @@ html {
 	padding: 2rem 0.5rem;
 	width: 2rem;
 	cursor: pointer;
+	transition: all 0.3s;
 }
-/*.form-container .form-pre:hover,
+.form-container .form-pre:hover,
 .form-container .form-next:hover {
-	background-color: rgba(1, 1, 1, 0.1);
-}*/
+	padding: 1.5rem 0rem;
+	width: 3rem;
+}
 .form-container .echartsCon {
 	position: absolute;
 	top: 3rem;
@@ -131,4 +134,34 @@ html {
 .form-container .onShow {
 	opacity: 1;
 	transform: translateZ(0rem)  rotateY(0deg);
+}
+.form-container .onShow img {
+	position: absolute;
+	top: 1rem;
+	left: 1rem;
+	width: 6rem;
+}
+.form-container .onShow div {
+	width: 20rem;
+	margin-left: 12rem;
+	padding: 0.6rem;
+}
+.form-container .onShow .driverID {
+	position: absolute;
+	top: 8rem;
+	left: 1rem;
+	margin-left: 0;
+	padding: 0.3rem;
+	width: 6rem;
+	text-align: center;
+}
+.form-container .onShow div span {
+	display: inline-block;
+	padding: 0.3rem;
+	margin: 0 0.8rem;
+}
+.form-container .onShow div .value {
+	width: 8rem;
+	text-align: center;
+	border-bottom: 0.5px solid #fff;
 }

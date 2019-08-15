@@ -101,6 +101,9 @@
 	text-align: center;
 	padding: 0.5rem 0;
 }
+.data-container .data li {
+	cursor: pointer;
+}
 .data-container .data li span{
 	display: inline-block;
 	font-size: 0.8rem;
