@@ -272,34 +272,34 @@ define(["require", "tools"], function (require) {
       return false;
     }
 
-    let heatmapPosition = {
+    let send = {
       area: area,
       time : tools.formatTime(allTimeNow)
     } 
-    console.log(heatmapPosition);
-    $.ajax({
-      url: serverUrl + `/thermoDiagram/getMap`,
-      method: "POST",
-      data: JSON.stringify(heatmapPosition),
-      contentType: false,
-      processData: false,
-      dataType: "json",
-      headers: {
-       "Content-Type": "application/json"
-     },
-     // async: false,
-     "crossDomain": true,
-     success: function (data) {
-       console.log(data.data);
-       if (data.msg == "success") {    	      	
-         heatmap.setDataSet({
-           data: data.data
-         });   	      	
-       } else {
-         alert("未知错误");
-       }
-     }
-   })
+    console.log(send);
+   //  $.ajax({
+   //    url: serverUrl + `/thermoDiagram/getMap`,
+   //    method: "GET",
+   //    data: send,
+   //    contentType: false,
+   //    processData: false,
+   //    dataType: "json",
+   //    headers: {
+   //     "Content-Type": "application/json"
+   //   },
+   //   async: true,
+   //   "crossDomain": true,
+   //   success: function (data) {
+   //     console.log(data.data);
+   //     if (data.msg == "success") {    	      	
+   //       heatmap.setDataSet({
+   //         data: data.data
+   //       });   	      	
+   //     } else {
+   //       alert("未知错误");
+   //     }
+   //   }
+   // })
     return true;
   }
   function hmapFuture() {
@@ -311,7 +311,6 @@ define(["require", "tools"], function (require) {
     let reg = /^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])\s+(20|21|22|23|[0-1]\d):[0-5]\d:[0-5]\d$/;
     let regExp = new RegExp(reg);
     if(!regExp.test(futureTime)){
-      // alert("请选择一个时间");
       hmapJudge.innerText = "请选择一个时间";
       heatmapTime.setAttribute("class", "time-value time-error");
       return false;
@@ -323,40 +322,40 @@ define(["require", "tools"], function (require) {
     if ( timeDiffer < 0) {
       hmapJudge.innerText = "请选择未来的时间";
       heatmapTime.setAttribute("class", "time-value time-error");
-      // alert("请选择未来的时间");
       return false;
     }
-    let heatmapPosition = {
+    let send = {
       area: area,
       algorithm: algorithm,
       futureTime: futureTime,
       nowTime : nowTime
     } 
 
-    console.log(heatmapPosition);
+    console.log(send);
  
-    $.ajax({
-    url: serverUrl + `/thermoDiagram/getFutureMap?nowTime=2017-02-01 15:00:00&futureTime=2017-02-02 17:00:00&area=1&algorithm=2`,
-    method: "POST",
-    contentType: false,
-    processData: false,
-    dataType: "json",
-    headers: {
-     "Content-Type": "application/json"
-    },
-     // async: false,
-    "crossDomain": true,
-    success: function (data) {
-       console.log(data.data);
-       if (data.msg == "success") {             
-         heatmap.setDataSet({
-           data: data.data
-         });            
-       } else {
-         alert("未知错误");
-       }
-     }
-    })
+    // $.ajax({
+    // url: serverUrl + "/thermoDiagram/getFutureMap",
+    // method: "GET",
+    // data: send,
+    // contentType: false,
+    // processData: false,
+    // dataType: "json",
+    // headers: {
+    //  "Content-Type": "application/json"
+    // },
+    //  // async: false,
+    // "crossDomain": true,
+    // success: function (data) {
+    //    console.log(data.data);
+    //    if (data.msg == "success") {             
+    //      heatmap.setDataSet({
+    //        data: data.data
+    //      });            
+    //    } else {
+    //      alert("未知错误");
+    //    }
+    //  }
+    // })
     return true;
   }
    
@@ -450,31 +449,79 @@ define(["require", "tools"], function (require) {
     formCon.innerHTML += `<img title="关闭" class="form-close" src="./images/关闭.png" onclick="formClose()"><div class="echartsCon onShow"></div>`;
     let chartCon = formCon.getElementsByClassName("onShow")[0];
     let chart =  echarts.init(chartCon);
-    var option = {
-      title:{
-        text:'QG实习生需求量分析',
-      },
-      tooltip:{
-      },
-      legend:{
-        data:['需求量'],
-      },
-      xAxis:{
-        data:['第一天','第二天','第三天','第四天','第五天','第六天','第七天','第n天']
-      },
-      yAxis:{
-      },
-      series:[
+
+    let area = regValue.getAttribute('tle');
+    let time = heatmapTime.value;
+    let send = {
+      area: area,
+      time: time
+    }
+    console.log(send);
+    // $.ajax({
+    //   url: serverUrl + "/AreaRequirement/analyseRequirement",
+    //   method: "GET",
+    //   data: send,
+    //   contentType: false,
+    //   processData: false,
+    //   dataType: "json",
+    //   headers: {
+    //    "Content-Type": "application/json"
+    //   },
+    //   async: false,
+    //   crossDomain: true,
+    //   success: function (data) {
+    //     console.log(data.data);
+    //     if (data.msg == "success") {
+    //       chart.setOption(createOption(data.data));
+    //     } else {
+    //       alert("未知错误");
+    //     }
+    //   }
+    // })
+
+
+    let data = {
+
+      "graph_data": [
       {
-        name:'需求量',
-        type:'line',
-        data:[33,22,16,28,32,39,23,999]
+        "title": "一个小时前",
+        "demand": 171
+      },
+      {
+        "title": "当前时间",
+        "demand": 195
+      },
+      {
+        "title": "一个小时后",
+        "demand": 330
       }
+      ],
+      "title": "天河区需求分析及预测"
+    }
+    chart.setOption(createOption(data));
+  }
+  function createOption(data) {
+    var option = {
+      title: {
+        text: data.title,
+      },
+      tooltip: {},
+      legend: {
+        data:["line"],
+      },
+      xAxis: {
+        data:[data.graph_data[0].title, data.graph_data[1].title, data.graph_data[2].title]
+      },
+      yAxis: {},
+      series: [
+        {
+          name:'line',
+          type:'line',
+          data:[data.graph_data[0].demand, data.graph_data[1].demand, data.graph_data[2].demand]
+        }
       ]
-    };
-    chart.setOption(option);
-
-
+    }
+    return option;
   }
 
 });
