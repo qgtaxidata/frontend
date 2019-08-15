@@ -40,7 +40,7 @@ html {
 	cursor: pointer;
 	text-align: center;
 	border-radius: 0.5rem;
-	transition: all 0.3s;
+	transition: all 0.5s;
 }
 .sidebar div ul {
 	/*display: none;*/
@@ -62,7 +62,7 @@ html {
 	cursor: pointer;
 	text-align: center;
 	border-radius: 0.5rem;
-	transition: all 0.3s;
+	transition: all 0.5s;
 }
 .on-sidebar,
 .sidebar div:hover,

@@ -49,18 +49,19 @@ define(["require", "tools"], function (require) {
 			}
 			formClose();
 		} else if (event.target.nodeName == "LI") {
-			let pre = barRegList.getElementsByClassName("on-region")[0] || null;
-			let now = event.target;
-			if (pre == now) {
-				return;
-			}
-			if (pre) {
-				pre.classList.remove("on-region");
-			}
-			now.classList.add("on-region");
-			if (event.target.innerText == "出租车司机收入排行榜") {
-				formClose();
-			}
+			// let pre = barRegList.getElementsByClassName("on-region")[0] || null;
+			// let now = event.target;
+			// if (pre == now) {
+			// 	return;
+			// }
+			// if (pre) {
+			// 	pre.classList.remove("on-region");
+			// }
+			// now.classList.add("on-region");
+			// if (event.target.innerText == "出租车司机收入排行榜") {
+			// 	formClose();
+			// 	console.log("关了");
+			// }
 		}
 		let regDataCon =  document.getElementsByClassName("region")[0].getElementsByClassName("data-container")[0];
 		if (event.target.innerText != "出租车司机收入排行榜") {

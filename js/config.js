@@ -30,7 +30,6 @@ function formNext() {
 	setTimeout(function() {
 		changeJudge = true;
 	}, 1500)
-    console.log("执行之前的",onShow);
 	formList[onShow].classList.remove("onShow");
 	onShow = (onShow + 1) % 3;
 	formList[onShow].classList.add("onShow");

@@ -73,22 +73,45 @@ define(["require", "tools"], function (require) {
   	let dataCon = con.getElementsByClassName("data-container")[0];
   	let refresh = con.getElementsByClassName('refresh')[0];
   	let sendClickJudge = true; 
-    // 收入排行榜
+    // 刷新
     refresh.onclick = function() {
     	let onRegion = barRegList.getElementsByClassName("on-region")[0] || null;
     	if (onRegion) {
-    		console.log(onRegion.innerText);
     		onRegion.onclick();
     	}
     }
-    barRegList.children[0].onclick = function() {
+    // 二级导航栏添加限制
+    function addClickLimit() {
     	if (!sendClickJudge) {
-    		return;
+    		return false;
     	}
     	sendClickJudge = false;
     	setTimeout(function() {
     		sendClickJudge = true;
-    	}, 800);
+    	}, 500);
+
+    	let pre = barRegList.getElementsByClassName("on-region")[0] || null;
+    	let now = this;
+
+    	if (pre) {
+    		pre.classList.remove("on-region");
+    	}
+    	now.classList.add("on-region");
+    	if (this.innerText == "出租车司机收入排行榜") {
+    		formClose();
+    	}
+    	return true;
+    }
+    // 出租车司机收入排行榜
+    barRegList.children[0].onclick = function() {
+    	if (!addClickLimit.call(this)) {
+    		return;
+    	}
+    	console.log("执行【出租车司机收入排行榜】");
+    	// sendClickJudge = false;
+    	// setTimeout(function() {
+    	// 	sendClickJudge = true;
+    	// }, 800);
     	let area = regValue.getAttribute("tle");
     	let date = dateValue.value
     	let send = {
@@ -96,27 +119,64 @@ define(["require", "tools"], function (require) {
     		date: date
     	}
     	console.log("司机排行榜sand",send);
-    	$.ajax({
-    		"url":  serverUrl + "/rank/getRank",
-    		"method": "GET",
-    		"headers": {
-    			"Content-Type": "application/json"
+    	// $.ajax({
+    	// 	"url":  serverUrl + "/rank/getRank",
+    	// 	"method": "GET",
+    	// 	"headers": {
+    	// 		"Content-Type": "application/json"
+    	// 	},
+    	// 	"data": send,
+    	// 	"dataType": "json",
+    	// 	"async": true,
+    	// 	"crossDomain": true,
+    	// 	"success": function(data) {
+    	// 		console.log(data.data);
+    	// 		createDriver(data.data, area, date);
+    	// 	}
+    	// })
+    	var data = [
+    		{
+    			rank: 1,
+    			driverID: "643",
+    			income: "24"
     		},
-    		"data": send,
-    		"dataType": "json",
-    		"async": true,
-    		"crossDomain": true,
-    		"success": function(data) {
-    			console.log(data.data);
-    			createDriver(data.data, area, date);
+    		{
+    			rank: 1,
+    			driverID: "32",
+    			income: "245"
+    		},
+    		{
+    			rank: 1,
+    			driverID: "45",
+    			income: "78"
+    		},
+    		{
+    			rank: 1,
+    			driverID: "4",
+    			income: "wttrwrtw"
+    		},
+    		{
+    			rank: 1,
+    			driverID: "re44",
+    			income: "657"
+    		},
+    		{
+    			rank: 1,
+    			driverID: "34435",
+    			income: "423"
+    		},
+    		{
+    			rank: 1,
+    			driverID: "34",
+    			income: "433457"
+    		},
+    		{
+    			rank: 1,
+    			driverID: "trew",
+    			income: "42762"
     		}
-    	})
-    	// var data = [{
-    	// 	rank: 1,
-    	// 	driverID: "'00045034",
-    	// 	income: "234565"},
-    	// 	];
-    	// createDriver(data, area, date);
+    		];
+    	createDriver(data, area, date);
     }
     function createDriver(data, area, date) {
     	dataCon.style.display = "block";
@@ -136,9 +196,7 @@ define(["require", "tools"], function (require) {
                     				<span style="width: 4rem">${data[i].income}</span>
                 				</li>`
     	}
-    	console.log(list.children.length);
     	for (let i = 0; i < list.children.length; i++) {
-    		console.log(list.children[i])
     		list.children[i].onclick = getDriver;
     	}
     }
@@ -169,31 +227,31 @@ define(["require", "tools"], function (require) {
     		driverID: driverID
     	};
     	console.log("司机具体信息sand", send);
-        $.ajax({
-    		"url":  serverUrl + "/rank/getSituation",
-    		"method": "GET",
-    		"headers": {
-    			"Content-Type": "application/json"
-    		},
-    		"data": send,
-    		"dataType": "json",
-    		"async": true,
-    		"crossDomain": true,
-    		"success": function(data) {
-    			console.log(data.data);
-    			showDriver(data.data, rank, driverID, income)
-    		}
-    	})
+     //    $.ajax({
+    	// 	"url":  serverUrl + "/rank/getSituation",
+    	// 	"method": "GET",
+    	// 	"headers": {
+    	// 		"Content-Type": "application/json"
+    	// 	},
+    	// 	"data": send,
+    	// 	"dataType": "json",
+    	// 	"async": true,
+    	// 	"crossDomain": true,
+    	// 	"success": function(data) {
+    	// 		console.log(data.data);
+    	// 		showDriver(data.data, rank, driverID, income)
+    	// 	}
+    	// })
 
 
-  //   	let data = {
-		// 	'companyID': '0200014479',  //公司编号
-		// 	'load_mile': 378.51,  // 载客里程(公里)
-		// 	'load_time': 703.28,  //载客司机(分钟)
-		// 	'no_load_mile': 57.26,  // 空载里程
-		// 	'no_load_time': 1005.67 // 空载时间
-		// }
-		// showDriver(data, rank, driverID, income)
+    	let data = {
+			'companyID': '0200014479',  //公司编号
+			'load_mile': 378.51,  // 载客里程(公里)
+			'load_time': 703.28,  //载客司机(分钟)
+			'no_load_mile': 57.26,  // 空载里程
+			'no_load_time': 1005.67 // 空载时间
+		}
+		showDriver(data, rank, driverID, income)
  
     	
     }
@@ -239,26 +297,48 @@ define(["require", "tools"], function (require) {
 
     // 出租车收入分析和预测
     barRegList.children[1].onclick = function() {
-    	if (!sendClickJudge) {
+    	if (!addClickLimit.call(this)) {
     		return;
     	}
-    	sendClickJudge = false;
-    	setTimeout(function() {
-    		sendClickJudge = true;
-    	}, 800);
+    	console.log("执行【出租车收入分析和预测】");
 
     	dataCon.style.display = "none";
-    	console.log("出租车收入分析和预测");
+    	let formCon = document.getElementsByClassName("form-container")[0];
+    	formCon.style.display = "block";
+    	formCon.innerHTML = ""
+    	formCon.innerHTML += `<img title="关闭" class="form-close" src="./images/关闭.png" onclick="formClose()"><div class="echartsCon onShow"></div>`;
+    	let chartCon = formCon.getElementsByClassName("onShow")[0];
+    	let chart =  echarts.init(chartCon);
+    	var option = {
+    		title:{
+    			text:'QG实习生需求量分析',
+    		},
+    		tooltip:{
+    		},
+    		legend:{
+    			data:['需求量'],
+    		},
+    		xAxis:{
+    			data:['第一天','第二天','第三天','第四天','第五天','第六天','第七天','第n天']
+    		},
+    		yAxis:{
+    		},
+    		series:[
+    		{
+    			name:'需求量',
+    			type:'line',
+    			data:[33,22,16,28,32,39,23,999]
+    		}
+    		]
+    	};
+    	chart.setOption(option);
     }
     // 区域道路质量分析
     barRegList.children[2].onclick = function() {
-    	if (!sendClickJudge) {
+    	if (!addClickLimit.call(this)) {
     		return;
     	}
-    	sendClickJudge = false;
-    	setTimeout(function() {
-    		sendClickJudge = true;
-    	}, 800);
+    	console.log("执行【区域道路质量分析】");
 
     	dataCon.style.display = "none";
     	let formCon = document.getElementsByClassName("form-container")[0];
@@ -272,7 +352,6 @@ define(["require", "tools"], function (require) {
 						        <div class="echartsCon"></div>`;
     	let formList = formCon.getElementsByClassName("echartsCon");
     	onShow = 0;
-    	console.log("重置过后的的",onShow);
     	var firstChart = echarts.init(formList[2]);
     	var option1 = {
     		title:{
@@ -440,13 +519,10 @@ define(["require", "tools"], function (require) {
     }
     // 车辆利用率
     barRegList.children[3].onclick = function() {
-    	if (!sendClickJudge) {
+    	if (!addClickLimit.call(this)) {
     		return;
     	}
-    	sendClickJudge = false;
-    	setTimeout(function() {
-    		sendClickJudge = true;
-    	}, 800);
+    	console.log("执行【车辆利用率】");
 
     	dataCon.style.display = "none";
     	let formCon = document.getElementsByClassName("form-container")[0];
@@ -461,7 +537,6 @@ define(["require", "tools"], function (require) {
 
     	let formList = formCon.getElementsByClassName("echartsCon"); 
     	onShow = 0;
-    	console.log("重置过后的的",onShow);
     	var firstChart = echarts.init(formList[0]);
     	var option1 = {
     		title:{
@@ -629,16 +704,12 @@ define(["require", "tools"], function (require) {
     }
     // 异常情况
     barRegList.children[4].onclick = function() {
-    	if (!sendClickJudge) {
+    	if (!addClickLimit.call(this)) {
     		return;
     	}
-    	sendClickJudge = false;
-    	setTimeout(function() {
-    		sendClickJudge = true;
-    	}, 800);
+    	console.log("执行【异常情况】");
 
     	dataCon.style.display = "none";
-    	console.log("异常情况");
     }
     
 
