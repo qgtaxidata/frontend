@@ -13,16 +13,26 @@
  	case"Y":2===a.digit&&(a.max=99,a.min=0);break;
  	case"M":a.max=11,a.min=0,a.offset=1,3===a.digit?a.aliases=h.monthsShort:4===a.digit&&(a.aliases=h.months);break;
  	case"D":a.max=function(){
- 		let timeChoice = document.getElementsByClassName('time-onChoose')[0].innerHTML;
- 		if (timeChoice == '历史') {return allTimeNow.getDate();}
- 		else if (timeChoice == '未来'){return 21;}
- 		else {return te(l.date.getFullYear(),l.date.getMonth());} 
+ 		let htpCon = document.getElementsByClassName("heatmap")[0];
+ 		let routeCon =  document.getElementsByClassName("route")[0];
+ 		let htpTimeChoice = htpCon.getElementsByClassName('time-onChoose')[0].innerHTML;
+ 		let routeTimeChoice = routeCon.getElementsByClassName('time-onChoose')[0].innerHTML;
+
+ 		if (htpTimeChoice == '历史' && htpCon.style.display == "block") {return allTimeNow.getDate();}
+ 		else if (routeTimeChoice == '历史' && routeCon.style.display == "block"){return allTimeNow.getDate();}
+ 		else if (htpTimeChoice == '未来' && htpCon.style.display == "block"){return 21;}
+ 		else {return 21} 
  	}
  	,a.min=function(){
- 		let timeChoice = document.getElementsByClassName('time-onChoose')[0].innerHTML;
- 		if (timeChoice == '未来') {return allTimeNow.getDate();}
- 		else if(timeChoice == '历史') {return 3;} 
- 		else {return 1}
+ 		let htpCon = document.getElementsByClassName("heatmap")[0];
+ 		let routeCon =  document.getElementsByClassName("route")[0];
+ 		let htpTimeChoice = htpCon.getElementsByClassName('time-onChoose')[0].innerHTML;
+ 		let routeTimeChoice = routeCon.getElementsByClassName('time-onChoose')[0].innerHTML;
+
+ 		if (htpTimeChoice == '未来' && htpCon.style.display == "block") {return allTimeNow.getDate();}
+ 		else if(htpTimeChoice == '历史' && htpCon.style.display == "block") {return 3;} 
+ 		else if(routeTimeChoice == '历史' && routeCon.style.display == "block") {return 3;} 
+ 		else {return 3}
  	};break;
  case"H":a.max=23,a.min=0;break;
  case"m":case"s":a.max=59,a.min=0;break;

@@ -3,18 +3,6 @@
 	top: 2%;
 	right: 2%;
 }
-.route .time-judge {
-	position: absolute;
-	top: 0;
-	right: 19rem;
-	padding: 0.4rem;
-	width: 15rem;
-	color: #ff2828;
-	font-size: 1.2rem;
-	font-weight: bold;
-	text-align: right;
-	text-shadow: 0px 2px 0px #fff;
-}
 .route .region-choice {
 	position: absolute;
 	top: 2.5rem;
@@ -97,7 +85,8 @@
 .route .time-container:hover .time-picker {
 	height: 8.5rem;
 }
-.picker-header{
+.picker-header,
+.picker-footer{
 	display: none;
 }
 .picker-cell {

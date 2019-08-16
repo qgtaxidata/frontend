@@ -743,7 +743,7 @@ define(["require", "tools"], function (require) {
       for (var i = 0; i < bounds.length; i ++) {
         var polygon = new AMap.Polygon({
           map: map,
-          strokeWeight: 0,
+          strokeWeight: 1,
           strokeColor: 'rgba(1, 1, 1, 0)',
           fillColor: '#80d8ff',
           fillOpacity: 0,

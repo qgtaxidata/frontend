@@ -7,9 +7,10 @@ let map = new AMap.Map("map-container", {
 
 let serverUrl = "http://192.168.31.162:8080";
 
-let allTimeNow = new Date(Date.now() - 79200000000);
+let timeDiffer = 79200000000;
+let allTimeNow = new Date(Date.now() - timeDiffer);
 let allTimeNowId = setInterval(function() {
-	allTimeNow = new Date(Date.now() - 79200000000);
+	allTimeNow = new Date(Date.now() - timeDiffer);
 }, 1000);
 
 // 图表容器

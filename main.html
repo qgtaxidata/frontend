@@ -12,6 +12,7 @@
     <link rel="stylesheet" type="text/css" href="css/region.css">
     <link rel="stylesheet" type="text/css" href="css/set.css">
     <script src="https://webapi.amap.com/maps?v=1.4.15&key=96229f005826740eab888ed632918943"></script>
+    <script src="https://webapi.amap.com/ui/1.0/main.js?v=1.0.11"></script>
     <script src="http://code.jquery.com/jquery-latest.js"></script>
     <script src="js/echarts.js"></script>
 
@@ -215,7 +216,6 @@
         </div>
     </div>
     <div class="route" style="display: none;">
-        <div class="time-judge"></div>
         <div class="region-choice">
             <input class="region-value " type="text" disabled="disabled" value="全广州" tle="0">
             <img src="./images/xiala.png" style="display: block;">
@@ -253,7 +253,14 @@
             <div class="taxi-number-notice">车牌号码</div>
         </div>
     </div>
-    <div class="set" style="display: none;"></div>
+    <div class="set" style="display: none;">
+        <div class="time-container">
+            <input type="text" class="time-value " disabled="disabled">
+            <input type="text" class="time-now " disabled="disabled" style="color: #4c93fd"> 
+            <div class="time-picker"></div>
+            <button>确定</button>
+        </div>
+    </div>
     <div class="form-container" style="display: none;">
 <!--         <img title="关闭" class="form-close" src="./images/关闭.png" onclick="formClose()">
         <img class="form-pre" src="./images/上一个.png" onclick="formPre()">
