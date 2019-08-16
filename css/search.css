@@ -285,7 +285,7 @@ input::-webkit-input-placeholder{
 
 .load-ul{
     display: none;
-    height: 21rem;
+    height: auto;
     width: 20rem;
     margin: auto;
 }
