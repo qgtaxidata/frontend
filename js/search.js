@@ -1,7 +1,7 @@
-define(function() {
+define(["require", "route"],function() {
 
-    
-    var hotpointurl = "http://192.168.31.162:8080/hotspot/findHotspot"
+    //引入别的文件路径规划函数
+    var loadplugin = require('route').loadplugin;
     //热点推荐的容器框
     var hot_point = document.getElementsByClassName("hot-point-container")[0]; 
     //非空载状态下路径可视化的容器框
@@ -16,12 +16,6 @@ define(function() {
     var couple_end = document.getElementById("input-destination");
     //模糊搜索容器框
     var fuzzy_container = document.getElementsByClassName("fuzzy-contaniner")[0]
-
-    //创建地图实例，并且生成地图
-    // var map = new AMap.Map('map-container', {
-    //     zoom:14,//级别
-    //     center: [113.32768342921646, 23.11584481465405],//中心点坐标
-    // });
 
     //搜索框对应出租车状态选择栏
     var change = document.getElementsByClassName('xiala')[0];
@@ -94,47 +88,6 @@ define(function() {
                 fuzzy_container.innerHTML = ""
                 gethotpoint()
             }
-            // var start = document.getElementById("start").value;
-            // //当用户点击时隐藏模糊搜索容器框
-
-            // //用户输入地址转变成坐标
-            // AMap.plugin('AMap.Geocoder', function() {
-            //     var geocoder = new AMap.Geocoder({
-            //     // city 指定进行编码查询的城市，支持传入城市名、adcode 和 citycode
-            //     city: '广州'
-            //     })
-            
-            //     geocoder.getLocation(start, function(status, result) {
-            //     if (status === 'complete' && result.info === 'OK') {
-            //         console.log([result.geocodes[0].location.lng,result.geocodes[0].location.lat])   
-                    
-                    //创建一个后台能够接受数据的对象
-                    // var position = {
-                    //     time : "2017-02-01 15:31:46",
-                    //     longitude: result.geocodes[0].location.lng,
-                    //     latitude: result.geocodes[0].location.lat,
-                    // } 
-                    // console.log(position);
-                    
-                    // $.ajax({
-                    //     "url":  hotpointurl,
-                    //     "method": "POST",
-                    //     "headers": {
-                    //     "Content-Type": "application/json"
-                    //     },
-                    //     "data": JSON.stringify(position),
-                    //     "dataType": "json",
-                    //     "async": true,
-                    //     "crossDomain": true,
-                    //     "success": function(data) {
-                    //         console.log(data)
-                    //         showhotpoint(data.data)
-                    //         addhotpoint(data.data);
-                    //     }
-                    // })
-        //         }
-        //         })
-        //     })
         })
     })
 
@@ -187,8 +140,11 @@ define(function() {
     function getroutepoint() {
         //定义两个变量解决下面回调函数的异步问题
         var flag1 = 0,
-            flag2 = 0;
-
+            flag2 = 0,
+            lonOrigin,
+            latOrigin,
+            lonDestination,
+            latDestination;
         AMap.plugin('AMap.Geocoder', function() {
             var geocoder = new AMap.Geocoder({
             // city 指定进行编码查询的城市，支持传入城市名、adcode 和 citycode
@@ -198,26 +154,35 @@ define(function() {
             geocoder.getLocation(couple_start.value, function(status, result) {
                 if (status === 'complete' && result.info === 'OK') {
                     flag1 = 1;
-                    console.log([result.geocodes[0].location.lng,result.geocodes[0].location.lat])   
+                    lonOrigin = result.geocodes[0].location.lng;
+                    latOrigin = result.geocodes[0].location.lat;  
                     if(flag1 == 1 && flag2 == 1) {
-                        //创建一个后台能够接受数据的对象,暂时不知道需要什么格式的数据                              
+                        var obj = {
+                            lonOrigin: lonOrigin,
+                            latOrigin: latOrigin,
+                            lonDestination: lonDestination,
+                            latDestination: latDestination
+                        }
+                        flag1 = 0; flag2 = 0;
                         $.ajax({
-                            "url":  serverUrl + "/hotspot/findHotspot",
+                            "url":  serverUrl + "/route/getRoute/?lonOrigin=" + lonOrigin + "&latOrigin=" + latOrigin + "&lonDestination=" + lonDestination + "&latDestination=" + latDestination ,
                             "method": "POST",
                             "headers": {
                             "Content-Type": "application/json"
                             },
-                            "data": JSON.stringify(position),
                             "dataType": "json",
                             "async": true,
                             "crossDomain": true,
                             "success": function(data) {
-                                console.log(data)
-                                showhotpoint(data.data)
-                                addhotpoint(data.data);
+                                if(data.code == -1) {
+                                    console.log(data)
+                                    alert(data.msg)
+                                } else if(data.code == 1) {
+                                    console.log(data)
+                                    noloadroute(data.data)
+                                }
                             }
-                        })
-                        flag1 = 0; flag2 = 0;
+                        })                                       
                     }
                 }
             })
@@ -225,26 +190,35 @@ define(function() {
             geocoder.getLocation(couple_end.value, function(status, result) {
                 if (status === 'complete' && result.info === 'OK') {
                     flag2 = 1;
-                    console.log([result.geocodes[0].location.lng,result.geocodes[0].location.lat])   
+                    lonDestination = result.geocodes[0].location.lng;
+                    latDestination = result.geocodes[0].location.lat;  
                     if(flag1 == 1 && flag2 == 1) {
-                        //创建一个后台能够接受数据的对象，,暂时不知道需要什么格式的数据                                    
+                        var obj = {
+                            lonOrigin: lonOrigin,
+                            latOrigin: latOrigin,
+                            lonDestination: lonDestination,
+                            latDestination: latDestination
+                        }
+                        flag1 = 0; flag2 = 0;
                         $.ajax({
-                            "url":  serverUrl + "/hotspot/findHotspot",
+                            "url":  serverUrl + "/route/getRoute/?lonOrigin=" + lonOrigin + "&latOrigin=" + latOrigin + "&lonDestination=" + lonDestination + "&latDestination=" + latDestination,
                             "method": "POST",
                             "headers": {
                             "Content-Type": "application/json"
                             },
-                            "data": JSON.stringify(position),
                             "dataType": "json",
-                            "async": true,
+                            "async": false,
                             "crossDomain": true,
                             "success": function(data) {
-                                console.log(data)
-                                showhotpoint(data.data)
-                                addhotpoint(data.data);
+                                if(data.code == -1) {
+                                    console.log(data)
+                                    alert(data.msg)
+                                } else if(data.code == 1) {
+                                    console.log(data);
+                                    noloadroute(data.data)
+                                }
                             }
-                        })
-                        flag1 = 0; flag2 = 0;
+                        })                          
                     }
                 }
             })
@@ -286,6 +260,7 @@ define(function() {
 
     //非空载下的路径规划
     function noloadroute(method) {
+        load_container.style.display = "block";
         let str = "";
         for(let i = 0; i < method.length; i++) {
             str += noloadstr(method[i], i);
@@ -299,30 +274,42 @@ define(function() {
                     document.getElementsByClassName("method-recommand-container")[i].style.color = "black";
                 }
                 this.style.color = "#4c93fd";
-                // showloadroute()
+                var k = this.getAttribute("num");
+                console.log(method[k].route);
+                console.log(changform(method[k].route));
+                loadplugin(changform(method[k].route), "history")
             };
         }
 
        document.getElementsByClassName("method-recommand-container")[method.length - 1].style.marginBottom = "1rem";
     }
 
+    function changform(path) {
+        var arry = new Array();
+        var taxi_point = new Array();
+
+        for(let i = 0; i < path.length; i++) {      
+            taxi_point[i] = [path[i].lng,path[i].lat]
+            arry.push(taxi_point[i]);   
+        }
+
+        return arry;
+    }
+
     function noloadstr(method, i) {
-        var context = `<div class="method-recommand-container" title="${i}">
-            <div class="method-recommand">${method.method}</div>
+        var context = `<div class="method-recommand-container" num="${i}">
+            <div class="method-recommand">方案${i + 1}</div>
                 <ul class="method-recommand method-recommand-ul">
-                    <li>${method.time}</li>
+                    <li>${method.time}分钟</li>
                     <li>|</li>
-                    <li>${method.mile}</li>
+                    <li>${method.distance}公里</li>
                 </ul>
             </div>`
 
         return context      
     }
 
-    //当点击不同的方案时像后台发出请求，生成路线
-    function showloadroute() {
-       //发送请求，生成路线
-    }
+
 
     // noloadroute(method1)
     //热点推荐

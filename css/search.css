@@ -285,7 +285,7 @@ input::-webkit-input-placeholder{
 
 .load-ul{
     display: none;
-    height: 21rem;
+    height: auto;
     width: 20rem;
     margin: auto;
 }
@@ -374,3 +374,17 @@ input::-webkit-input-placeholder{
 .congestion-degree,.traffic-flow{
     margin-bottom: 2rem;
 } */
+
+.error-alert{
+    display: none;
+    position: absolute;
+    top: 0;
+    right: 19rem;
+    width: 17.2rem;
+    height: 2rem;
+    line-height: 2rem;
+    color: #ff2828;
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-align: right;
+}

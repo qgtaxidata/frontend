@@ -5,7 +5,7 @@ let map = new AMap.Map("map-container", {
 });
 
 
-let serverUrl = "http://192.168.31.162:8080";
+let serverUrl = "http://192.168.31.179:9090";
 
 let timeDiffer = 79200000000;
 let allTimeNow = new Date(Date.now() - timeDiffer);

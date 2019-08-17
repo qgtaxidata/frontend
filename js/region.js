@@ -130,8 +130,12 @@ define(["require", "tools"], function (require) {
     	// 	"async": true,
     	// 	"crossDomain": true,
     	// 	"success": function(data) {
-    	// 		console.log(data.data);
-    	// 		createDriver(data.data, area, date);
+     //            console.log(data.data);
+     //            if (data.code ==1) {
+     //                createDriver(data.data, area, date);
+     //            } else {
+     //                alert(data.msg)
+     //            }	
     	// 	}
     	// })
     	var data = [
@@ -239,7 +243,11 @@ define(["require", "tools"], function (require) {
     	// 	"crossDomain": true,
     	// 	"success": function(data) {
     	// 		console.log(data.data);
-    	// 		showDriver(data.data, rank, driverID, income)
+     //            if (data.code == 1) {
+     //                showDriver(data.data, rank, driverID, income)
+     //            } else {
+     //                alert(data.msg);
+     //            }
     	// 	}
     	// })
 
@@ -352,170 +360,21 @@ define(["require", "tools"], function (require) {
 						        <div class="echartsCon"></div>`;
     	let formList = formCon.getElementsByClassName("echartsCon");
     	onShow = 0;
-    	var firstChart = echarts.init(formList[2]);
-    	var option1 = {
-    		title:{
-    			text:'1',
-    		},
-    		tooltip:{
-    		},
-    		legend:{
-    			data:['猥琐度','颜值'],
-    		},
-    		xAxis:{
-    			data:['郑伟滨','曾华琛','余圣源','林旭','陈子锋']
-    		},
-    		yAxis:{
-    		},
-    		series:[
-    		{
-    			name:'猥琐度',
-    			type:'bar',
-    			data:[29,0,36,22,17]
-    		},
-    		{
-    			name:'颜值',
-    			type:'line',
-    			data:[-22,99,66,87,89]
-    		}
-    		]
-    	};
-    	firstChart.setOption(option1);
 
-    	var data = {
-    		evaporation:[2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3],
-    		precipitation:[2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3]
-    	}
-    	var secondChart = echarts.init(formList[0]);
-    	var option2 = {
-    		title:{
-    			text:'2',
-    			subtext:'虚构的数据'
-    		},
-    		toolbox:{
-    			show:true,
-    			feature:{
-    				dataView:{
-    					show:true,
-    					readOnly:false
-    				},
-    				magicType:{
-    					show:true,
-    					type:['line','bar']
-    				},
-    				restore:{
-    					show:true
-    				},
-    				saveAsImage:{
-    					show:true
-    				}
-    			}
-    		},
-    		legend:{						
-    			padding:5,
-    			itemGap:10,
-    			data:[
-    			{name:'蒸发量',textStyle:{color:'green'}},
-    			{name:'降水量'}]
-    		},
-    		tooltip:{						
-    			trigger:'axis'
-    		},
-    		xAxis:[						
-    		{	
-    			type:'category',
-    			data:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
-    		}
-    		],
-    		yAxis:[							
-    		{
-    			type:'value',
-    		}
-    		],
-    		series:[
-    		{
-    			name:'蒸发量',
-    			type:'bar',
-
-    			data:data.evaporation,
-    			markPoint:{
-    				data:[
-    				{type:'max',name:'最大蒸发量'},
-    				{type:'min',name:'最小蒸发量'}
-    				]
-    			},
-    			markLine:{
-    				data:[
-    				{type:'average',name:'平均蒸发量'}
-    				]
-    			}
-    		},
-    		{
-    			name:'降水量',
-    			type:'bar',
-
-    			data:data.precipitation,
-    			markPoint:{
-    				data:[
-    				{type:'max',name:'最大降雨量'},
-    				{type:'min',name:'最小降雨量'}
-    				]
-    			},
-    			markLine:{
-    				data:[
-    				{type:'average',name:'平均蒸发量'}
-    				]
-    			}
-    		}
-    		]
-    	};
-    	secondChart.setOption(option2);
-
-    	var thirdChart = echarts.init(formList[1]);
-    	var option3 = {
-    		title:{
-    			text:'3',
-    			left:'left'
-    		},
-    		toolbox:{
-    			feature:{
-    				dataView:{
-    					show:true,
-    					readonly:true
-    				},
-    				restore:{
-    					show:true
-    				},
-    				saveAsImage:{
-    					show:true
-    				}
-    			}
-    		},
-    		legend:{						
-    			orient:'vertical',
-    			left:'left',
-    			top:'center',
-    			data:['直接访问','邮件营销','联盟广告','视频广告','搜索引擎']
-    		},
-    		tooltip:{					
-    			trigger:'item'
-    		},
-    		series:[
-    		{
-    			name:'访问来源',
-    			type:'pie',
-    			radius: "55%",
-    			data:[
-    			{name:'直接访问',value:100},
-    			{name:'邮件营销',value:78},
-    			{name:'联盟广告',value:234},
-    			{name:'视频广告',value:324},
-    			{name:'搜索引擎',value:789},
-    			]
-    		},
-    		]
-    	};
-    	thirdChart.setOption(option3);
+        let data = {
+            x: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            y: [112, 32, 34, 14, 55, 26, 17, 8, 94],
+            title: "天河区需求分析及预测"
+        }
+        let chart0 =  echarts.init(formList[0]);
+        let chart1 =  echarts.init(formList[1]);
+        let chart2 =  echarts.init(formList[2]);
+        
+        
+        chart0.setOption(createOption(data));        
+        chart1.setOption(createOption(data));
+        chart2.setOption(createOption(data));
+    	
     }
     // 车辆利用率
     barRegList.children[3].onclick = function() {
@@ -537,170 +396,19 @@ define(["require", "tools"], function (require) {
 
     	let formList = formCon.getElementsByClassName("echartsCon"); 
     	onShow = 0;
-    	var firstChart = echarts.init(formList[0]);
-    	var option1 = {
-    		title:{
-    			text:'1',
-    		},
-    		tooltip:{
-    		},
-    		legend:{
-    			data:['猥琐度','颜值'],
-    		},
-    		xAxis:{
-    			data:['郑伟滨','曾华琛','余圣源','林旭','陈子锋']
-    		},
-    		yAxis:{
-    		},
-    		series:[
-    		{
-    			name:'猥琐度',
-    			type:'bar',
-    			data:[29,0,36,22,17]
-    		},
-    		{
-    			name:'颜值',
-    			type:'line',
-    			data:[-22,99,66,87,89]
-    		}
-    		]
-    	};
-    	firstChart.setOption(option1);
 
-    	var data = {
-    		evaporation:[2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3],
-    		precipitation:[2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3]
-    	}
-    	var secondChart = echarts.init(formList[1]);
-    	var option2 = {
-    		title:{
-    			text:'2',
-    			subtext:'虚构的数据'
-    		},
-    		toolbox:{
-    			show:true,
-    			feature:{
-    				dataView:{
-    					show:true,
-    					readOnly:false
-    				},
-    				magicType:{
-    					show:true,
-    					type:['line','bar']
-    				},
-    				restore:{
-    					show:true
-    				},
-    				saveAsImage:{
-    					show:true
-    				}
-    			}
-    		},
-    		legend:{						
-    			padding:5,
-    			itemGap:10,
-    			data:[
-    			{name:'蒸发量',textStyle:{color:'green'}},
-    			{name:'降水量'}]
-    		},
-    		tooltip:{						
-    			trigger:'axis'
-    		},
-    		xAxis:[						
-    		{	
-    			type:'category',
-    			data:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
-    		}
-    		],
-    		yAxis:[							
-    		{
-    			type:'value',
-    		}
-    		],
-    		series:[
-    		{
-    			name:'蒸发量',
-    			type:'bar',
+        let data = {
+            x: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            y: [112, 32, 34, 14, 55, 26, 17, 8, 94],
+            title: "天河区需求分析及预测"
+        }
+        let chart0 =  echarts.init(formList[0]);
+        let chart1 =  echarts.init(formList[1]);
+        let chart2 =  echarts.init(formList[2]);
 
-    			data:data.evaporation,
-    			markPoint:{
-    				data:[
-    				{type:'max',name:'最大蒸发量'},
-    				{type:'min',name:'最小蒸发量'}
-    				]
-    			},
-    			markLine:{
-    				data:[
-    				{type:'average',name:'平均蒸发量'}
-    				]
-    			}
-    		},
-    		{
-    			name:'降水量',
-    			type:'bar',
-
-    			data:data.precipitation,
-    			markPoint:{
-    				data:[
-    				{type:'max',name:'最大降雨量'},
-    				{type:'min',name:'最小降雨量'}
-    				]
-    			},
-    			markLine:{
-    				data:[
-    				{type:'average',name:'平均蒸发量'}
-    				]
-    			}
-    		}
-    		]
-    	};
-    	secondChart.setOption(option2);
-
-    	var thirdChart = echarts.init(formList[2]);
-    	var option3 = {
-    		title:{
-    			text:'3',
-    			left:'left'
-    		},
-    		toolbox:{
-    			feature:{
-    				dataView:{
-    					show:true,
-    					readonly:true
-    				},
-    				restore:{
-    					show:true
-    				},
-    				saveAsImage:{
-    					show:true
-    				}
-    			}
-    		},
-    		legend:{						
-    			orient:'vertical',
-    			left:'left',
-    			top:'center',
-    			data:['直接访问','邮件营销','联盟广告','视频广告','搜索引擎']
-    		},
-    		tooltip:{					
-    			trigger:'item'
-    		},
-    		series:[
-    		{
-    			name:'访问来源',
-    			type:'pie',
-    			radius: "55%",
-    			data:[
-    			{name:'直接访问',value:100},
-    			{name:'邮件营销',value:78},
-    			{name:'联盟广告',value:234},
-    			{name:'视频广告',value:324},
-    			{name:'搜索引擎',value:789},
-    			]
-    		},
-    		]
-    	};
-    	thirdChart.setOption(option3);
+        chart0.setOption(createOption(data));        
+        chart1.setOption(createOption(data));
+        chart2.setOption(createOption(data));
     }
     // 异常情况
     barRegList.children[4].onclick = function() {
@@ -712,49 +420,69 @@ define(["require", "tools"], function (require) {
     	dataCon.style.display = "none";
     }
     
-
-  // map.plugin("AMap.DistrictSearch");
-  var opts = {
-    extensions: 'all',      
-  };
-  let polygons = [];
-  // 跳转视图
-  function changeView(districtName) {
-    for (let i = 0; i < polygons.length; i++) {
-      polygons[i].setMap(null);
-    }
-    polygons = [];
-    var district = new AMap.DistrictSearch(opts);
-    district.search(districtName, function(status, result) {
-      if(status=='complete'){
-        getData(result.districtList[0]);
-          // var position = [result.districtList[0].center.lng, result.districtList[0].center.lat];
-          // var marker = new AMap.Marker({position : position});
-          // map.add(marker);
+    var opts = {
+        extensions: 'all',      
+    };
+    let polygons = [];
+    // 跳转视图
+    function changeView(districtName) {
+        for (let i = 0; i < polygons.length; i++) {
+            polygons[i].setMap(null);
         }
-      });
-    setTimeout(function() {
-      map.setFitView();
-    }, 500);
-  }
-  function getData(data) {
-    var bounds = data.boundaries;
-    if (bounds) {
-      for (var i = 0; i < bounds.length; i ++) {
-        var polygon = new AMap.Polygon({
-          map: map,
-          strokeWeight: 1,
-          strokeColor: 'rgba(1, 1, 1, 0)',
-          fillColor: '#80d8ff',
-          fillOpacity: 0,
-          path: bounds[i]
-        });
-        polygons.push(polygon);
-      }
-      map.setFitView();
+        polygons = [];
+        var district = new AMap.DistrictSearch(opts);
+        district.search(districtName, function(status, result) {
+          if(status=='complete'){
+            getData(result.districtList[0]);
+         }
+     });
+        setTimeout(function() {
+          map.setFitView();
+      }, 500);
     }
-  }
+    function getData(data) {
+        var bounds = data.boundaries;
+        if (bounds) {
+            for (var i = 0; i < bounds.length; i ++) {
+                var polygon = new AMap.Polygon({
+                    map: map,
+                    strokeWeight: 1,
+                    strokeColor: 'rgba(1, 1, 1, 0)',
+                    fillColor: '#80d8ff',
+                    fillOpacity: 0,
+                    path: bounds[i]
+                });
+                polygons.push(polygon);
+            }
+            map.setFitView();
+        }
+    }
 
-// document.getElementsByClassName('sidebar')[0].children[2].
+    function createOption(data) {
+        console.log(data);
+        var option = {
+            title: {
+                text: data.title,
+            },
+            tooltip: {},
+            legend: {
+                data:["line"],
+            },
+            xAxis: {
+                data: data.x
+            },
+            yAxis: {},
+            series: [
+                {
+                    name:'line',
+                    type:'line',
+                    data: data.y
+                }
+            ]
+        }
+        return option;
+    }
+
+
 
 });

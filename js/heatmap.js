@@ -278,16 +278,15 @@ define(["require", "tools"], function (require) {
     } 
     console.log(send);
    //  $.ajax({
-   //    url: serverUrl + `/thermoDiagram/getMap`,
+   //    url: serverUrl + `/thermoDiagram/getAreaMap`,
    //    method: "GET",
    //    data: send,
-   //    contentType: false,
-   //    processData: false,
+   //    // contentType: false,
    //    dataType: "json",
    //    headers: {
    //     "Content-Type": "application/json"
    //   },
-   //   async: true,
+   //   async: false,
    //   "crossDomain": true,
    //   success: function (data) {
    //     console.log(data.data);
@@ -296,7 +295,7 @@ define(["require", "tools"], function (require) {
    //         data: data.data
    //       });   	      	
    //     } else {
-   //       alert("未知错误");
+   //       alert(data.msg);
    //     }
    //   }
    // })
@@ -337,13 +336,11 @@ define(["require", "tools"], function (require) {
     // url: serverUrl + "/thermoDiagram/getFutureMap",
     // method: "GET",
     // data: send,
-    // contentType: false,
-    // processData: false,
     // dataType: "json",
     // headers: {
     //  "Content-Type": "application/json"
     // },
-    //  // async: false,
+    //  async: false,
     // "crossDomain": true,
     // success: function (data) {
     //    console.log(data.data);
@@ -352,7 +349,7 @@ define(["require", "tools"], function (require) {
     //        data: data.data
     //      });            
     //    } else {
-    //      alert("未知错误");
+    //      alert(data.msg);
     //    }
     //  }
     // })
@@ -369,9 +366,8 @@ define(["require", "tools"], function (require) {
     heatmapClickJudge = false;
     setTimeout(function() {
       heatmapClickJudge = true;
-    }, 1000);
+    }, 3000);
 
-    heatmap.show();
     if (onHmapPrd == "time-future") {
       if(!hmapFuture()) {
         return;
@@ -388,6 +384,7 @@ define(["require", "tools"], function (require) {
         hmapNowPass();
       }, 2000);
     }
+    heatmap.show();
     changeStaus();// 换状态
   }
   // 隐藏热力图
@@ -461,8 +458,6 @@ define(["require", "tools"], function (require) {
     //   url: serverUrl + "/AreaRequirement/analyseRequirement",
     //   method: "GET",
     //   data: send,
-    //   contentType: false,
-    //   processData: false,
     //   dataType: "json",
     //   headers: {
     //    "Content-Type": "application/json"
@@ -474,7 +469,7 @@ define(["require", "tools"], function (require) {
     //     if (data.msg == "success") {
     //       chart.setOption(createOption(data.data));
     //     } else {
-    //       alert("未知错误");
+    //       alert(data.msg);
     //     }
     //   }
     // })

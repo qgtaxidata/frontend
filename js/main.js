@@ -14,7 +14,7 @@ define(["require", "tools"], function (require) {
 			return;
 		}
 		if (sidebar.getAttribute('tle') == "hiden") {
-			sidebar.style.height = "17.7rem";
+			sidebar.style.height = "21rem";
 
 			sidebar.setAttribute('tle',"show");
 			setTimeout(function() {

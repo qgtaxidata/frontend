@@ -33,6 +33,7 @@
             </ul>
         </div>
         <div tle="route">路径可视化</div>
+        <div tle="billboard">广告牌推荐</div>
         <div tle="set">设置</div>
     </div>
 
@@ -200,22 +201,10 @@
         </div>
         <div class="refresh">刷新</div>
         <div class="data-container">
-            <!-- <div class="item-name">
-                <span style="width: 4rem">排名</span>
-                <span style="width: 6rem">司机编号</span>
-                <span style="width: 4rem">收入</span>
-            </div>
-            <ul class="data" style="overflow-x: hidden; max-height: 20rem">
-                <li>
-                    <span style="width: 4rem">1</span>
-                    <span style="width: 6rem">A11111</span>
-                    <span style="width: 4rem">2000</span>
-                </li>
-               
-            </ul> -->
         </div>
     </div>
     <div class="route" style="display: none;">
+        <div class="error-alert">请选择过去的时间</div>
         <div class="region-choice">
             <input class="region-value " type="text" disabled="disabled" value="全广州" tle="0">
             <img src="./images/xiala.png" style="display: block;">
@@ -253,6 +242,10 @@
             <div class="taxi-number-notice">车牌号码</div>
         </div>
     </div>
+    <div class="billboard" style="display: none;">
+
+
+    </div>
     <div class="set" style="display: none;">
         <div class="time-container">
             <input type="text" class="time-value " disabled="disabled">
@@ -262,39 +255,6 @@
         </div>
     </div>
     <div class="form-container" style="display: none;">
-<!--         <img title="关闭" class="form-close" src="./images/关闭.png" onclick="formClose()">
-        <img class="form-pre" src="./images/上一个.png" onclick="formPre()">
-        <img class="form-next" src="./images/下一个.png" onclick="formNext()">
-        <div class="echartsCon "></div>
-        <div class="echartsCon"></div>
-        <div class="echartsCon onShow">
-            <img src="./images/driver.png">
-            <div class="driverID">A11111</div>
-            <div>
-                <span>收入金额</span>
-                <span class="value">12万</span>
-            </div>
-            <div>
-                <span>收入排名</span>
-                <span class="value">1</span>
-            </div>
-            <div>
-                <span>运营里程</span>
-                <span class="value">1252km</span>
-            </div>
-            <div>
-                <span>运营时长</span>
-                <span class="value">355h</span>
-            </div>
-            <div>
-                <span>空车里程</span>
-                <span class="value">453km</span>
-            </div>
-            <div>
-                <span>空车时长</span>
-                <span class="value">125h</span>
-            </div>
-        </div> -->
     </div>
 </body>
 <script type="text/javascript" src="js/picker.change.js"></script> 
