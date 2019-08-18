@@ -98,7 +98,8 @@ define(["require", "tools"], function (require) {
     	}
     	now.classList.add("on-region");
     	if (this.innerText == "出租车司机收入排行榜") {
-    		formClose();
+    		formCon.style.display = "none";
+            onShow = 0;
     	}
     	return true;
     }
@@ -267,7 +268,7 @@ define(["require", "tools"], function (require) {
     	let formCon = document.getElementsByClassName("form-container")[0];
     	formCon.style.display = "block";
     	formCon.innerHTML = "";
-    	formCon.innerHTML += `<img title="关闭" class="form-close" src="./images/关闭.png" onclick="formClose()">
+    	formCon.innerHTML += `<img title="关闭" class="form-close" src="./images/关闭.png" click="formClose">
     						  <div class="echartsCon onShow">
     						      <img src="./images/driver.png">
 				                  <div class="driverID">${driverID}</div>
@@ -314,7 +315,7 @@ define(["require", "tools"], function (require) {
     	let formCon = document.getElementsByClassName("form-container")[0];
     	formCon.style.display = "block";
     	formCon.innerHTML = ""
-    	formCon.innerHTML += `<img title="关闭" class="form-close" src="./images/关闭.png" onclick="formClose()"><div class="echartsCon onShow"></div>`;
+    	formCon.innerHTML += `<img title="关闭" class="form-close" src="./images/关闭.png" click="formClose"><div class="echartsCon onShow"></div>`;
     	let chartCon = formCon.getElementsByClassName("onShow")[0];
     	let chart =  echarts.init(chartCon);
     	var option = {
@@ -352,9 +353,9 @@ define(["require", "tools"], function (require) {
     	let formCon = document.getElementsByClassName("form-container")[0];
     	formCon.style.display = "block";
     	formCon.innerHTML = ""
-    	formCon.innerHTML +=   `<img title="关闭" class="form-close" src="./images/关闭.png" onclick="formClose()">
-						        <img class="form-pre" src="./images/上一个.png"onclick="formPre()">
-						        <img class="form-next" src="./images/下一个.png" onclick="formNext()">
+    	formCon.innerHTML +=   `<img title="关闭" class="form-close" src="./images/关闭.png" click="formClose">
+						        <img class="form-pre" src="./images/上一个.png" click="formPre">
+						        <img class="form-next" src="./images/下一个.png" click="formNext">
 						        <div class="echartsCon onShow"></div>
 						        <div class="echartsCon"></div>
 						        <div class="echartsCon"></div>`;
@@ -387,9 +388,9 @@ define(["require", "tools"], function (require) {
     	let formCon = document.getElementsByClassName("form-container")[0];
     	formCon.style.display = "block";
     	formCon.innerHTML = ""
-    	formCon.innerHTML +=   `<img title="关闭" class="form-close" src="./images/关闭.png" onclick="formClose()">
-						        <img class="form-pre" src="./images/上一个.png"onclick="formPre()">
-						        <img class="form-next" src="./images/下一个.png" onclick="formNext()">
+    	formCon.innerHTML +=   `<img title="关闭" class="form-close" src="./images/关闭.png" click="formClose">
+						        <img class="form-pre" src="./images/上一个.png" click="formPre">
+						        <img class="form-next" src="./images/下一个.png" click="formNext">
 						        <div class="echartsCon onShow"></div>
 						        <div class="echartsCon"></div>
 						        <div class="echartsCon"></div>`;

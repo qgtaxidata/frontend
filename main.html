@@ -10,6 +10,7 @@
     <link rel="stylesheet" type="text/css" href="css/heatmap.css">
     <link rel="stylesheet" type="text/css" href="css/route.css">
     <link rel="stylesheet" type="text/css" href="css/region.css">
+    <link rel="stylesheet" type="text/css" href="css/billboard.css">
     <link rel="stylesheet" type="text/css" href="css/set.css">
     <script src="https://webapi.amap.com/maps?v=1.4.15&key=96229f005826740eab888ed632918943"></script>
     <script src="https://webapi.amap.com/ui/1.0/main.js?v=1.0.11"></script>
@@ -200,7 +201,7 @@
             </ul>
         </div>
         <div class="refresh">刷新</div>
-        <div class="data-container">
+        <div class="data-container" style="display: none;">
         </div>
     </div>
     <div class="route" style="display: none;">
@@ -242,10 +243,59 @@
             <div class="taxi-number-notice">车牌号码</div>
         </div>
     </div>
+
+
+
+
+
     <div class="billboard" style="display: none;">
-
-
+        <div class="region-choice" style="right: 20rem;">
+            <input class="region-value" type="text" disabled="disabled" value="花都区" tle="1">
+            <img src="./images/xiala.png" tle="xiala">
+            <ul title="hiden" style="height: 0">
+                <li tle="1">花都区</li>
+                <li tle="2">南沙区</li>
+                <li tle="3">增城区</li>
+                <li tle="4">从化区</li>
+                <li tle="5">番禺区</li>
+                <li tle="6">白云区</li>
+                <li tle="7">黄埔区</li>
+                <li tle="8">荔湾区</li>
+                <li tle="9">海珠区</li>
+                <li tle="10">天河区</li>
+                <li tle="11">越秀区</li>
+            </ul>
+        </div>
+        <div class="date-type-choice" style="right: 12rem;">
+            <input class="date-type-value" type="text" disabled="disabled" value="工作日">
+            <img src="./images/xiala.png" tle="xiala">
+            <ul title="hiden" style="height: 0">
+                <li>工作日</li>
+                <li>周末</li>
+                <li>不限</li>
+            </ul>
+        </div>
+        <div class="time-interval-choice" style="right: 5rem;">
+            <input class="time-interval-value" type="text" disabled="disabled" value="白天">
+            <img src="./images/xiala.png" tle="xiala">
+            <ul title="hiden" style="height: 0">
+                <li>白天</li>
+                <li>黑夜</li>
+                <li>不限</li>
+            </ul>
+        </div>
+        
+        <div class="refresh">刷新</div>
+        <div class="data-container" style="display: none;">
+           <!--  广告牌推荐点数据 容器 -->
+        </div>
     </div>
+
+
+
+
+
+
     <div class="set" style="display: none;">
         <div class="time-container">
             <input type="text" class="time-value " disabled="disabled">

@@ -443,7 +443,7 @@ define(["require", "tools"], function (require) {
     let formCon = document.getElementsByClassName("form-container")[0];
     formCon.style.display = "block";
     formCon.innerHTML = ""
-    formCon.innerHTML += `<img title="关闭" class="form-close" src="./images/关闭.png" onclick="formClose()"><div class="echartsCon onShow"></div>`;
+    formCon.innerHTML += `<img title="关闭" class="form-close" src="./images/关闭.png" click="formClose"><div class="echartsCon onShow"></div>`;
     let chartCon = formCon.getElementsByClassName("onShow")[0];
     let chart =  echarts.init(chartCon);
 

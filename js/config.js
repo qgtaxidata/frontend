@@ -1,54 +1,24 @@
+// 公用地图
 let map = new AMap.Map("map-container", {
 	resizeEnable: true,
 	center: [113.31739, 23.209],
 	zoom: 11
 });
 
+// 图表容器
+let formCon = document.getElementsByClassName("form-container")[0];
+// 图表切换监听
+let onShow = 0;
 
+// 服务器地址
 let serverUrl = "http://192.168.31.179:9090";
 
+// 公用时间
 let timeDiffer = 79200000000;
 let allTimeNow = new Date(Date.now() - timeDiffer);
 let allTimeNowId = setInterval(function() {
 	allTimeNow = new Date(Date.now() - timeDiffer);
 }, 1000);
-
-// 图表容器
-let formCon = document.getElementsByClassName("form-container")[0];
-let onShow = 0;
-let changeJudge = true;
-function formClose () {
-	formCon.style.display = "none";
-	onShow = 0;
-}
-
-function formNext() {
-	let formList = formCon.getElementsByClassName("echartsCon");
-	if (!changeJudge) {
-		return;
-	}
-	changeJudge = false;
-	setTimeout(function() {
-		changeJudge = true;
-	}, 1500)
-	formList[onShow].classList.remove("onShow");
-	onShow = (onShow + 1) % 3;
-	formList[onShow].classList.add("onShow");
-}
-function formPre() {
-	let formList = formCon.getElementsByClassName("echartsCon");
-	if (!changeJudge) {
-		return;
-	}
-	changeJudge = false;
-	setTimeout(function() {
-		changeJudge = true;
-	}, 1500)
-	console.log("执行之前的",onShow);
-	formList[onShow].classList.remove("onShow");
-	onShow = (onShow + 2) % 3;
-	formList[onShow].classList.add("onShow");
-}
 
 require.config({
 	baseUrl : "js",
@@ -58,8 +28,9 @@ require.config({
 		"heatmap": "heatmap",
 		"region": "region",
 		"route": "route",
-        "tools": "tools",
-        "set": "set"
+		"billboard": "billboard",
+		"set": "set",
+        "tools": "tools"
     }
 })
 
@@ -68,6 +39,7 @@ require(['search']);
 require(["heatmap"]);
 require(["region"]);
 require(["route"]);
+require(["billboard"]);
 require(['set']);
 
 

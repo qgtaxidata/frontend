@@ -1,0 +1,125 @@
+.billboard {
+	position: fixed;
+	top: 2%;
+	right: 2%;
+}
+.billboard .region-choice,
+.billboard .date-type-choice,
+.billboard .time-interval-choice {
+	position: absolute;
+	top: 0rem;
+}
+.billboard .region-choice input,
+.billboard .date-type-choice input,
+.billboard .time-interval-choice input  {
+	padding: 0.5rem;
+	width: 4rem;
+	outline: none;
+	border: 0.1rem solid #4c93fd;
+	border-radius: 0.5rem;
+	background-color: #fff;
+}
+.billboard .region-choice img,
+.billboard .date-type-choice img,
+.billboard .time-interval-choice img {
+	position: absolute;
+	top: 0.9rem;
+	right: 0.6rem;
+	height: 0.5rem;
+	cursor: pointer;
+}
+.billboard .region-choice ul,
+.billboard .date-type-choice ul,
+.billboard .time-interval-choice ul {
+	position: absolute;
+	z-index: -1;
+	top: 1rem;
+	border: 0.1rem solid #d4d4d4;
+	border-radius: 0.5rem;
+	background-color: #fff;
+	transition: all 0.8s;
+	overflow: hidden;
+}
+.billboard .region-choice li,
+.billboard .date-type-choice li,
+.billboard .time-interval-choice li  {
+	padding: 0.4rem; 
+	font-size: 0.8rem;
+	cursor: pointer;
+	border-radius: 0.5rem;
+}
+.billboard .region-choice li:hover,
+.billboard .date-type-choice li:hover,
+.billboard .time-interval-choice li:hover{
+	color: #4c93fd;
+}
+.billboard .region-choice input {
+	width: 4rem;
+}
+.billboard .date-type-choice input {
+	width: 6rem;
+}
+.billboard .time-interval-choice input {
+	width: 5rem;
+}
+.billboard .region-choice ul {
+	width: 5rem;
+}
+.billboard .date-type-choice ul {
+	width: 7rem;
+}
+.billboard .time-interval-choice ul {
+	width: 6rem;
+}
+.billboard .region-choice li {
+	width: 4rem;	
+}
+.billboard .date-type-choice li {
+	width: 6rem;
+}
+.billboard .time-interval-choice li {
+	width: 5rem;
+}
+.billboard .refresh {
+	position: absolute;
+	top: 0;
+	right: 0;
+	padding: 0.5rem 1rem;
+	width: 2rem;
+	color: #fff;
+	font-size: 0.9rem;
+	cursor: pointer;
+	background-color: #4c93fd;
+	border-radius: 0.5rem;
+}
+/*广告牌推荐点数据 容器*/
+.billboard .data-container {
+	position: absolute;
+	z-index: -2;
+	top: 5rem;
+	right: 0;
+	/*padding: 0.5rem;
+	width: 16rem;
+	max-height: 22rem;
+	background-color: #fff;
+	border-radius: 0.4rem;
+	box-shadow: 0 0rem 0.5rem #d4d4d4;*/
+}
+
+
+/*滑轴样式*/
+.billboard .region-choice ul::-webkit-scrollbar{
+    width: 0.5rem;    
+}
+.billboard .region-choice ul::-webkit-scrollbar-thumb  {
+    border-radius: 0.5rem;
+    background: rgba(184,184,184);
+}
+.billboard .region-choice ul::-webkit-scrollbar-track {
+    border-bottom-right-radius: 0.5rem;  
+    background: rgba(235,235,235);
+}
+
+
+
+

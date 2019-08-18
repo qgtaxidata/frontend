@@ -82,7 +82,7 @@
 	background-color: #4c93fd;
 	border-radius: 0.5rem;
 }
-.data-container {
+.region .data-container {
 	position: absolute;
 	z-index: -2;
 	top: 5rem;
@@ -94,41 +94,40 @@
 	border-radius: 0.4rem;
 	box-shadow: 0 0rem 0.5rem #d4d4d4;
 }
-.data-container .item-name span{
+.region .data-container .item-name span{
 	display: inline-block;
 	color: #4c93fd;
 	font-size: 0.9rem;
 	text-align: center;
 	padding: 0.5rem 0;
 }
-.data-container .data li {
+.region .data-container .data li {
 	cursor: pointer;
 }
-.data-container .data li span{
+.region .data-container .data li span{
 	display: inline-block;
 	font-size: 0.8rem;
 	text-align: center;
 	padding: 0.3rem 0;
 }
-.data-container ul::-webkit-scrollbar,
+.region .data-container ul::-webkit-scrollbar,
 .region .date-choice ul::-webkit-scrollbar,
 .region .region-choice ul::-webkit-scrollbar{
     width: 0.5rem;    
 }
-
-.data-container ul::-webkit-scrollbar-thumb,
+.region .data-container ul::-webkit-scrollbar-thumb,
 .region .date-choice ul::-webkit-scrollbar-thumb,
 .region .region-choice ul::-webkit-scrollbar-thumb  {
     border-radius: 0.5rem;
     background: rgba(184,184,184);
 }
-
-.data-container ul::-webkit-scrollbar-track,
+.region .data-container ul::-webkit-scrollbar-track,
 .region .date-choice ul::-webkit-scrollbar-track,
 .region .region-choice ul::-webkit-scrollbar-track {
     border-bottom-right-radius: 0.5rem;  
     background: rgba(235,235,235);
 }
+
 
 
 
