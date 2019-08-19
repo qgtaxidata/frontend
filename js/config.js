@@ -7,11 +7,13 @@ let map = new AMap.Map("map-container", {
 
 // 图表容器
 let formCon = document.getElementsByClassName("form-container")[0];
-// 图表切换监听
-let onShow = 0;
 
 // 服务器地址
-let serverUrl = "http://192.168.31.179:9090";
+let serverUrl = "192.168.31.162:8080";
+
+// 吴某人 http://192.168.1.101:8080
+// 子锋 http://192.168.31.89:8080
+// QG-red http://192.168.1.122:8080
 
 // 公用时间
 let timeDiffer = 79200000000;

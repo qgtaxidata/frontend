@@ -40,24 +40,68 @@ define(["require", "tools"], function (require) {
   let regCon = heatmapCon.getElementsByClassName('region-choice')[0];
   // 选择的地区
   let regValue = regCon.getElementsByClassName('region-value')[0];
-  // 区域列表下拉和上拉
-  let regChoice = regCon.getElementsByTagName('img');
-  // 选择地区列表
-  let regList = regCon.getElementsByTagName('ul')[0];
   // 选择算法容器
   let algCon = heatmapCon.getElementsByClassName('algorithm-choice')[0];
   // 选择的算法
   let algValue = algCon.getElementsByClassName('algorithm-value')[0];
-  // 算法列表下拉和上拉
-  let algChoice = algCon.getElementsByTagName('img');
-  // 选择算法列表
-  let algList = algCon.getElementsByTagName('ul')[0];
   // 热力图数据分析分析按钮
-  let regAnaly = heatmapCon.getElementsByClassName('analyse')[0]; 
+  let regAnaly = heatmapCon.getElementsByClassName('analyse')[0].children[1]; 
 
-  for(let i = 0; i < hmapPrd.children.length; i++) {
-    // 时段按钮事件绑定
-    hmapPrd.children[i].onclick = function() { 
+  function liFun() {
+    let input = this.getElementsByTagName("input")[0];
+    input.value = event.target.innerText;
+    input.setAttribute("tle", event.target.getAttribute("tle"));
+    imgFun.call(this);
+    if (event.target.innerText == "全广州") {
+      changeView("广州");
+    } else {
+      changeView(event.target.innerText);
+    }
+    if (event.target.innerText != "全广州" && onHmapPrd == "time-now") {
+      regAnaly.parentNode.style.display = "block";
+    } else {
+      regAnaly.parentNode.style.display = "none";
+    }
+  }
+
+  function imgFun() {
+    let img = this.getElementsByTagName("img")[0];
+    let ul = this.getElementsByTagName("ul")[0];
+    if (img.getAttribute("tle") == "xiala") {
+      img.setAttribute("tle", "shouqi");
+      img.setAttribute("src", "./images/shouqi.png");
+      if (this.getAttribute("class") == "region-choice") {
+        ul.setAttribute('style', "height: 15rem;padding-top: 1.5rem;");
+      } else {
+        ul.setAttribute('style', "height: 5.7rem;padding-top: 1.5rem;");
+      } 
+    } else {
+      img.setAttribute("tle", "xiala");
+      img.setAttribute("src", "./images/xiala.png");
+      ul.setAttribute('style', "height: 0;");
+    }
+  }
+
+  function chooseFun() {
+    if (heatmapStatus == "show") {
+      hmapButJudge.innerText = "请先取消热力图显示";
+      heatmapHide.classList.add("heatmap-cancel");
+      return;
+    }
+    if (event.target.nodeName == "IMG") {
+      imgFun.call(this);
+      event.stopPropagation();
+    } else if (event.target.nodeName == "LI") {
+      liFun.call(this);
+      event.stopPropagation();
+    }  
+  }
+
+  regCon.onclick = chooseFun.bind(regCon);
+  algCon.onclick = chooseFun.bind(algCon);
+
+  hmapPrd.onclick = function() {
+    if (event.target.nodeName == "BUTTON") {
       if (heatmapStatus == "show") {
         hmapButJudge.innerText = "请先取消热力图显示";
         heatmapHide.classList.add("heatmap-cancel");
@@ -73,10 +117,11 @@ define(["require", "tools"], function (require) {
         algCon.style.display = "none";
       }
       if (regValue.value != "全广州" && onHmapPrd == "time-now") {
-        regAnaly.style.display = "block";
+        regAnaly.parentNode.style.display = "block";
       } else {
-        regAnaly.style.display = "none";
+        regAnaly.parentNode.style.display = "none";
       }
+      event.stopPropagation();
     }
   }
   
@@ -117,76 +162,6 @@ define(["require", "tools"], function (require) {
   }
   // 默认创造当前时间
   creatTime();
-
-  // 地区选择列表下拉上拉事件程序处理函数
-  function showRegList() {
-    if (heatmapStatus == "show") {
-      hmapButJudge.innerText = "请先取消热力图显示";
-      heatmapHide.classList.add("heatmap-cancel");
-      return;
-    }
-    if (regList.title == "hiden") {
-      regList.setAttribute('style', "height: 15rem;padding-top: 1.5rem");
-      regList.title = "show";
-      regChoice[0].style.display = "none";
-      regChoice[1].style.display = "block";
-    } else {
-      regList.setAttribute('style', "height: 0;");
-      regList.title = "hiden";
-      regChoice[0].style.display = "block";
-      regChoice[1].style.display = "none";
-    }
-  }
-  regChoice[0].onclick = showRegList;
-  regChoice[1].onclick = showRegList;
-  // 算法选择列表下拉上拉事件程序处理函数
-  function showAlgList() {
-    if (heatmapStatus == "show") {
-      hmapButJudge.innerText = "请先取消热力图显示";
-      heatmapHide.classList.add("heatmap-cancel");
-      return;
-    }
-    if (algList.title == "hiden") {
-      algList.setAttribute('style', "height: 5.7rem;padding-top: 1rem");
-      algList.title = "show";
-      algChoice[0].style.display = "none";
-      algChoice[1].style.display = "block";
-    } else {
-      algList.removeAttribute('style');
-      algList.title = "hiden";
-      algChoice[0].style.display = "block";
-      algChoice[1].style.display = "none";
-    }
-  }
-  algChoice[0].onclick = showAlgList;
-  algChoice[1].onclick = showAlgList;
-  // 地区选择事件程序处理函数
-  for (let i = 0; i < regList.children.length; i++) {
-    regList.children[i].onclick = function () {
-      regValue.value = event.target.innerText;
-      regValue.setAttribute('tle', event.target.getAttribute('tle'));
-      showRegList();
-      if (event.target.innerText == "全广州") {
-        changeView("广州");
-      } else {
-        changeView(event.target.innerText);
-      }
-      
-      if (event.target.innerText != "全广州" && onHmapPrd == "time-now") {
-        regAnaly.style.display = "block";
-      } else {
-        regAnaly.style.display = "none";
-      }
-    }
-  }
-  // 算法选择事件程序处理函数
-  for (let i = 0; i < algList.children.length; i++) {
-    algList.children[i].onclick = function () {
-      algValue.value = event.target.innerText;
-      algValue.setAttribute('tle', event.target.getAttribute('tle'));
-      showAlgList();
-    }
-  }
 
 
   map.plugin("AMap.DistrictSearch");
@@ -276,29 +251,29 @@ define(["require", "tools"], function (require) {
       area: area,
       time : tools.formatTime(allTimeNow)
     } 
-    console.log(send);
-   //  $.ajax({
-   //    url: serverUrl + `/thermoDiagram/getAreaMap`,
-   //    method: "GET",
-   //    data: send,
-   //    // contentType: false,
-   //    dataType: "json",
-   //    headers: {
-   //     "Content-Type": "application/json"
-   //   },
-   //   async: false,
-   //   "crossDomain": true,
-   //   success: function (data) {
-   //     console.log(data.data);
-   //     if (data.msg == "success") {    	      	
-   //       heatmap.setDataSet({
-   //         data: data.data
-   //       });   	      	
-   //     } else {
-   //       alert(data.msg);
-   //     }
-   //   }
-   // })
+    console.log("请求实时或历史热力图",send);
+    $.ajax({
+      url: serverUrl + `/thermoDiagram/getAreaMap`,
+      method: "GET",
+      data: send,
+      // contentType: false,
+      dataType: "json",
+      headers: {
+       "Content-Type": "application/json"
+     },
+     async: true,
+     "crossDomain": true,
+     success: function (data) {
+       console.log(data.data);
+       if (data.msg == "success") {    	      	
+         heatmap.setDataSet({
+           data: data.data
+         });   	      	
+       } else {
+         alert(data.msg);
+       }
+     }
+   })
     return true;
   }
   function hmapFuture() {
@@ -330,29 +305,29 @@ define(["require", "tools"], function (require) {
       nowTime : nowTime
     } 
 
-    console.log(send);
+    console.log("请求未来热力图",send);
  
-    // $.ajax({
-    // url: serverUrl + "/thermoDiagram/getFutureMap",
-    // method: "GET",
-    // data: send,
-    // dataType: "json",
-    // headers: {
-    //  "Content-Type": "application/json"
-    // },
-    //  async: false,
-    // "crossDomain": true,
-    // success: function (data) {
-    //    console.log(data.data);
-    //    if (data.msg == "success") {             
-    //      heatmap.setDataSet({
-    //        data: data.data
-    //      });            
-    //    } else {
-    //      alert(data.msg);
-    //    }
-    //  }
-    // })
+    $.ajax({
+    url: serverUrl + "/thermoDiagram/getFutureMap",
+    method: "GET",
+    data: send,
+    dataType: "json",
+    headers: {
+     "Content-Type": "application/json"
+    },
+     async: true,
+    "crossDomain": true,
+    success: function (data) {
+       console.log(data.data);
+       if (data.msg == "success") {             
+         heatmap.setDataSet({
+           data: data.data
+         });            
+       } else {
+         alert(data.msg);
+       }
+     }
+    })
     return true;
   }
    
@@ -366,7 +341,7 @@ define(["require", "tools"], function (require) {
     heatmapClickJudge = false;
     setTimeout(function() {
       heatmapClickJudge = true;
-    }, 3000);
+    }, 2000);
 
     if (onHmapPrd == "time-future") {
       if(!hmapFuture()) {
@@ -439,7 +414,16 @@ define(["require", "tools"], function (require) {
     heatmapTime.setAttribute("class", "time-value time-correct");
   }
   
+  let analyClickJudge = true;
   regAnaly.onclick = function() {
+    if (!analyClickJudge) {
+      return;
+    } 
+    analyClickJudge = false;
+    setTimeout(function() {
+      analyClickJudge = true;
+    }, 1000);
+
     let formCon = document.getElementsByClassName("form-container")[0];
     formCon.style.display = "block";
     formCon.innerHTML = ""
@@ -454,51 +438,51 @@ define(["require", "tools"], function (require) {
       time: time
     }
     console.log(send);
-    // $.ajax({
-    //   url: serverUrl + "/AreaRequirement/analyseRequirement",
-    //   method: "GET",
-    //   data: send,
-    //   dataType: "json",
-    //   headers: {
-    //    "Content-Type": "application/json"
-    //   },
-    //   async: false,
-    //   crossDomain: true,
-    //   success: function (data) {
-    //     console.log(data.data);
-    //     if (data.msg == "success") {
-    //       chart.setOption(createOption(data.data));
-    //     } else {
-    //       alert(data.msg);
-    //     }
-    //   }
-    // })
-
-
-    let data = {
-
-      "graph_data": [
-      {
-        "title": "一个小时前",
-        "demand": 171
+    $.ajax({
+      url: serverUrl + "/AreaRequirement/analyseRequirement",
+      method: "GET",
+      data: send,
+      dataType: "json",
+      headers: {
+       "Content-Type": "application/json"
       },
-      {
-        "title": "当前时间",
-        "demand": 195
-      },
-      {
-        "title": "一个小时后",
-        "demand": 330
+      async: true,
+      crossDomain: true,
+      success: function (data) {
+        console.log(data);
+        if (data.msg == "success") {
+          chart.setOption(createOption(data.data));
+        } else {
+          alert(data.msg);
+        }
       }
-      ],
-      "title": "天河区需求分析及预测"
-    }
-    chart.setOption(createOption(data));
+    })
+
+
+    // let data = {
+
+    //   "graph_data": [
+    //   {
+    //     "title": "一个小时前",
+    //     "demand": 171
+    //   },
+    //   {
+    //     "title": "当前时间",
+    //     "demand": 195
+    //   },
+    //   {
+    //     "title": "一个小时后",
+    //     "demand": 330
+    //   }
+    //   ],
+    //   "title": "天河区需求分析及预测"
+    // }
+    // chart.setOption(createOption(data));
   }
   function createOption(data) {
     var option = {
       title: {
-        text: data.title,
+        text: data.graph_title,
       },
       tooltip: {},
       legend: {

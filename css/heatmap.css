@@ -252,6 +252,26 @@
 	height: 3rem;
 	cursor: pointer;
 }
+.heatmap .analyse p {
+	position: absolute;
+	top: 0.5rem;
+	left: -6rem;
+	z-index: -100;
+	width: 5.5rem;
+	font-size: 0.9rem;
+	color: #4c93fd;
+	text-align: center;
+	letter-spacing: 0.1rem;
+	transition: all 0.5s;
+	opacity: 0;
+}
+.heatmap .analyse img {
+	height: 100%;
+}
+.heatmap .analyse:hover p {
+	opacity: 1;
+}
+
 .heatmap .region-choice ul::-webkit-scrollbar{
     width: 7px;    
 }

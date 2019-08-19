@@ -125,15 +125,23 @@ html {
 	left: 3rem;
 	width: 34rem;
 	height: 24rem;
-	transition: all 1.5s;
-	opacity: 0;
+	transition: all 2s;
+	
 	perspective: 1000px;
-	transform: translateZ(-100rem)  rotateY(90deg);
+	
 	/*backface-visibility: hidden;*/
+}
+.form-container .pre {
+	opacity: 0;
+	transform: translateZ(0rem) rotateX(180deg)  rotateY(90deg);
+}
+.form-container .next {
+	opacity: 0;
+	transform: translateZ(0rem) rotateX(180deg)  rotateY(-90deg);
 }
 .form-container .onShow {
 	opacity: 1;
-	transform: translateZ(0rem)  rotateY(0deg);
+	transform: translateZ(0rem) rotateX(0deg) rotateY(9deg);
 }
 .form-container .onShow img {
 	position: absolute;

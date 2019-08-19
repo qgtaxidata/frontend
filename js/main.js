@@ -61,10 +61,9 @@ define(["require", "tools"], function (require) {
 	let changeJudge = true;
 	function formClose () {
 		formCon.style.display = "none";
-		onShow = 0;
 	}
 	function formNext() {
-		let formList = formCon.getElementsByClassName("echartsCon");
+
 		if (!changeJudge) {
 			return;
 		}
@@ -72,12 +71,17 @@ define(["require", "tools"], function (require) {
 		setTimeout(function() {
 			changeJudge = true;
 		}, 1500)
-		formList[onShow].classList.remove("onShow");
-		onShow = (onShow + 1) % 3;
-		formList[onShow].classList.add("onShow");
+
+		let onShow = formCon.getElementsByClassName("onShow")[0];
+		let pre = formCon.getElementsByClassName("pre")[0];
+		let next = formCon.getElementsByClassName("next")[0];
+		
+		next.setAttribute("class", "echartsCon onShow");
+		onShow.setAttribute("class", "echartsCon pre");
+		pre.setAttribute("class", "echartsCon next");
 	}
 	function formPre() {
-		let formList = formCon.getElementsByClassName("echartsCon");
+
 		if (!changeJudge) {
 			return;
 		}
@@ -85,10 +89,14 @@ define(["require", "tools"], function (require) {
 		setTimeout(function() {
 			changeJudge = true;
 		}, 1500)
-		console.log("执行之前的",onShow);
-		formList[onShow].classList.remove("onShow");
-		onShow = (onShow + 2) % 3;
-		formList[onShow].classList.add("onShow");
+
+		let onShow = formCon.getElementsByClassName("onShow")[0];
+		let pre = formCon.getElementsByClassName("pre")[0];
+		let next = formCon.getElementsByClassName("next")[0];
+		
+		pre.setAttribute("class", "echartsCon onShow");
+		onShow.setAttribute("class", "echartsCon next");
+		next.setAttribute("class", "echartsCon pre");		
 	}
 	formCon.onclick = function() {
 		if(event.target && event.target.getAttribute("click") == "formClose") {

@@ -41,7 +41,6 @@
     <div class="search" style="display: block;">
         <div class="search-container">
             <div id="taxi-status" class="taxi-status-hidden">
-                <div class="status-choice">出租车状态</div>
                 <div class="status-choice">空载</div>
                 <div class="status-choice">非空载</div>
                 <img src="images/xiala.png" alt="xiala" class="xiala">
@@ -72,55 +71,6 @@
 
         <!-- 热点推荐 -->
         <div class="hot-point-container">
-            <!-- <div class="method-recommand-container">
-                <div class="method-recommand">方案一</div>
-                <ul class="method-recommand method-recommand-ul">
-                    <li>32分钟</li>
-                    <li>|</li>
-                    <li>18公里</li>
-                </ul>
-            </div>
-
-            <div class="method-recommand-container">
-                <div class="method-recommand">方案一</div>
-                <ul class="method-recommand method-recommand-ul">
-                    <li>32分钟</li>
-                    <li>|</li>
-                    <li>18公里</li>
-                </ul>
-            </div>
-            <div class="hot-point-recommand">
-                <div class="hot-point-icon">
-                    <div class="show-lng-lat">
-                        北纬23°47’59” 东经23°47’59”
-                    </div>
-                    <div class="show-shot-rank">
-                        热度值:9
-                    </div>
-                </div>
-            </div>
-
-            <div class="hot-point-recommand">
-                <div class="hot-point-icon">
-                    <div class="show-lng-lat">
-                        北纬23°47’59” 东经23°47’59”
-                    </div>
-                    <div class="show-shot-rank">
-                        热度值:9
-                    </div>
-                </div>
-            </div>
-
-            <div class="hot-point-recommand">
-                <div class="hot-point-icon">
-                    <div class="show-lng-lat">
-                        北纬23°47’59” 东经23°47’59”
-                    </div>
-                    <div class="show-shot-rank">
-                        热度值:9
-                    </div>
-                </div>
-            </div> -->
         </div>
 
         <!-- 非空载下的路径可视化 -->
@@ -133,9 +83,8 @@
         <div class="time-judge"></div>
         <div class="region-choice">
             <input class="region-value " type="text" disabled="disabled" value="全广州" tle="0">
-            <img src="./images/xiala.png" style="display: block;">
-            <img src="./images/shouqi.png" style="display: none;">
-            <ul title="hiden" style="height: 0">
+            <img src="./images/xiala.png" tle="xiala">
+            <ul style="height: 0">
                 <li tle="0">全广州</li>
                 <li tle="1">花都区</li>
                 <li tle="2">南沙区</li>
@@ -161,18 +110,21 @@
         </div>
         <div class="algorithm-choice" style="display: none">
             <input class="algorithm-value" type="text" disabled="disabled" value="A算法" tle="0">
-            <img src="./images/xiala.png" style="display: block;">
-            <img src="./images/shouqi.png" style="display: none;">
-            <ul title="hiden">
-                <li>A算法</li>
-                <li>B算法</li>
-                <li>C算法</li>
+            <img src="./images/xiala.png" tle="xiala">
+            <ul  style="height: 0">
+                <li tle="0">A算法</li>
+                <li tle="1">B算法</li>
+                <li tle="2">C算法</li>
             </ul>
         </div>
         <div class="button-judge"></div>
         <button class="heatmap-show" style="display: block;">显示</button>
         <button class="heatmap-hide" style="display: none;">关闭</button>
-        <img class="analyse" src="images/道路质量分析.png" style="display: none;">
+        <div class="analyse" style="display: none;">
+            <p>区域需求量分析及预测</p>
+            <img title="出租车区域需求量分析及预测" src="images/道路质量分析.png" >
+        </div>
+        
     </div>
     <div class="region" style="display: none;">
         <div class="region-choice">
