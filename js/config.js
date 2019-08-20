@@ -9,14 +9,14 @@ let map = new AMap.Map("map-container", {
 let formCon = document.getElementsByClassName("form-container")[0];
 
 // 服务器地址
-let serverUrl = "192.168.31.162:8080";
+let serverUrl = "http://192.168.31.162/";
 
 // 吴某人 http://192.168.1.101:8080
 // 子锋 http://192.168.31.89:8080
 // QG-red http://192.168.1.122:8080
 
 // 公用时间
-let timeDiffer = 79200000000;
+let timeDiffer = 80000000000;
 let allTimeNow = new Date(Date.now() - timeDiffer);
 let allTimeNowId = setInterval(function() {
 	allTimeNow = new Date(Date.now() - timeDiffer);
@@ -31,6 +31,7 @@ require.config({
 		"region": "region",
 		"route": "route",
 		"billboard": "billboard",
+		"abnormal": "abnormal",
 		"set": "set",
         "tools": "tools"
     }
@@ -42,6 +43,7 @@ require(["heatmap"]);
 require(["region"]);
 require(["route"]);
 require(["billboard"]);
+require(["abnormal"]);
 require(['set']);
 
 

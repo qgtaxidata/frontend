@@ -54,31 +54,31 @@
 	color: #4c93fd;
 }
 .billboard .region-choice input {
-	width: 4rem;
+	width: 6rem;
 }
 .billboard .date-type-choice input {
-	width: 6rem;
+	width: 8rem;
 }
 .billboard .time-interval-choice input {
-	width: 5rem;
+	width: 8rem;
 }
 .billboard .region-choice ul {
-	width: 5rem;
-}
-.billboard .date-type-choice ul {
 	width: 7rem;
 }
+.billboard .date-type-choice ul {
+	width: 9rem;
+}
 .billboard .time-interval-choice ul {
-	width: 6rem;
+	width: 9rem;
 }
 .billboard .region-choice li {
-	width: 4rem;	
+	width: 7rem;	
 }
 .billboard .date-type-choice li {
-	width: 6rem;
+	width: 8rem;
 }
 .billboard .time-interval-choice li {
-	width: 5rem;
+	width: 9rem;
 }
 .billboard .refresh {
 	position: absolute;
@@ -98,26 +98,46 @@
 	z-index: -2;
 	top: 5rem;
 	right: 0;
-	/*padding: 0.5rem;
-	width: 16rem;
-	max-height: 22rem;
 	background-color: #fff;
+	width: 16rem;
+	max-height: 28rem;
+	padding: 0.5rem;
 	border-radius: 0.4rem;
-	box-shadow: 0 0rem 0.5rem #d4d4d4;*/
+	text-align: center;
+	/* box-shadow: 0 0rem 0.5rem #d4d4d4; */
 }
-
-
-/*滑轴样式*/
-.billboard .region-choice ul::-webkit-scrollbar{
-    width: 0.5rem;    
+.billboard .data-container p {
+	margin: 2.2rem 0;
+	margin-bottom: 1.2rem;
+	text-align: center;
+	font-size: 1.2rem;
 }
-.billboard .region-choice ul::-webkit-scrollbar-thumb  {
-    border-radius: 0.5rem;
-    background: rgba(184,184,184);
+.billboard .data-container ul li {
+	font-size: 0.92rem;
+	cursor: pointer;
+}  
+.billboard .data-container img {
+	display: inline-block;
+	margin-bottom: -0.4rem;
+	margin-right: 1.5rem;
+	width: 9%;
+	cursor: auto;
+} 
+.billboard .data-container span {
+	display: inline-block;
+	padding: 0.8rem 0;
 }
-.billboard .region-choice ul::-webkit-scrollbar-track {
-    border-bottom-right-radius: 0.5rem;  
-    background: rgba(235,235,235);
+.billboard .data-container button {
+	border: none;
+	border-radius: 0.4rem;
+	margin-top: 1.2rem;
+	margin-bottom: 2.2rem;
+	padding: 0.4rem 1rem;
+	outline: none;
+	color: white;
+	font-size: 1.1rem;
+	background-color: #4c93fd;
+	cursor: pointer;
 }
 
 

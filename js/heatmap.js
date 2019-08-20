@@ -163,65 +163,20 @@ define(["require", "tools"], function (require) {
   // 默认创造当前时间
   creatTime();
 
-
-  map.plugin("AMap.DistrictSearch");
-  var opts = {
-    extensions: 'all',      
-  };
-  let polygons = [];
-  // 跳转视图
-  function changeView(districtName) {
-    for (let i = 0; i < polygons.length; i++) {
-      polygons[i].setMap(null);
-    }
-    polygons = [];
-    var district = new AMap.DistrictSearch(opts);
-    district.search(districtName, function(status, result) {
-      if(status=='complete'){
-        getData(result.districtList[0]);
-          // var position = [result.districtList[0].center.lng, result.districtList[0].center.lat];
-          // var marker = new AMap.Marker({position : position});
-          // map.add(marker);
-        }
-      });
-    setTimeout(function() {
-      map.setFitView();
-    }, 500);
-  }
-  function getData(data) {
-    var bounds = data.boundaries;
-    if (bounds) {
-      for (var i = 0; i < bounds.length; i ++) {
-        var polygon = new AMap.Polygon({
-          map: map,
-          strokeWeight: 0,
-          strokeColor: 'rgba(1, 1, 1, 0)',
-          fillColor: '#80d8ff',
-          fillOpacity: 0,
-          path: bounds[i]
-        });
-        polygons.push(polygon);
-      }
-      map.setFitView();
+  let heatmap = null;
+  let option = {
+    radius: 25, 
+    opacity: [0, 0.5],
+    gradient: {
+      0.5: 'rgb(0, 0, 255)',
+      0.65: 'rgb(117, 211, 248)',
+      0.7: 'rgb(0, 255, 0)',
+      0.9: 'rgb(255, 234, 0)',
+      1.0: 'rgb(255, 0, 0)'
     }
   }
-    
-
-
-  let heatmap;
-  map.plugin(["AMap.Heatmap"], function(){
-    heatmap = new AMap.Heatmap(map, {
-      radius: 25, 
-      opacity: [0, 0.5],
-      gradient: {
-        0.5: 'rgb(0, 0, 255)',
-        0.65: 'rgb(117, 211, 248)',
-        0.7: 'rgb(0, 255, 0)',
-        0.9: 'rgb(255, 234, 0)',
-        1.0: 'rgb(255, 0, 0)'
-      }
-    });
-  });
+  map.plugin(["AMap.Heatmap"]); 
+  
   
   
   function hmapNowPass() {
@@ -260,20 +215,22 @@ define(["require", "tools"], function (require) {
       dataType: "json",
       headers: {
        "Content-Type": "application/json"
-     },
-     async: true,
-     "crossDomain": true,
-     success: function (data) {
-       console.log(data.data);
-       if (data.msg == "success") {    	      	
-         heatmap.setDataSet({
-           data: data.data
-         });   	      	
-       } else {
-         alert(data.msg);
-       }
-     }
-   })
+      },
+      async: true,
+      "crossDomain": true,
+      success: function (data) {
+        console.log(data.data);
+        if (data.msg == "success") {    	      	
+          heatmap = new AMap.Heatmap(map,option);             
+          heatmap.setDataSet({
+            data: data.data
+          });
+          heatmap.show();   	      	
+        } else {
+          alert(data.msg);
+        }
+      }
+    })
     return true;
   }
   function hmapFuture() {
@@ -319,10 +276,12 @@ define(["require", "tools"], function (require) {
     "crossDomain": true,
     success: function (data) {
        console.log(data.data);
-       if (data.msg == "success") {             
+       if (data.msg == "success") {
+         heatmap = new AMap.Heatmap(map,option);             
          heatmap.setDataSet({
            data: data.data
-         });            
+         });
+         heatmap.show();            
        } else {
          alert(data.msg);
        }
@@ -357,9 +316,8 @@ define(["require", "tools"], function (require) {
       }
       controlTime = setInterval(function() {
         hmapNowPass();
-      }, 2000);
+      }, 3000);
     }
-    heatmap.show();
     changeStaus();// 换状态
   }
   // 隐藏热力图
@@ -376,10 +334,10 @@ define(["require", "tools"], function (require) {
       hmapButJudge.innerText = "";
       heatmapHide.classList.remove('heatmap-cancel');
     }
-    
-
-
-    heatmap.hide();
+    if(heatmap) {
+      heatmap.hide();
+    }
+    heatmap = null;
     if (onHmapPrd == "time-now") {
       clearInterval(controlTime);
     } 
@@ -458,27 +416,50 @@ define(["require", "tools"], function (require) {
       }
     })
 
-
-    // let data = {
-
-    //   "graph_data": [
-    //   {
-    //     "title": "一个小时前",
-    //     "demand": 171
-    //   },
-    //   {
-    //     "title": "当前时间",
-    //     "demand": 195
-    //   },
-    //   {
-    //     "title": "一个小时后",
-    //     "demand": 330
-    //   }
-    //   ],
-    //   "title": "天河区需求分析及预测"
-    // }
-    // chart.setOption(createOption(data));
   }
+
+  map.plugin("AMap.DistrictSearch");
+  var opts = {
+    extensions: 'all',      
+  };
+  let polygons = [];
+  // 跳转视图
+  function changeView(districtName) {
+    for (let i = 0; i < polygons.length; i++) {
+      polygons[i].setMap(null);
+    }
+    polygons = [];
+    var district = new AMap.DistrictSearch(opts);
+    district.search(districtName, function(status, result) {
+      if(status=='complete'){
+        getData(result.districtList[0]);
+          // var position = [result.districtList[0].center.lng, result.districtList[0].center.lat];
+          // var marker = new AMap.Marker({position : position});
+          // map.add(marker);
+        }
+      });
+    setTimeout(function() {
+      map.setFitView();
+    }, 500);
+  }
+  function getData(data) {
+    var bounds = data.boundaries;
+    if (bounds) {
+      for (var i = 0; i < bounds.length; i ++) {
+        var polygon = new AMap.Polygon({
+          map: map,
+          strokeWeight: 0,
+          strokeColor: 'rgba(1, 1, 1, 0)',
+          fillColor: '#80d8ff',
+          fillOpacity: 0,
+          path: bounds[i]
+        });
+        polygons.push(polygon);
+      }
+      map.setFitView();
+    }
+  }
+
   function createOption(data) {
     var option = {
       title: {
@@ -501,6 +482,36 @@ define(["require", "tools"], function (require) {
       ]
     }
     return option;
+  }
+
+
+
+  function clear() {
+    if (hmapButJudge.innerText != "") {
+      hmapButJudge.innerText = "";
+      heatmapHide.classList.remove('heatmap-cancel');
+    }
+    if (hmapJudge.innerText != "") {
+      hmapJudge.innerText = "";
+      heatmapTime.setAttribute("class", "time-value time-correct");
+    }
+    if (heatmap) {
+      heatmap.hide();
+      heatmap = null;
+    }
+    if (onHmapPrd == "time-now") {
+      clearInterval(controlTime);
+    }
+    if (heatmapStatus == "show") {
+      changeStaus(); 
+    } 
+    for (let i = 0; i < polygons.length; i++) {
+      polygons[i].setMap(null);
+    }
+  }
+
+  return {
+    clear: clear
   }
 
 });

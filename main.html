@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -11,6 +12,7 @@
     <link rel="stylesheet" type="text/css" href="css/route.css">
     <link rel="stylesheet" type="text/css" href="css/region.css">
     <link rel="stylesheet" type="text/css" href="css/billboard.css">
+    <link rel="stylesheet" type="text/css" href="css/abnormal.css">
     <link rel="stylesheet" type="text/css" href="css/set.css">
     <script src="https://webapi.amap.com/maps?v=1.4.15&key=96229f005826740eab888ed632918943"></script>
     <script src="https://webapi.amap.com/ui/1.0/main.js?v=1.0.11"></script>
@@ -18,11 +20,12 @@
     <script src="js/echarts.js"></script>
 
 </head>
+
 <body>
     <div id="map-container"></div>
     <img class="sidebar-click" src="images/功能分类按钮.png">
     <div class="sidebar" tle="hiden" style="height:0rem;overflow: hidden;">
-        <div class="on-sidebar"  tle="search">搜索</div>
+        <div class="on-sidebar" tle="search">搜索</div>
         <div tle="heatmap">区域出租车热力图</div>
         <div tle="region">区域分析
             <ul class="bar-reg-list" style="height: 0">
@@ -35,6 +38,7 @@
         </div>
         <div tle="route">路径可视化</div>
         <div tle="billboard">广告牌推荐</div>
+        <div tle="abnormal">异常情况</div>
         <div tle="set">设置</div>
     </div>
 
@@ -58,7 +62,7 @@
                 <div class="circle green"></div>
                 <div class="input-departure">
                     <input placeholder="请输入终点" id="input-destination" value="" maxlength="40">
-                    <div class="cha-icon" ></div>
+                    <div class="cha-icon"></div>
                 </div>
             </div>
 
@@ -67,7 +71,7 @@
                 <div class="search-btn" name="loadroute">搜索</div>
             </div>
         </div>
-        <div class="fuzzy-contaniner" id = "fuzzy-search-contanier"></div>
+        <div class="fuzzy-contaniner" id="fuzzy-search-contanier"></div>
 
         <!-- 热点推荐 -->
         <div class="hot-point-container">
@@ -111,7 +115,7 @@
         <div class="algorithm-choice" style="display: none">
             <input class="algorithm-value" type="text" disabled="disabled" value="A算法" tle="0">
             <img src="./images/xiala.png" tle="xiala">
-            <ul  style="height: 0">
+            <ul style="height: 0">
                 <li tle="0">A算法</li>
                 <li tle="1">B算法</li>
                 <li tle="2">C算法</li>
@@ -122,9 +126,9 @@
         <button class="heatmap-hide" style="display: none;">关闭</button>
         <div class="analyse" style="display: none;">
             <p>区域需求量分析及预测</p>
-            <img title="出租车区域需求量分析及预测" src="images/道路质量分析.png" >
+            <img title="出租车区域需求量分析及预测" src="images/道路质量分析.png">
         </div>
-        
+
     </div>
     <div class="region" style="display: none;">
         <div class="region-choice">
@@ -195,16 +199,11 @@
             <div class="taxi-number-notice">车牌号码</div>
         </div>
     </div>
-
-
-
-
-
     <div class="billboard" style="display: none;">
-        <div class="region-choice" style="right: 20rem;">
+        <div class="region-choice" style="right: 25rem;">
             <input class="region-value" type="text" disabled="disabled" value="花都区" tle="1">
             <img src="./images/xiala.png" tle="xiala">
-            <ul title="hiden" style="height: 0">
+            <ul class="region-ul" title="hiden" style="height: 0">
                 <li tle="1">花都区</li>
                 <li tle="2">南沙区</li>
                 <li tle="3">增城区</li>
@@ -218,40 +217,92 @@
                 <li tle="11">越秀区</li>
             </ul>
         </div>
-        <div class="date-type-choice" style="right: 12rem;">
-            <input class="date-type-value" type="text" disabled="disabled" value="工作日">
+        <div class="date-type-choice" style="right: 15rem;">
+            <input class="date-type-value" type="text" disabled="disabled" value="工作日" tle="0">
             <img src="./images/xiala.png" tle="xiala">
             <ul title="hiden" style="height: 0">
-                <li>工作日</li>
-                <li>周末</li>
-                <li>不限</li>
+                <li tle="0">工作日</li>
+                <li tle="1">周末</li>
+                <li tle="2">不限</li>
             </ul>
         </div>
         <div class="time-interval-choice" style="right: 5rem;">
-            <input class="time-interval-value" type="text" disabled="disabled" value="白天">
+            <input class="time-interval-value" type="text" disabled="disabled" value="白天" tle="1">
             <img src="./images/xiala.png" tle="xiala">
             <ul title="hiden" style="height: 0">
-                <li>白天</li>
-                <li>黑夜</li>
-                <li>不限</li>
+                <li tle="0">白天</li>
+                <li tle="1">黑夜</li>
+                <li tle="2">不限</li>
             </ul>
         </div>
-        
+
         <div class="refresh">刷新</div>
         <div class="data-container" style="display: none;">
-           <!--  广告牌推荐点数据 容器 -->
+            <!--  广告牌推荐点数据 容器 -->
+            <p>广告牌位置推荐</p>
+            <ul>
+                <li marker-data="113.25,23.13" vehicle-flow="180" arrival-rate="50.1"><img
+                        src="./images/Placeholder.png"><span>广告牌位置1</span></li>
+                <li marker-data="113.22,23.174" vehicle-flow="440" arrival-rate="44.8"><img
+                        src="./images/Placeholder.png"><span>广告牌位置2</span></li>
+                <li marker-data="113.271,23.16" vehicle-flow="500" arrival-rate="90.5"><img
+                        src="./images/Placeholder.png"><span>广告牌位置3</span></li>
+                <li marker-data="113.252,23.135" vehicle-flow="620" arrival-rate="84.2"><img
+                        src="./images/Placeholder.png"><span>广告牌位置4</span></li>
+                <li marker-data="113.21,23.17" vehicle-flow="270" arrival-rate="74.0"><img
+                        src="./images/Placeholder.png"><span>广告牌位置5</span></li>
+            </ul>
+            <button>生成对比图表</button>
         </div>
     </div>
-
-
-
-
-
-
+    <div class="abnormal" style="display: none;">
+        <div class="left">
+            <div class="form"></div>
+        </div>
+        <div class="right">
+            <!-- <span class="title">区域分析</span> -->
+            <div tle="0" class="form on-show"></div>
+            <div tle="1" class="form"></div>
+            <div tle="2" class="form"></div>
+            <div tle="3" class="form"></div>
+            <div tle="4" class="form"></div>
+            <div tle="5" class="form"></div>
+            <div tle="6" class="form"></div>
+            <div tle="7" class="form"></div>
+            <div tle="8" class="form"></div>
+            <div tle="9" class="form"></div>
+            <div tle="10" class="form"></div>
+            <div tle="11" class="form"></div>
+            <ul class="reg-choice">
+                <li tle="0" class="on-choice">全广州</li>
+                <li tle="1">花都区</li>
+                <li tle="2">南沙区</li>
+                <li tle="3">增城区</li>
+                <li tle="4">从化区</li>
+                <li tle="5">番禺区</li>
+                <li tle="6">白云区</li>
+                <li tle="7">黄埔区</li>
+                <li tle="8">荔湾区</li>
+                <li tle="9">海珠区</li>
+                <li tle="10">天河区</li>
+                <li tle="11">越秀区</li>
+            </ul>
+        </div>
+        <div class="bottom">
+            <div class="form car1"></div>
+            <div class="form car2"></div>
+            <div class="form car3"></div>
+            <div class="form"></div>
+            <div class="form"></div>
+            <div class="form"></div>
+            <div class="form"></div>
+            <div class="form"></div>
+        </div>
+    </div>
     <div class="set" style="display: none;">
         <div class="time-container">
             <input type="text" class="time-value " disabled="disabled">
-            <input type="text" class="time-now " disabled="disabled" style="color: #4c93fd"> 
+            <input type="text" class="time-now " disabled="disabled" style="color: #4c93fd">
             <div class="time-picker"></div>
             <button>确定</button>
         </div>
@@ -259,7 +310,7 @@
     <div class="form-container" style="display: none;">
     </div>
 </body>
-<script type="text/javascript" src="js/picker.change.js"></script> 
+<script type="text/javascript" src="js/picker.change.js"></script>
 <script type="text/javascript" data-main="js/config.js" src="js/require.js"></script>
 
 </html>

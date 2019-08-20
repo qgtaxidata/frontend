@@ -1,6 +1,10 @@
-define(["require", "tools"], function (require) {
+define(["require", "tools", "heatmap"], function (require) {
 
 	let tools = require('tools');
+
+	let clearFun = {
+		heatmap: require("heatmap").clear
+	}
 
 
 
@@ -19,7 +23,7 @@ define(["require", "tools"], function (require) {
 		}, 1000);
 
 		if (sidebar.getAttribute('tle') == "hiden") {
-			sidebar.style.height = "21rem";
+			sidebar.style.height = "24.3rem";
 
 			sidebar.setAttribute('tle',"show");
 			setTimeout(function() {
@@ -40,15 +44,12 @@ define(["require", "tools"], function (require) {
 			onSidebar = event.target.getAttribute('tle');
 			document.getElementsByClassName(onSidebar)[0].style.display = "block";
 			if (event.target == barRegList.parentNode) {
-				event.target.getElementsByTagName('ul')[0].style.height = "18.8rem"
+				event.target.getElementsByTagName('ul')[0].style.height = "15.7rem"
 			} else {
 				sidebar.children[2].getElementsByTagName('ul')[0].style.height = "0";
 			}
-			let pre = barRegList.getElementsByClassName("on-region")[0] || null;
-			if (pre) {
-				pre.classList.remove("on-region");
-			}
 			formClose();
+			clearFun.heatmap();
 		} else if (event.target.nodeName == "LI") {
 		}
 		let regDataCon =  document.getElementsByClassName("region")[0].getElementsByClassName("data-container")[0];
@@ -61,6 +62,12 @@ define(["require", "tools"], function (require) {
 	let changeJudge = true;
 	function formClose () {
 		formCon.style.display = "none";
+		if(onSidebar == "region") {
+			let pre = barRegList.getElementsByClassName("on-region")[0] || null;
+			if (pre) {
+				pre.classList.remove("on-region");
+			}
+		}
 	}
 	function formNext() {
 

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html>
 <head>
 	<meta charset="utf-8">
@@ -13,5 +13,404 @@
 	<div id="container"></div>
 </body>
 <script type="text/javascript" src="js/drawLoad.js"></script>
-</html>
+</html> -->
 
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+	<script src="js/echarts.js"></script>
+	<style>
+		* {
+			padding: 0;
+			margin: 0;
+		}
+
+		ul {
+			padding: 0;
+			margin: 0;
+			list-style: none;
+		}
+
+		.abnormal {
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			margin-top: -18rem;
+			margin-left: -28rem;
+			width: 56rem;
+			height: 36rem;
+			border-radius: 0.8rem;
+			overflow: hidden;
+			box-shadow: 0 0 0.3rem #9d9d9d;
+			background: rgb(255, 255, 255, 0.9);
+		}
+
+		.abnormal .left {
+			position: absolute;
+			left: 0;
+			width: 24rem;
+			height: 20rem;
+		}
+
+		.abnormal .right {
+			position: absolute;
+			right: 0;
+			width: 32rem;
+			height: 20rem;
+		}
+
+		.abnormal .bottom {
+			position: absolute;
+			bottom: 0;
+			width: 56rem;
+			height: 16rem;
+		}
+
+		.abnormal .left .form {
+			padding: 1rem;
+			width: 22rem;
+			height: 18rem;
+		}
+
+		.abnormal .right .form {
+			position: absolute;
+			top: 1rem;
+			right: 1rem;
+			height: 18rem;
+			width: 30rem;
+			opacity: 0;
+			transition: all 1.2s;
+			transform: translateZ(-100rem) rotateY(90deg);
+		}
+
+		.abnormal .right .form.on-show {
+			opacity: 1;
+			transform: translateZ(0rem) rotateY(0deg);
+		}
+
+		.abnormal .right .reg-choice {
+			position: absolute;
+			z-index: 1;
+			top: 1rem;
+			left: 1rem;
+		}
+
+		.abnormal .right .reg-choice li {
+			padding: 0.2rem 0.5rem;
+			/* height: 1.1rem; */
+			font-size: 0.8rem;
+			cursor: pointer;
+			border-radius: 0.3rem;
+		}
+
+		.abnormal .right .reg-choice .on-choice,
+		.abnormal .right .reg-choice li:hover {
+			color: #fff;
+			background-color: #4c93fd;
+		}
+
+		.bottom .form {
+			position: absolute;
+			z-index: 0;
+			padding: 1rem;
+			width: 26rem;
+			height: 14rem;
+			transform: translateX(24rem) scale(0.5);
+			transform-origin: 0% 50%;
+			opacity: 0;
+			border-radius: 0.5rem;
+			transition: all 1s;
+			box-shadow: 0 0.1rem 0.3rem #d9d9d9;
+
+			background: #fff;
+
+		}
+
+		.bottom .form:hover {
+			background: rgba(255, 0, 0, 0.2);
+		}
+
+		.bottom .form.car1 {
+			opacity: 1;
+			z-index: 1;
+			transform: translateX(0rem) scale(0.5);
+		}
+
+		.bottom .form.car2 {
+			opacity: 1;
+			z-index: 2;
+			transform: translateX(14rem);
+		}
+
+		.bottom .form.car3 {
+			opacity: 1;
+			z-index: 1;
+			transform: translateX(42rem) scale(0.5);
+		}
+	</style>
+</head>
+
+<body>
+	<div class="abnormal" style="display: block;">
+		<div class="left">
+			<div class="form" style="transform: rotateX(0deg)"></div>
+		</div>
+		<div class="right">
+			<!-- <span class="title">区域分析</span> -->
+			<div tle="0" class="form on-show"></div>
+			<div tle="1" class="form"></div>
+			<div tle="2" class="form"></div>
+			<div tle="3" class="form"></div>
+			<div tle="4" class="form"></div>
+			<div tle="5" class="form"></div>
+			<div tle="6" class="form"></div>
+			<div tle="7" class="form"></div>
+			<div tle="8" class="form"></div>
+			<div tle="9" class="form"></div>
+			<div tle="10" class="form"></div>
+			<div tle="11" class="form"></div>
+			<ul class="reg-choice">
+				<li tle="0" class="on-choice">全广州</li>
+				<li tle="1">花都区</li>
+				<li tle="2">南沙区</li>
+				<li tle="3">增城区</li>
+				<li tle="4">从化区</li>
+				<li tle="5">番禺区</li>
+				<li tle="6">白云区</li>
+				<li tle="7">黄埔区</li>
+				<li tle="8">荔湾区</li>
+				<li tle="9">海珠区</li>
+				<li tle="10">天河区</li>
+				<li tle="11">越秀区</li>
+			</ul>
+		</div>
+		<div class="bottom">
+			<div class="form car1"></div>
+			<div class="form car2"></div>
+			<div class="form car3"></div>
+			<div class="form"></div>
+			<div class="form"></div>
+			<div class="form"></div>
+			<div class="form"></div>
+			<div class="form"></div>
+		</div>
+	</div>
+</body>
+<script>
+	let con = document.getElementsByClassName("abnormal")[0];
+	let left = con.getElementsByClassName("left")[0];
+	let right = con.getElementsByClassName("right")[0];
+	let bottom = con.getElementsByClassName("bottom")[0];
+	let leftForm = left.getElementsByClassName("form");
+	let rightForm = right.getElementsByClassName("form");
+	let bottomForm = bottom.getElementsByClassName("form");
+
+	// rightChart.showLoading({
+	//     text: '正在努力获取数据中...',		
+	// });
+	// rightChart.hideLoading();
+	function createLeftOption() {
+		let option = {
+			title: {
+				text: '阶梯瀑布图',
+				left: 'center',
+				subtext: 'QG 之回家的诱惑番外我们必回家'
+			},
+			color: "#4c93fd",
+			grid: {
+				bottom: '0',
+				containLabel: true
+			},
+			tooltip: {
+				trigger: 'axis',
+				axisPointer: {
+					type: 'shadow'
+				}
+			},
+			xAxis: {
+				type: 'category',
+				data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+			},
+			yAxis: {
+				type: 'value'
+			},
+			series: [{
+				data: [120, 200, 150, 80, 70, 110, 130],
+				type: 'bar',
+				barWidth: '50%',
+			}]
+		};
+
+		return option;
+	}
+	function createRightOption(title) {
+		var option = {
+			title: {
+				text: title,
+				left: 'center',
+				textStyle: {
+					fontSize: "15",
+					fontStyle: "normal"
+				}
+
+			},
+			legend: {
+				orient: 'vertical',
+				left: 'right',
+				top: 'top',
+				data: ['直接访问', '邮件营销', '联盟广告', '视频广告', '搜索引擎']
+			},
+			series: [
+				{
+					name: '访问来源',
+					type: 'pie',
+					radius: "60%",
+					data: [
+						{ name: '直接访问', value: Math.random() * 100 },
+						{ name: '邮件营销', value: Math.random() * 100 },
+						{ name: '联盟广告', value: Math.random() * 100 },
+						{ name: '视频广告', value: Math.random() * 100 },
+						{ name: '搜索引擎', value: Math.random() * 100 },
+					]
+				},
+			]
+		};
+		return option;
+	}
+	function createBottomOption(title) {
+		let timeArr = [];
+		let data = [];
+		let normal = [0.09, 0.37, 0.40, 0.39, 0.77, 0.09, 0.45, 0.13, 0.03, 0.38, 0.40, 0.22, 0.25, 0.69, 0.94, 0.36, 0.80, 0.92, 0.24, 0.52, 0.190, 0.194, 0.37, 0.90];
+		for (let i = 0; i < 24; i++) {
+			timeArr[i] = `${i > 9 ? i : ("0" + i)}:00`;
+			data[i] = Math.random();
+		}
+		let option = {
+			title: {
+				text: title,
+				left: 'right',
+			},
+			grid: {
+				bottom: '0',
+				containLabel: true
+			},
+			legend: {
+				left: 'left',
+				top: 'top',
+				data: ['异常情况', '正常情况']
+			},
+			xAxis: {
+				type: 'category',
+				data: timeArr,
+				axisTick: {
+					// alignWithLabel: true,   
+					interval: 6
+				},
+				axisLabel: {
+					interval: 6
+				},
+			},
+			yAxis: {
+				type: 'value'
+			},
+			series: [{
+				name: "异常情况",
+				data: data,
+				smooth: true,
+				showSymbol: false,
+				type: 'line',
+				color: "#ff0000"
+			}, {
+				name: "正常情况",
+				data: normal,
+				smooth: true,
+				showSymbol: false,
+				type: 'line',
+				color: "#4c93fd"
+			}]
+		};
+
+		return option;
+
+	}
+
+	let leftChart = echarts.init(leftForm[0]);
+	leftChart.setOption(createLeftOption());
+
+	let rightChart = [];
+	for (let i = 0; i < rightForm.length; i++) {
+		rightChart[i] = echarts.init(rightForm[i]);
+		rightChart[i].setOption(createRightOption(i));
+	}
+
+	let bottomChart = []
+	for (let i = 0; i < bottomForm.length; i++) {
+		bottomChart[i] = echarts.init(bottomForm[i]);
+		bottomChart[i].setOption(createBottomOption(i));
+	}
+
+	// 地区选择，切换饼状图
+	let regClickJudge = true;
+	let regChoice = right.getElementsByClassName("reg-choice")[0];
+
+	regChoice.onclick = function () {
+		if (!regClickJudge) {
+			return;
+		}
+		regClickJudge = false;
+		setTimeout(function () {
+			regClickJudge = true;
+		}, 1000)
+
+		if (event.target.nodeName == "LI") {
+			let pre = regChoice.getElementsByClassName("on-choice")[0];
+			let now = event.target;
+			pre.classList.remove("on-choice");
+			now.classList.add("on-choice");
+			let preIndex = pre.getAttribute("tle");
+			let nowIndex = now.getAttribute("tle");
+			rightForm[preIndex].classList.remove("on-show");
+			rightForm[nowIndex].classList.add("on-show");
+		}
+	}
+
+	// 异常车辆选择，切换折线图
+	let carClickJudge = true;
+	let carArr = [];
+	for (let item of bottom.children) {
+		carArr.push(item.getAttribute("class"));
+	}
+
+	bottom.onclick = function () {
+		if (!carClickJudge) {
+			return;
+		}
+		carClickJudge = false;
+		setTimeout(function () {
+			carClickJudge = true;
+		}, 1000)
+
+		let form = event.target.parentNode.parentNode;
+
+		if (form.classList[1] == "car1") {
+			carArr.push(carArr[0]);
+			carArr.shift();
+			for (let i = 0; i < carArr.length; i++) {
+				bottom.children[i].setAttribute("class", carArr[i]);
+			}
+		} else if (form.classList[1] == "car3") {
+			carArr.unshift(carArr[carArr.length - 1]);
+			carArr.pop();
+			for (let i = 0; i < carArr.length; i++) {
+				bottom.children[i].setAttribute("class", carArr[i]);
+			}
+		}
+	}
+</script>
+
+</html>
