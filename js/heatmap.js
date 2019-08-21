@@ -220,7 +220,11 @@ define(["require", "tools"], function (require) {
       "crossDomain": true,
       success: function (data) {
         console.log(data.data);
-        if (data.msg == "success") {    	      	
+        if (data.msg == "success") {
+          if(heatmap) {
+            heatmap.hide();
+            heatmap = null;
+           }    	      	
           heatmap = new AMap.Heatmap(map,option);             
           heatmap.setDataSet({
             data: data.data
@@ -277,6 +281,10 @@ define(["require", "tools"], function (require) {
     success: function (data) {
        console.log(data.data);
        if (data.msg == "success") {
+         if(heatmap) {
+          heatmap.hide();
+          heatmap = null;
+         }
          heatmap = new AMap.Heatmap(map,option);             
          heatmap.setDataSet({
            data: data.data
