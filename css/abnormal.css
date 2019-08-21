@@ -12,41 +12,49 @@ ul {
     top: 50%;
     left: 50%;
     margin-top: -18rem;
-    margin-left: -28rem;
+    margin-left: -29rem;
+    padding: 0 1rem;
     width: 56rem;
     height: 36rem;
     border-radius: 0.8rem;
     overflow: hidden;
     box-shadow: 0 0 0.3rem #9d9d9d;
-    background: rgb(255, 255, 255, 0.7);
+    background: rgb(255, 255, 255, 0.8);
 }
 .abnormal .left {
     position: absolute;
     left: 0;
-    width: 24rem;
+    width: 28rem;
     height: 20rem;
 }
 .abnormal .right {
     position: absolute;
     right: 0;
-    width: 32rem;
     height: 20rem;
+    width: 32rem;
 }
 .abnormal .bottom {
     position: absolute;
-    bottom: 0;
+    bottom: 1rem;
     width: 56rem;
     height: 16rem;
 }
+.abnormal .left .title {
+    position: absolute;
+    top: 3rem;
+    left: 1rem;
+    width: 1rem;
+    color: #666;
+    font-weight: bold;
+}
 .abnormal .left .form {
     padding: 1rem;
-    width: 22rem;
+    width: 26rem;
     height: 18rem;
 }
 .abnormal .right .form {
     position: absolute;
-    top: 1rem;
-    right: 1rem;
+    padding: 1rem;
     height: 18rem;
     width: 30rem;
     opacity: 0;
@@ -61,11 +69,11 @@ ul {
     position: absolute;
     z-index: 1;
     top: 1rem;
-    left: 1rem;
+    left: 2rem;
 }
 .abnormal .right .reg-choice li {
     padding: 0.2rem 0.5rem;
-    /* height: 1.1rem; */
+    color: #888;
     font-size: 0.8rem;
     cursor: pointer;
     border-radius: 0.3rem;
@@ -75,7 +83,7 @@ ul {
     color: #fff;
     background-color: #4c93fd;
 }
-.bottom .form {
+.abnormal .bottom .form {
     position: absolute;
     z-index: 0;
     padding: 1rem;
@@ -86,25 +94,26 @@ ul {
     opacity: 0;
     border-radius: 0.5rem;
     transition: all 1s;
-    box-shadow: 0 0.1rem 0.3rem #d9d9d9;
+    box-shadow: 0 0.1rem 0.3rem #d2d2d2;
 
-    background: rgb(255, 255, 255, 0.8);
+    background-color: rgba(255,255,255,0.9);
 
 }
-.bottom .form:hover {
-    background: rgba(1, 1, 1, 0.2);
+.abnormal .bottom .form:hover {
+    /* background: rgba(145, 200, 174, 0.8); */
+    background-color: rgba(145, 199, 174, 0.36);
 }
-.bottom .form.car1 {
+.abnormal .bottom .form.car1 {
     opacity: 1;
     z-index: 1;
     transform:  translateX(0rem) scale(0.5);
 }
-.bottom .form.car2 {
+.abnormal .bottom .form.car2 {
     opacity: 1;
     z-index: 2;
     transform:  translateX(14rem);
 }
-.bottom .form.car3 {
+.abnormal .bottom .form.car3 {
     opacity: 1;
     z-index: 1;
     transform: translateX(42rem) scale(0.5);

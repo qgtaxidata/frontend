@@ -2,10 +2,9 @@ define(["require", "tools"], function (require) {
 
 	let tools = require('tools');  
 
-
     // 路线可视化按钮容器
     let routeCon = document.getElementsByClassName('route')[0]; 
-        // 监控路线可视化时段选择
+    // 监控路线可视化时段选择
     let onRoutePrd = "time-now";
     // 路线可视化时段按钮容器
     let routePrd = routeCon.getElementsByClassName('time-choice')[0];
@@ -24,7 +23,19 @@ define(["require", "tools"], function (require) {
  	// 区域列表下拉和上拉
  	let regChoice = regCon.getElementsByTagName('img');
  	// 选择地区列表
- 	let regList = regCon.getElementsByTagName('ul')[0];
+     let regList = regCon.getElementsByTagName('ul')[0];
+    //存放颜色的数组，用于不同路线的改变未不同的颜色
+    var color = [
+        "#3366cc", "#dc3912", "#ff9900", "#109618", "#990099", "#0099c6", "#dd4477", "#66aa00",
+        "#b82e2e", "#316395", "#994499", "#22aa99", "#aaaa11", "#6633cc", "#e67300", "#8b0707",
+        "#651067", "#329262", "#5574a6", "#3b3eac"
+    ];
+    //存放路线轨迹的数组
+    var pathSimplifierIns = new Array()
+    //获得loading和画面
+    var loading = document.getElementById("fountainG");
+
+    
 
  	for(let i = 0; i < routePrd.children.length; i++) {
     	// 时段按钮事件绑定
@@ -80,6 +91,7 @@ define(["require", "tools"], function (require) {
   	// 地区选择列表下拉上拉事件程序处理函数
   	function showRegList() {
   		if (regList.title == "hiden") {
+              console.log(avoid)
   			regList.setAttribute('style', "height: 15rem;padding-top: 1.5rem");
   			regList.title = "show";
   			regChoice[0].style.display = "none";
@@ -109,37 +121,56 @@ define(["require", "tools"], function (require) {
       
     //路径可视化的大容器
     var route = document.getElementsByClassName("route")[0];
-
+    //防暴力点击变量
+    var avoid = 0;
+    //防暴力点击变量
+    var avoid_hot = 0;
     //给刷新按钮添加点击事件,根据不同的情况发送不同的请求
     $(function() {
         $('.refresh-btn').click(function() {
+            clear();
+            console.log(avoid)
             if(route.getElementsByClassName("time-pass")[0].getAttribute("class") == "time-pass time-onChoose") {
-                if(route.getElementsByClassName("time-value ")[0].value == "请选择过去的时间") {
+                if(route.getElementsByClassName("time-value ")[0].value == "请选择过去的时间") {                 
                     routeCon.getElementsByClassName("error-alert")[0].style.display = "block";
                     routeTime.style.borderColor = "red";
-                    routeTime.style.color = "red";
+                    routeTime.style.color = "red";                
                 } else {
-                    //调用化函数发送查询历史的请求
-                    routeCon.getElementsByClassName("error-alert")[0].style.display = "none";
-                    routeTime.style.borderColor = "#4c93fd";
-                    routeTime.style.color = "#4c93fd";
-                    sendhistoryreq();
+                    if(avoid == 0 && event.target.getAttribute("class") == "refresh-btn") {
+                        console.log(indexhistory)
+                        avoid = 1;
+                        //调用化函数发送查询历史的请求
+                        routeCon.getElementsByClassName("error-alert")[0].style.display = "none";
+                        routeTime.style.borderColor = "#4c93fd";
+                        routeTime.style.color = "#4c93fd";
+                        sendhistoryreq();
+                    } else {
+                        alert("请不要频繁点击")                     
+                    }
                 }
             } else if(route.getElementsByClassName("time-now")[0].getAttribute("class") == "time-now time-onChoose") {
-                //调用发送实时路径查询请求
-                presentreq();
+                if(avoid_hot == 0) {
+                    if(route.getElementsByClassName("time-value ")[0].value != "请选择过去时间") {
+                        avoid_hot = 1;
+                        console.log("avoid_hot" + avoid_hot)
+                        //调用发送实时路径查询请求
+                        presentreq();
+                    }
+                } else {
+                    alert("请不要频繁点击");
+                }
             }           
         })
     })
-
-    //发送历史查询结果的请求
-    var indexhistory = -1;
+ 
+    //历史路径查询
     function sendhistoryreq() {
         //获得不同区域对应不同的编号
-        var region_num = route.getElementsByClassName("region-choice")[0].getElementsByTagName("input")[0].getAttribute("tle")
+        var region_num = route.getElementsByClassName("region-choice")[0].getElementsByTagName("input")[0].getAttribute("tle");
 
         //先判断用户是否选择广州的,如果是就拦截
         if(region_num == 0) {
+            avoid = 0;
             alert("暂不支持搜索全广州,请选择其他区域")
         } else {
             var position = {
@@ -156,15 +187,24 @@ define(["require", "tools"], function (require) {
                 "async": true,
                 "crossDomain": true,
                 "success": function(data) {
-                    indexhistory++;
-                    console.log(data.data);
-                    //在页面上显示车牌信息
-                    taxinumber(data.data);
-                    addhistorytaxionclick(data.data);
-                    map.setFitView();
+                    setTimeout(function(){
+                        avoid = 0;
+                    },2000)
+                    if(data.code == -1) {
+                        alert(code.msg)
+                    } else {
+                        if(data.data) {
+
+                        }
+                        console.log(data.data);
+                        //在页面上显示车牌信息
+                        taxinumber(data.data);
+                        addhistorytaxionclick(data.data);
+                   
+                    }
                 }
             })     
-        }
+        } 
     }
 
     //发送实时搜索车辆请求
@@ -173,6 +213,7 @@ define(["require", "tools"], function (require) {
 
         //先判断用户是否选择广州的,如果是就拦截
         if(region_num == 0) {
+            avoid_hot = 0;
             alert("暂不支持搜索全广州,请选择其他区域")
         } else {
             var position = {
@@ -189,6 +230,9 @@ define(["require", "tools"], function (require) {
                 "async": true,
                 "crossDomain": true,
                 "success": function(data) {
+                    setTimeout(function(){
+                        avoid_hot = 0;
+                    },2000)
                     console.log(data.data);
                     //在页面上显示车牌信息
                     taxinumber(data.data);
@@ -214,56 +258,47 @@ define(["require", "tools"], function (require) {
         }
     }
 
-    //从拿到的车牌号中查找该车牌号所对应的是时间
-    function findtime(taxi_license,taxi_obj) {
-        for(var i = 0; i < taxi_obj.length; i++) {
-            if(taxi_obj[i].licenseplateno == taxi_license) {
-                return taxi_obj[i].time
-            }
-        }
-    }
-
+     //发送历史查询结果的请求
+     var indexhistory = -1;
     //历史车辆路径显示绑定点击事件
-    function addhistorytaxionclick(information) {  
+    function addhistorytaxionclick() {  
         //显示出车牌信息展示容器
         route.getElementsByClassName("taxi-information-container")[0].style.display = "block";
 
         for(let i = 0; i < document.getElementsByClassName("taxi-number").length; i++) {  
             document.getElementsByClassName("taxi-number")[i].onclick = function() {
-                //////////这里可以加一个loding界面！！！！！！！！！！！！！！！！！！！
-                if(indexhistory < 3) {
-                    //给点击的车辆号码改变颜色
-                    this.style.color = "#4c93fd";
-                    indexhistory++;
-                    //这里重新生成一个新的对象，用于第二次数据的提交
-                    var obj = {
-                        time: route.getElementsByClassName("time-value ")[0].value,
-                        licenseplateno: this.innerHTML
-                    }
-                    $.ajax({
-                        "url": serverUrl + "/taxiRoute/findRoute",
-                        "method": "POST",
-                        "headers": {
-                            "Content-Type": "application/json"
-                        },
-                        "data": JSON.stringify(obj),
-                        "dataType": "json",
-                        "async": true,
-                        "crossDomain": true,
-                        "success": function(data) {
-                            if(data.code == -1) {
-                                alert(data.msg);
-                                document.getElementsByClassName("taxi-number")[i].style.color = "black";
-                                indexhistory = indexhistory - 1;
-                            } else if(data.code == 1) {
-                                console.log(data.data);
-                                loadplugin(changform(data.data), "history")  
-                            }                                                       
-                        }
-                    })
-                } else {
-                    alert("最多选择3辆车")
+                indexhistory++;
+                loading.style.display = "block";
+                //给点击的车辆号码改变颜色
+                this.style.color = "#4c93fd";
+                console.log(indexhistory)
+                //这里重新生成一个新的对象，用于第二次数据的提交
+                var obj = {
+                    time: route.getElementsByClassName("time-value ")[0].value,
+                    licenseplateno: this.innerHTML
                 }
+                $.ajax({
+                    "url": serverUrl + "/taxiRoute/findRoute",
+                    "method": "POST",
+                    "headers": {
+                        "Content-Type": "application/json"
+                    },
+                    "data": JSON.stringify(obj),
+                    "dataType": "json",
+                    "async": true,
+                    "crossDomain": true,
+                    "success": function(data) {
+                        loading.style.display = "none";
+                        if(data.code == -1) {
+                            alert(data.msg);
+                            document.getElementsByClassName("taxi-number")[i].style.color = "black";
+                            indexhistory = indexhistory - 1;
+                        } else if(data.code == 1) {
+                            console.log(data.data);                             
+                            loadplugin(changform(data.data), "history", color[indexhistory], indexhistory);                                                 
+                        }                                                       
+                    }
+                })            
             }
         }
     }
@@ -272,21 +307,22 @@ define(["require", "tools"], function (require) {
     //记录点击了多少辆车
     var index = -1;
     //给三条路线添加一个计时器
-    var timeout = new Array();
+    var timeout1,
+        timeout2,
+        timeout3
     //定义一个数组把之前之前路径生成的点都存起来
     var storepoint = new Array();
     //出租车实时路径可视化
-    function addhottaxionclick(information) {
-        //先清除之前的计时器    
-        clearInterval(timeout);
-
+    function addhottaxionclick() {
         //显示出车牌信息展示容器
         route.getElementsByClassName("taxi-information-container")[0].style.display = "block";
 
         for(let i = 0; i < document.getElementsByClassName("taxi-number").length; i++) {  
             document.getElementsByClassName("taxi-number")[i].onclick = function() {
-                /////////////注意点击一下进入loading界面防止恶意点击！！！！！！！！！！！！！！！！！！！！！！！
-                if(index < 2) {
+                //点击一次出租车数量计数器+1，记录当前显示多少辆车。
+                index++;
+                if(index < 3) {
+                    loading.style.display = "block"
                     console.log(index)
                      //给点击的车辆号码改变颜色
                     this.style.color = "#4c93fd";
@@ -307,27 +343,30 @@ define(["require", "tools"], function (require) {
                         "async": true,
                         "crossDomain": true,
                         "success": function(data) {
+                            loading.style.display = "none";
                             if(data.code == -1) {
-                                    alert(data.msg)   
-                                document.getElementsByClassName("taxi-number")[i].style.color = "black";                              
-                            } else if(data.code == 1) {                                                                                                                                
-                                    //点击一次出租车数量计数器+1，记录当前显示多少辆车。
-                                    index++;
+                                alert(data.msg)   
+                                document.getElementsByClassName("taxi-number")[i].style.color = "black";   
+                                index = index - 1;                           
+                            } else if(data.code == 1) {                                                                                                                              
                                     var realpoint = changform(data.data)
-                                    loadplugin(realpoint, "hot")
+                                    loadplugin(realpoint, "hot", color[index], index);
+                                    map.setFitView();
                                     storepoint.push(realpoint);
-                                    console.log(storepoint)
-                                           
+                                    console.log(storepoint)                                          
                                     if(index == 0) {
-                                        timeout[index] = setInterval(function() { 
+                                        console.log("我执行了"+ index)
+                                        timeout1 = setInterval(function() { 
                                             realtimeroute(obj.licenseplateno,0);
                                         },10000)
                                     } else if(index == 1) {
-                                        timeout[index] = setInterval(function() { 
+                                        console.log("我执行了"+ index)
+                                        timeout2 = setInterval(function() { 
                                             realtimeroute(obj.licenseplateno,1);
                                         },10000)
                                     } else if(index == 2) {
-                                        timeout[index] = setInterval(function() { 
+                                        console.log("我执行了"+ index)
+                                        timeout3 = setInterval(function() { 
                                             realtimeroute(obj.licenseplateno,2);
                                         },10000)
                                     } 
@@ -336,14 +375,14 @@ define(["require", "tools"], function (require) {
                         
                     })
                 } else {
-                    alert("最多选择3辆车")
+                    alert("你已经超过三辆车请先清除轨迹后再试")
                 }              
             }
         }
     }
 
     //实时路径查询
-    function realtimeroute(taxi,k) {
+    function realtimeroute(taxi, k) {
         var obj = {
             time:  route.getElementsByClassName("time-value ")[0].value,
             licenseplateno: taxi
@@ -360,12 +399,16 @@ define(["require", "tools"], function (require) {
             "crossDomain": true,
             "success": function(data) {
                 if(data.data != 0 ) {
-                    console.log(data.data);
-                    console.log(changform(data.data))
-                    mergeary(changform(data.data),k)
-                    console.log(storepoint);
-                    //把json对象转为路线规划参数符合的形式
-                    loadplugin(storepoint[k], "hot");      
+                    if(data.data != null) {
+                        console.log(data.data);
+                        console.log(changform(data.data))
+                        mergeary(changform(data.data),k)
+                        console.log(storepoint);
+                        //把json对象转为路线规划参数符合的形式
+                        console.log(pathSimplifierIns) 
+                        pathSimplifierIns[k].hide();
+                        loadplugin(storepoint[k], "hot", color[k], k);     
+                    } 
                 }                  
             }
         }) 
@@ -384,15 +427,17 @@ define(["require", "tools"], function (require) {
 
     //这里没有拼接到
     function mergeary(arr, k) {
-        console.log("第一个车", k);
-
-        for(var i = 0; i < arr.length; i++) {           
-            storepoint[k].push(arr[i])
+        if(timeout1 == null && timeout2 == null && timeout3 == null) {
+            for(var i = 0; i < arr.length; i++) {           
+                storepoint[k].push(arr[i])
+            }
+        } else {
+            return;
         }
     }
 
     //用于接受海量数据的路径规划，加载路径规划插件 
-    function loadplugin(point_arry, type) {
+    function loadplugin(point_arry, type, routecolor, num) {
         AMapUI.load(['ui/misc/PathSimplifier'], function(PathSimplifier) {
 
             if (!PathSimplifier.supportCanvas) {
@@ -400,20 +445,16 @@ define(["require", "tools"], function (require) {
                 return;
             }
             //启动路线规划
-            initPage(PathSimplifier, point_arry, type);
+            initPage(PathSimplifier, point_arry, type , routecolor, num);
         });
     }
     
     //启动路径规划函数
-    function initPage(PathSimplifier,routes, type) {
-        if(type == "hot") {
-            imagestart(routes[0])
-        } else if(type == "history") {
-            //添加图片
-            addimage(routes[0],routes[routes.length - 1])
-        }
+    function initPage(PathSimplifier,routes, type, routecolor, num) {
+        console.log("num=" + num)
+
         //创建组件实例
-        var pathSimplifierIns = new PathSimplifier({
+            pathSimplifierIns[num] = new PathSimplifier({     
             autoSetFitView: false,
             zIndex: 100,
             map: map, //所属的地图实例
@@ -423,33 +464,28 @@ define(["require", "tools"], function (require) {
             renderOptions: {
                 //轨迹线的样式
                 pathLineStyle: {
-                    outlineColor: '#ffeeff',
-                    strokeStyle: "#3366FF",
+                    outlineColor: routecolor,
+                    strokeStyle: routecolor,
                     lineWidth: 6,
                     dirArrowStyle: true
                 }
             }
         });
 
-        pathSimplifierIns.setData([{
+        pathSimplifierIns[num].setData([{
             path: routes
         },    
         ]);
-    }
 
-    //把实时路径storeppint外层数组去掉
-    function realroute(storepoint) {
-        var realpoint = [];
-
-        for(var i = 0; i < storepoint.length; i++) {
-            for(var j  = 0; j < storepoint[i].length; j++) {
-                realpoint.push(storepoint[i][j]);
-            }
+        if(type == "hot") {         
+            imagestart(routes[0])                      
+        } else if(type == "history") {
+            //添加图片
+            addimage(routes[0],routes[routes.length - 1])
+            map.setFitView();
         }
-
-        return realpoint;
     }
-
+    
     //只添加起点的图标
     function imagestart(startpoint) {
         // 创建一个 Icon
@@ -519,16 +555,37 @@ define(["require", "tools"], function (require) {
 
     //点击按钮清除当前显示路径同时停止计时器
     route.getElementsByClassName("clear-btn")[0].onclick = function() {
-      console.log("我已经清除计时器")
-      for(var i = 0; i < timeout.length; i++) {
-          if(timeout[i] != null) {
-              clearInterval(timeout[i])
-          }
-      } 
+        clear()
+    }
 
-      index = -1;
-      indexhistory = -1;
-      map.clearMap();   
+    //还原所有东西
+    function clear() {
+        console.log("我已经清楚了计时器")
+        clearInterval(timeout1);
+        clearInterval(timeout2);
+        clearInterval(timeout3);
+
+        timeout1 = null;
+        timeout2 = null;
+        timeout3 = null
+
+        for(let i = 0; i < pathSimplifierIns.length; i++) {
+            if(pathSimplifierIns[i] != null) {
+                pathSimplifierIns[i].hide();
+            }
+        }
+
+        pathSimplifierIns.length = 0;
+        storepoint.length = 0;
+        map.clearMap();
+        index = -1;
+        indexhistory = -1;
+        reductioncolor()
+        console.log(storepoint)
+        console.log(pathSimplifierIns)
+        routeCon.getElementsByClassName("error-alert")[0].style.display = "none";
+        routeTime.style.borderColor = "#4c93fd";
+        routeTime.style.color = "#4c93fd";       
     }
     
 
@@ -575,6 +632,19 @@ define(["require", "tools"], function (require) {
         loadplugin: loadplugin,
         initPage: initPage,
         addimage: addimage,
-        changform: changform
+        changform: changform,
+        loading: loading,
+        clear: clear
     }
+
+    
 });
+
+
+
+
+
+
+
+
+

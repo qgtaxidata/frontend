@@ -1,9 +1,12 @@
-define(["require", "tools", "heatmap"], function (require) {
+define(["require", "tools", "heatmap", "billboard", "route","search"], function (require) {
 
 	let tools = require('tools');
 
 	let clearFun = {
-		heatmap: require("heatmap").clear
+		heatmap: require("heatmap").clear,
+		billboard: require("billboard").clear,
+		route: require("route").clear,
+		search: require("search").clear
 	}
 
 
@@ -50,16 +53,22 @@ define(["require", "tools", "heatmap"], function (require) {
 			}
 			formClose();
 			clearFun.heatmap();
+			clearFun.billboard();
+			clearFun.route();
+			clearFun.search();
 		} else if (event.target.nodeName == "LI") {
 		}
 		let regDataCon =  document.getElementsByClassName("region")[0].getElementsByClassName("data-container")[0];
 		if (event.target.innerText != "出租车司机收入排行榜") {
-			regDataCon.style.display = "none";
+			if (regDataCon.style.display != "none") {
+				regDataCon.style.display = "none";
+			}
 		}
 	}
 
 	// 图表容器
 	let changeJudge = true;
+
 	function formClose () {
 		formCon.style.display = "none";
 		if(onSidebar == "region") {

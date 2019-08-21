@@ -94,35 +94,35 @@ define(["require", "tools"], function (require) {
 		// 时段
 		let targetDay = con.getElementsByClassName("time-interval-value")[0].getAttribute("tle");
 
-		insertFun(" ");
+		// insertFun(" ");
 		// AJAX
 
-		// let send = {
-		// 	area: area,
-		// 	targetTime: targetTime,
-		// 	targetDay: targetDay
-		// }
+		let send = {
+			area: area,
+			targetTime: targetTime,
+			targetDay: targetDay
+		}
 
-		// $.ajax({
-		// 	"url":  serverUrl + "/analyse/billboard",
-		// 	"method": "GET",
-		// 	"headers": {
-		// 		"Content-Type": "application/json"
-		// 	},
-		// 	"data": send,
-		// 	"dataType": "json",
-		// 	"async": true,
-		// 	"crossDomain": true,
-		// 	"success": function(data) {
-		//            console.log(data);
-		//            if (data.code == 1) {
-		// 			insertFun(data.data);
-		// 			console.log(data.data[0])
-		//            } else {
-		//                alert(data.msg)
-		//            }	
-		// 	}
-		// })
+		$.ajax({
+			"url":  serverUrl + "/analyse/billboard",
+			"method": "GET",
+			"headers": {
+				"Content-Type": "application/json"
+			},
+			"data": send,
+			"dataType": "json",
+			"async": true,
+			"crossDomain": true,
+			"success": function(data) {
+		           console.log(data);
+		           if (data.code == 1) {
+					insertFun(data.data);
+					console.log(data.data[0])
+		           } else {
+		               alert(data.msg)
+		           }	
+			}
+		})
 	}
 	// 引入查询地理位置插件
 	map.plugin("AMap.Geocoder");
@@ -132,20 +132,20 @@ define(["require", "tools"], function (require) {
 		// 出现容器
 		dataCon.style.display = "block";
 		// 清空容器原本数据
-		// dataCon.innerHTML = "";
-		// // 插入得到的数据，生成节点
-		// var str = `
-		// <p>广告牌位置推荐</p>
-		// <ul>
-		// 	<li marker-data="${data[0].boardLon}, ${data[0].boardLat}" vehicle-flow="${data[0].boardFlow}" arrival-rate="${data[0].boradRate}"><img src="./images/Placeholder.png"><span>广告牌位置1</span></li>
-		// 	<li marker-data="${data[1].boardLon}, ${data[1].boardLat}" vehicle-flow="${data[1].boardFlow}" arrival-rate="${data[1].boradRate}"><img src="./images/Placeholder.png"><span>广告牌位置2</span></li>
-		// 	<li marker-data="${data[2].boardLon}, ${data[2].boardLat}" vehicle-flow="${data[2].boardFlow}" arrival-rate="${data[2].boradRate}"><img src="./images/Placeholder.png"><span>广告牌位置3</span></li>
-		// 	<li marker-data="${data[3].boardLon}, ${data[3].boardLat}" vehicle-flow="${data[3].boardFlow}" arrival-rate="${data[3].boradRate}"><img src="./images/Placeholder.png"><span>广告牌位置4</span></li>
-		// 	<li marker-data="${data[4].boardLon}, ${data[4].boardLat}" vehicle-flow="${data[4].boardFlow}" arrival-rate="${data[4].boradRate}"><img src="./images/Placeholder.png"><span>广告牌位置5</span></li>
-		// </ul>
-		// <button>生成对比图表</button>
-		// `;
-		// dataCon.insertAdjacentHTML("beforeend", str);
+		dataCon.innerHTML = "";
+		// 插入得到的数据，生成节点
+		var str = `
+		<p>广告牌位置推荐</p>
+		<ul>
+			<li marker-data="${data[0].boardLon}, ${data[0].boardLat}" vehicle-flow="${data[0].boardFlow}" arrival-rate="${data[0].boradRate}"><img src="./images/Placeholder.png"><span>广告牌位置1</span></li>
+			<li marker-data="${data[1].boardLon}, ${data[1].boardLat}" vehicle-flow="${data[1].boardFlow}" arrival-rate="${data[1].boradRate}"><img src="./images/Placeholder.png"><span>广告牌位置2</span></li>
+			<li marker-data="${data[2].boardLon}, ${data[2].boardLat}" vehicle-flow="${data[2].boardFlow}" arrival-rate="${data[2].boradRate}"><img src="./images/Placeholder.png"><span>广告牌位置3</span></li>
+			<li marker-data="${data[3].boardLon}, ${data[3].boardLat}" vehicle-flow="${data[3].boardFlow}" arrival-rate="${data[3].boradRate}"><img src="./images/Placeholder.png"><span>广告牌位置4</span></li>
+			<li marker-data="${data[4].boardLon}, ${data[4].boardLat}" vehicle-flow="${data[4].boardFlow}" arrival-rate="${data[4].boradRate}"><img src="./images/Placeholder.png"><span>广告牌位置5</span></li>
+		</ul>
+		<button>生成对比图表</button>
+		`;
+		dataCon.insertAdjacentHTML("beforeend", str);
 
 		// 根据坐标查询地理位置
 		var geocoder = new AMap.Geocoder({

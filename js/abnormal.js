@@ -8,22 +8,27 @@ define(["require", "tools"], function (require) {
     let bottom = con.getElementsByClassName("bottom")[0];
     let leftForm = left.getElementsByClassName("form");
     let rightForm = right.getElementsByClassName("form");
-    let bottomForm = bottom.getElementsByClassName("form");
+    
+    let carClickJudge = true;
+    let carArr = [];
 
     // rightChart.showLoading({
     //     text: '正在努力获取数据中...',		
     // });
     // rightChart.hideLoading();
-    function createLeftOption() {
+    function createLeftOption(data) {
+        let xArr = [];
+        for (let i = 0; i < data.x.length; i++) {
+            xArr[i] = toArea(data.x[i]);
+        }
         let option = {
-            title: {
-                text: '阶梯瀑布图',
-                left: 'center',
-                subtext: 'QG 之回家的诱惑番外我们必回家'
-            },
-            color: "#4c93fd",
+            // title: {
+            //     text: data.title,
+            //     left: 'right',
+            // },
+            color: "rgba(145, 199, 174, 0.6)",
             grid: {
-                bottom: '0',
+                left: 'right',
                 containLabel: true
             },
             tooltip: {
@@ -32,26 +37,28 @@ define(["require", "tools"], function (require) {
                     type: 'shadow'
                 }
             },
-            xAxis: {
+            angleAxis: {
                 type: 'category',
-                data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+                data: xArr,
+                z: 10
             },
-            yAxis: {
-                type: 'value'
+            radiusAxis: {
             },
-            series: [{
-                data: [120, 200, 150, 80, 70, 110, 130],
+            polar: {
+            },
+            series: {
                 type: 'bar',
-                barWidth: '50%',
-            }]
+                data: data.y,
+                coordinateSystem: 'polar',
+            },
         };
 
         return option;
     }
-    function createRightOption(title) {
+    function createRightOption(data) {
         var option = {
             title: {
-                text: title,
+                text: `${toArea(data.area)}异常车辆概率分布`,
                 left: 'center',
                 textStyle: {
                     fontSize: "15",
@@ -59,6 +66,7 @@ define(["require", "tools"], function (require) {
                 }
 
             },
+            color: ["#d48265", " #91c7ae"],
             legend: {
                 orient: 'vertical',
                 left: 'right',
@@ -71,25 +79,24 @@ define(["require", "tools"], function (require) {
                     type: 'pie',
                     radius: "60%",
                     data: [
-                        { name: '异常指数', value: Math.random() * 100 },
-                        { name: '正常指数', value: Math.random() * 100 }
+                        { name: '异常指数', value: data.abnormal },
+                        { name: '正常指数', value: data.normal }
                     ]
                 },
             ]
         };
         return option;
     }
-    function createBottomOption(title) {
+    function createBottomOption(normalData, abnormalData) {
         let timeArr = [];
-        let data = [];
-        let normal = [0.09, 0.37, 0.40, 0.39, 0.77, 0.09, 0.45, 0.13, 0.03, 0.38, 0.40, 0.22, 0.25, 0.69, 0.94, 0.36, 0.80, 0.92, 0.24, 0.52, 0.190, 0.194, 0.37, 0.90];
+        let data = abnormalData.distribution;
+        let normal = normalData;
         for (let i = 0; i < 24; i++) {
             timeArr[i] = `${i > 9 ? i : ("0" + i)}:00`;
-            data[i] = Math.random();
         }
         let option = {
             title: {
-                text: title,
+                text: `异常车辆  ${abnormalData.license}`,
                 left: 'right',
             },
             grid: {
@@ -121,40 +128,48 @@ define(["require", "tools"], function (require) {
                 smooth: true,
                 showSymbol: false,
                 type: 'line',
-                color: "#ff0000"
+                color: "#ff9966"
             }, {
                 name: "正常情况",
                 data: normal,
                 smooth: true,
                 showSymbol: false,
                 type: 'line',
-                color: "#4c93fd"
+                color: "#5793f3"
             }]
         };
 
         return option;
 
     }
-
-    let leftChart = echarts.init(leftForm[0]);
-    leftChart.setOption(createLeftOption());
-
-    let rightChart = [];
-    for (let i = 0; i < rightForm.length; i++) {
-        rightChart[i] = echarts.init(rightForm[i]);
-        rightChart[i].setOption(createRightOption(i));
+    
+    function creatCarChart(normal, abnormal) {
+        bottom.innerHTML = "";
+        let str = "";
+        for(let i = 0; i < abnormal.length; i++) {
+            if (i < 3) {
+                str += `<div class="form car${i+1}"></div>`;
+            } else {
+                str += `<div class="form"></div>`;
+            }
+        }
+        bottom.innerHTML = str;
+        bottom.onclick = bottomClick; 
+        for (let item of bottom.children) {
+            carArr.push(item.getAttribute("class"));
+        }
+        
+        let bottomChart = [];
+        let bottomForm = bottom.getElementsByClassName("form");
+        for (let i = 0; i < abnormal.length; i++) {
+            bottomChart[i] = echarts.init(bottomForm[i]);
+            bottomChart[i].setOption(createBottomOption(normal, abnormal[i]));
+        }      
     }
 
-    let bottomChart = []
-    for (let i = 0; i < bottomForm.length; i++) {
-        bottomChart[i] = echarts.init(bottomForm[i]);
-        bottomChart[i].setOption(createBottomOption(i));
-    }
-
-    // 地区选择，切换饼状图
+    // 地区选择
     let regClickJudge = true;
     let regChoice = right.getElementsByClassName("reg-choice")[0];
-
     regChoice.onclick = function () {
         if (!regClickJudge) {
             return;
@@ -175,15 +190,9 @@ define(["require", "tools"], function (require) {
             rightForm[nowIndex].classList.add("on-show");
         }
     }
-
-    // 异常车辆选择，切换折线图
-    let carClickJudge = true;
-    let carArr = [];
-    for (let item of bottom.children) {
-        carArr.push(item.getAttribute("class"));
-    }
-
-    bottom.onclick = function () {
+        
+    // 车辆选择
+    function bottomClick() {
         if (!carClickJudge) {
             return;
         }
@@ -208,6 +217,73 @@ define(["require", "tools"], function (require) {
             }
         }
     }
+    
+    // 地区编号转化地区名称
+    function toArea(number) {
+        if (number == "0") {
+            return "全广州";
+        } else if (number == "1") {
+            return "花都区";
+        } else if (number == "2") {
+            return "南沙区";
+        } else if (number == "3") {
+            return "增城区";
+        } else if (number == "4") {
+            return "从化区";
+        } else if (number == "5") {
+            return "番禺区";
+        } else if (number == "6") {
+            return "白云区";
+        } else if (number == "7") {
+            return "黄埔区";
+        } else if (number == "8") {
+            return "荔湾区";
+        } else if (number == "9") {
+            return "海珠区";
+        } else if (number == "10") {
+            return "天河区";
+        } else if (number == "11") {
+            return "越秀区";
+        } else {
+            return "";
+        }
+
+    }
+
+    function getData() {
+        $.ajax({
+            "url": serverUrl + "/analyse/abnormalTaxiAnalysis",
+            "method": "GET",
+            "headers": {
+                "Content-Type": "application/json"
+            },
+            "dataType": "json",
+            "async": true,
+            "crossDomain": true,
+            "success": function (data) {
+                console.log(data);
+                if (data.code == 1) {
+                    let leftChart = echarts.init(leftForm[0]);
+                    leftChart.setOption(createLeftOption(data.data.bar));
+
+                    let rightChart = [];
+                    for (let i = 0; i < rightForm.length; i++) {
+                        let pie = data.data.pies.pie[i];
+                        rightChart[i] = echarts.init(rightForm[i]);
+                        rightChart[i].setOption(createRightOption(pie));
+                    }
+
+                    let normal = data.data.cars.normal_distribution;
+                    let abnormal = data.data.cars.abnormal;
+                    creatCarChart(normal, abnormal)
+                    
+                } else {
+                    alert(data.msg);
+                }
+            }
+        })
+    }
+    getData();
 
 });
 

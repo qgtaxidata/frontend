@@ -104,6 +104,10 @@
 .region .data-container .data li {
 	cursor: pointer;
 }
+.region .data-container .data li:hover {
+	color: #fff;
+	background-color: #4c93fd;
+}
 .region .data-container .data li span{
 	display: inline-block;
 	font-size: 0.8rem;

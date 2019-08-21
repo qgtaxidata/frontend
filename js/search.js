@@ -1,11 +1,12 @@
-define(["require", "route"],function() {
+define(["require", "route", "tools"],function() {
 
     //引入别的文件路径规划函数
-    var loadplugin = require('route').loadplugin;
+    var loading = require("route").loading;
+    var tools = require("tools").verificat; 
     //热点推荐的容器框
     var hot_point = document.getElementsByClassName("hot-point-container")[0]; 
     //非空载状态下路径可视化的容器框
-    var load_container=  document.getElementsByClassName("load-ul")[0];
+    var load_container =  document.getElementsByClassName("load-ul")[0];
     //搜索确认框
     var comfirm_btn = document.getElementsByClassName("search-btn")[0]
     //单个输入框时的inoput名称
@@ -15,7 +16,13 @@ define(["require", "route"],function() {
     //两个输入框时的终点输入框
     var couple_end = document.getElementById("input-destination");
     //模糊搜索容器框
-    var fuzzy_container = document.getElementsByClassName("fuzzy-contaniner")[0]
+    var fuzzy_container = document.getElementsByClassName("fuzzy-contaniner")[0];
+    var color = [
+        "#3366cc", "#dc3912", "#22aa99", "#109618", "#990099", "#0099c6", "#dd4477", "#66aa00",
+        "#b82e2e", "#316395", "#994499", "#22aa99", "#aaaa11", "#6633cc", "#e67300", "#8b0707",
+        "#651067", "#329262", "#5574a6", "#3b3eac"
+    ];
+    var roads = new Array()
 
     //搜索框对应出租车状态选择栏
     var change = document.getElementsByClassName('xiala')[0];
@@ -47,6 +54,57 @@ define(["require", "route"],function() {
         }
     }
 
+    //当聚焦三个input框时清除掉所有的东西
+    function onfcus() {       
+        single_input.onfocus = function() {
+            hot_point.innerHTML = "";
+            load_container.innerHTML = ""
+        }
+        couple_start.onfocus = function() {
+            hot_point.innerHTML = "";
+            load_container.innerHTML = ""
+        }
+        couple_end.onfocus = function() {
+            hot_point.innerHTML = "";
+            load_container.innerHTML = ""
+        }
+    }
+
+    //清除路线轨迹
+    function removeRoute() {
+        if(roads.length != 0) {
+            console.log(roads)
+            for(var i = 0; i <  roads.length; i++) { 
+                if(roads[i])    
+                roads[i].hide()
+            }
+        }
+    }
+
+    //清除所有的东西
+    function clear() {
+        map.clearMap();
+        document.getElementById("input-departure").value = "";
+        document.getElementById("input-destination").value = "";
+        avoid = "available"
+        removeRoute()
+        fuzzy_container.innerHTML = "";
+        single_input.value = "";
+        hot_point.innerHTML = "";
+        car_num = 0;
+        document.getElementsByClassName("button-contaniner")[0].innerHTML = " <div class='clear-routes-btn'>清除路线</div><div class='search-btn' name='loadroute'>搜索</div>";
+        submit();
+        bindClear()
+    }
+
+    //点击清除按钮
+    function bindClear() {
+        document.getElementsByClassName("clear-routes-btn")[0].onclick = function() {
+            clear()
+        }
+    }
+    bindClear()
+
     //给搜索框的取消按钮添加取消功能
     var wrong_icon = document.getElementsByClassName("cha-icon");
     wrong_icon[0].onclick = function() {
@@ -54,7 +112,7 @@ define(["require", "route"],function() {
     }
 
     wrong_icon[1].onclick = function() {
-        document.getElementById("input-destination").value = ""
+        document.getElementById("input-destination").value = "";
     }
 
 
@@ -75,26 +133,48 @@ define(["require", "route"],function() {
     fuzzysearch ("input-destination"); 
 
     //用户点击搜索把名称转变为坐标向后台发请求
-    $(function() {
+    //防止暴力点击按钮
+    var avoid = "available"
+    function submit(type, lng , lat) {
         $('.search-btn').click(function() {
-            //进行判断判断按钮的name是hotpoint，还是loadroute，对应发送不同的请求
-            if(single_input.getAttribute("class") == "input-start-hidden") {
-                //当点击发送请求的时候清空模糊搜索内容
-                fuzzy_container.innerHTML = ""
-                getroutepoint()
-
-            } else if(single_input.getAttribute("class") == "input-start") {
-                //当点击发送请求的时候清空模糊搜索内容
-                fuzzy_container.innerHTML = ""
-                gethotpoint()
-            }
+            removeRoute();
+            map.clearMap()
+            car_num = 0;       
+            if(avoid == "available") {
+                avoid = "inactivated";
+                //进行判断判断按钮的name是hotpoint，还是loadroute，对应发送不同的请求
+                if(single_input.getAttribute("class") == "input-start-hidden") {
+                    if(tools.isNotNullTrim(couple_end.value) && tools.isNotNullTrim(couple_start.value)) {
+                        single_input.value = ""
+                        loading.style.display = "block"
+                        avoid = "available";
+                        //当点击发送请求的时候清空模糊搜索内容
+                        fuzzy_container.innerHTML = "";
+                        load_container.innerHTML = "";
+                        getroutepoint(type, lng, lat)
+                    } else {
+                        alert("请检查你的输入")
+                    }
+                } else if(single_input.getAttribute("class") == "input-start") {
+                    if(tools.isNotNullTrim(single_input.value)) {     
+                        console.log(avoid)
+                        couple_end.value = ""; 
+                        couple_start.value = "";                  
+                        //当点击发送请求的时候清空模糊搜索内容
+                        fuzzy_container.innerHTML = "";
+                        load_container.innerHTML = ""
+                        gethotpoint(type, lng, lat)
+                    } else {
+                        alert("请检查你的输入")
+                    }                 
+                }
+            } else {
+                alert("请不要频繁点击")
+            }                     
         })
-    })
-
-    function submitloadroute() {
-        console.log($('.search-btn').attr("name"));
     }
 
+    submit()
     //把地址的名称转变为坐标,同时向后台发送请求请求热点数据
     function gethotpoint() {
         AMap.plugin('AMap.Geocoder', function() {
@@ -104,9 +184,7 @@ define(["require", "route"],function() {
             })
         
             geocoder.getLocation(single_input.value, function(status, result) {
-            if (status === 'complete' && result.info === 'OK') {
-                console.log([result.geocodes[0].location.lng,result.geocodes[0].location.lat])   
-                
+            if (status === 'complete' && result.info === 'OK') {              
                 //创建一个后台能够接受数据的对象
                 var position = {
                     time : "2017-02-01 15:31:46",
@@ -126,9 +204,16 @@ define(["require", "route"],function() {
                     "async": true,
                     "crossDomain": true,
                     "success": function(data) {
-                        console.log(data)
-                        showhotpoint(data.data)
-                        addhotpoint(data.data);
+                        avoid = "available"
+                        if(data.code == -1) {
+                            alert(data.msg)
+                        } else {
+                            fuzzy_container.innerHTML = ""
+                            console.log(data)
+                            showhotpoint(data.data)
+                            addhotpoint(data.data);
+                            onfcus()
+                        }
                     }
                 })
             }
@@ -137,7 +222,7 @@ define(["require", "route"],function() {
     }
 
     //非空载状态下的导航
-    function getroutepoint() {
+    function getroutepoint(type, lng, lat) {
         //定义两个变量解决下面回调函数的异步问题
         var flag1 = 0,
             flag2 = 0,
@@ -147,25 +232,18 @@ define(["require", "route"],function() {
             latDestination;
         AMap.plugin('AMap.Geocoder', function() {
             var geocoder = new AMap.Geocoder({
-            // city 指定进行编码查询的城市，支持传入城市名、adcode 和 citycode
             city: '广州'
             })
-            //先获得第一个输入框起点的坐标
-            geocoder.getLocation(couple_start.value, function(status, result) {
-                if (status === 'complete' && result.info === 'OK') {
-                    flag1 = 1;
-                    lonOrigin = result.geocodes[0].location.lng;
-                    latOrigin = result.geocodes[0].location.lat;  
-                    if(flag1 == 1 && flag2 == 1) {
-                        var obj = {
-                            lonOrigin: lonOrigin,
-                            latOrigin: latOrigin,
-                            lonDestination: lonDestination,
-                            latDestination: latDestination
-                        }
-                        flag1 = 0; flag2 = 0;
+
+            if(type == "hot") {
+                //热点推荐下的路径规划
+                geocoder.getLocation(couple_start.value, function(status, result) {
+                    if (status === 'complete' && result.info === 'OK') {
+                        lonOrigin = result.geocodes[0].location.lng;
+                        latOrigin = result.geocodes[0].location.lat;   
+                        console.log("我已经执行了路线请求")       
                         $.ajax({
-                            "url":  serverUrl + "/route/getRoute/?lonOrigin=" + lonOrigin + "&latOrigin=" + latOrigin + "&lonDestination=" + lonDestination + "&latDestination=" + latDestination ,
+                            "url":  serverUrl + "/route/getRoute?lonOrigin=" + lonOrigin + "&latOrigin=" + latOrigin + "&lonDestination=" + lng + "&latDestination=" + lat,
                             "method": "POST",
                             "headers": {
                             "Content-Type": "application/json"
@@ -174,92 +252,97 @@ define(["require", "route"],function() {
                             "async": true,
                             "crossDomain": true,
                             "success": function(data) {
+                                loading.style.display = "none"
                                 if(data.code == -1) {
                                     console.log(data)
                                     alert(data.msg)
                                 } else if(data.code == 1) {
-                                    console.log(data)
-                                    noloadroute(data.data)
-                                }
-                            }
-                        })                                       
-                    }
-                }
-            })
-            //再获得第二个输入框终点的坐标
-            geocoder.getLocation(couple_end.value, function(status, result) {
-                if (status === 'complete' && result.info === 'OK') {
-                    flag2 = 1;
-                    lonDestination = result.geocodes[0].location.lng;
-                    latDestination = result.geocodes[0].location.lat;  
-                    if(flag1 == 1 && flag2 == 1) {
-                        var obj = {
-                            lonOrigin: lonOrigin,
-                            latOrigin: latOrigin,
-                            lonDestination: lonDestination,
-                            latDestination: latDestination
-                        }
-                        flag1 = 0; flag2 = 0;
-                        $.ajax({
-                            "url":  serverUrl + "/route/getRoute/?lonOrigin=" + lonOrigin + "&latOrigin=" + latOrigin + "&lonDestination=" + lonDestination + "&latDestination=" + latDestination,
-                            "method": "POST",
-                            "headers": {
-                            "Content-Type": "application/json"
-                            },
-                            "dataType": "json",
-                            "async": false,
-                            "crossDomain": true,
-                            "success": function(data) {
-                                if(data.code == -1) {
-                                    console.log(data)
-                                    alert(data.msg)
-                                } else if(data.code == 1) {
+                                    fuzzy_container.innerHTML = "" 
                                     console.log(data);
                                     noloadroute(data.data)
                                 }
                             }
-                        })                          
+                        })                                             
                     }
-                }
-            })
-        })        
+                })
+            } else {
+                //先获得第一个输入框起点的坐标
+                geocoder.getLocation(couple_start.value, function(status, result) {
+                    if (status === 'complete' && result.info === 'OK') {
+                        flag1 = 1;
+                        lonOrigin = result.geocodes[0].location.lng;
+                        latOrigin = result.geocodes[0].location.lat;  
+                        if(flag1 == 1 && flag2 == 1) {
+                            flag1 = 0; flag2 = 0;
+                            console.log("我已经执行了路线请求") 
+                            $.ajax({
+                                "url":  serverUrl + "/route/getRoute?lonOrigin=" + lonOrigin + "&latOrigin=" + latOrigin + "&lonDestination=" + lonDestination + "&latDestination=" + latDestination ,
+                                "method": "POST",
+                                "headers": {
+                                "Content-Type": "application/json"
+                                },
+                                "dataType": "json",
+                                "async": true,
+                                "crossDomain": true,
+                                "success": function(data) {
+                                    loading.style.display = "none"
+                                    if(data.code == -1) {
+                                        console.log(data)
+                                        alert(data.msg)
+                                    } else if(data.code == 1) { 
+                                        fuzzy_container.innerHTML = ""                                
+                                        console.log(data)
+                                        noloadroute(data.data)
+                                    }
+                                }
+                            })                                       
+                        }
+                    }
+                })
+                 
+                //再获得第二个输入框终点的坐标
+                geocoder.getLocation(couple_end.value, function(status, result) {
+                    if (status === 'complete' && result.info === 'OK') {
+                        flag2 = 1;
+                        lonDestination = result.geocodes[0].location.lng;
+                        latDestination = result.geocodes[0].location.lat;  
+                        if(flag1 == 1 && flag2 == 1) {
+                            flag1 = 0; flag2 = 0;
+                            console.log("我已经执行了路线请求") 
+                            $.ajax({
+                                "url":  serverUrl + "/route/getRoute?lonOrigin=" + lonOrigin + "&latOrigin=" + latOrigin + "&lonDestination=" + lonDestination + "&latDestination=" + latDestination,
+                                "method": "POST",
+                                "headers": {
+                                "Content-Type": "application/json"
+                                },
+                                "dataType": "json",
+                                "async": true,
+                                "crossDomain": true,
+                                "success": function(data) {
+                                    loading.style.display = "none"
+                                    if(data.code == -1) {
+                                        console.log(data)
+                                        alert(data.msg)
+                                    } else if(data.code == 1) {
+                                        fuzzy_container.innerHTML = "" 
+                                        console.log(data);
+                                        noloadroute(data.data)
+                                    }
+                                }
+                            })                          
+                        }
+                        avoid = "available"   
+                    }                                   
+                })
+            }         
+        }) 
     }
 
-    // var method1 = [
-    //     {
-    //         method: "方案一",
-    //         time: "23分钟",
-    //         mile: "23公里"
-    //     },
-    //     {
-    //         method: "方案一",
-    //         time: "23分钟",
-    //         mile: "23公里"
-    //     },
-    //     {
-    //         method: "方案一",
-    //         time: "23分钟",
-    //         mile: "23公里"
-    //     },
-    //     {
-    //         method: "方案一",
-    //         time: "23分钟",
-    //         mile: "23公里"
-    //     },
-    //     {
-    //         method: "方案一",
-    //         time: "23分钟",
-    //         mile: "23公里"
-    //     },
-    //     {
-    //         method: "方案一",
-    //         time: "23分钟",
-    //         mile: "23公里"
-    //     },
-    // ]
-
+    var car_num = 0
     //非空载下的路径规划
     function noloadroute(method) {
+        releaseEvent()
+        submit()
         load_container.style.display = "block";
         let str = "";
         for(let i = 0; i < method.length; i++) {
@@ -269,15 +352,20 @@ define(["require", "route"],function() {
         for (let i = 0; i < method.length; i++) {
            let node = document.getElementsByClassName("method-recommand-container")[i];
             node.onclick = function () {
+                load_container.style.display = "block"
                 //当点击一个时还原另外两个的颜色
                 for(var i = 0; i < method.length; i++) {
                     document.getElementsByClassName("method-recommand-container")[i].style.color = "black";
                 }
                 this.style.color = "#4c93fd";
                 var k = this.getAttribute("num");
-                console.log(method[k].route);
-                console.log(changform(method[k].route));
-                loadplugin(changform(method[k].route), "history")
+                map.clearMap();
+                loadplugin(changform(method[k].route), "history", color[car_num], car_num);
+                car_num++;      
+                if(car_num == 3) {
+                    car_num = 0;
+                }         
+                map.setFitView();             
             };
         }
 
@@ -309,20 +397,49 @@ define(["require", "route"],function() {
         return context      
     }
 
+    // function removeRoute() {
+    //     if(pathSimplifierIns.length !=0) {
+    //         for(var i = 0; i < pathSimplifierIns.lengthl; i++) {
+    //             pathSimplifierIns[i].hide()
+    //         }
+    //     }
+    //     map.clearMap()
+    // }
 
-
-    // noloadroute(method1)
-    //热点推荐
-    function addhotpoint(json_information) {
-        var arr = new Array();
-        for(let k = 0; k < json_information.length; k++) {
-                arr[k] = new AMap.Marker({
-                        position: new AMap.LngLat(json_information[k].longitude,json_information[k].latitude)
-                });
-                map.add(arr[k]);      
+    //颜色的映射
+    function heatColor(heatVaule) {
+        if(heatVaule <= 2) {
+            return "#fefbd8"
+        } else if(heatVaule > 2 && heatVaule <=4) {
+            return "#fff001"
+        } else if(heatVaule > 4 && heatVaule <= 6) {
+            return "#f6aa00"
+        } else if(heatVaule > 6 && heatVaule <= 9) {
+            return "#e85521"
+        } else if(heatVaule > 9 && heatVaule <= 10) {
+            return "#e50112"
         }
-        
-        map.setFitView();
+    }
+    //热点推荐
+    //还要传入热度值
+    function addhotpoint(json_information) {
+        for(var i = 0; i < json_information.length; i++){
+            var center = [json_information[i].longitude, json_information[i].latitude];
+            var circleMarker = new AMap.CircleMarker({
+              center:center,
+              radius: 15,
+              strokeWeight:2,
+              strokeOpacity: 0.5,
+              fillColor:  heatColor(json_information[i].heat),
+              fillOpacity: 1,
+              zIndex:10,
+              bubble:true,
+              cursor:'pointer',
+              clickable: true
+            })
+            circleMarker.setMap(map)
+        }  
+        map.setFitView();      
     }
 
     //把后台返回的热点信息显示在前端
@@ -342,27 +459,40 @@ define(["require", "route"],function() {
             hot_point_result[hot_point_result.length - 1].style.marginBottom = "1.5rem";
         }
 
-        for(var i = 0; i < hot_point_result.length; i++) {
+        for(let i = 0; i < hot_point_result.length; i++) {
             hot_point_result[i].onclick = function () {
                 //还原原来所选字的颜色
-                for(var i = 0; i < document.getElementsByClassName("hot-point-recommand").length; i++) {
-                    document.getElementsByClassName("hot-point-recommand")[i].style.color = "black";
+                for(var j = 0; j < document.getElementsByClassName("hot-point-recommand").length; j++) {
+                    document.getElementsByClassName("hot-point-recommand")[j].style.color = "black";
                 }
                 this.color = "#4c93fd";
                 //切换搜索框,同时把在搜索框的终点上,加上所选择的字段
-                var end_name = this.innerHTML
+                var end_name = single_input.value
                 document.getElementsByClassName("input-start-end-contaniner")[0].style.display = "block";
                 single_input.setAttribute("class", "input-start-hidden");
+                hot_point.innerHTML = "";
                 couple_end.value = end_name ;
                 //把地图的视野聚焦到那个点上
-                map.setFitView([m1, m2]);
-                //////////////////////////////////还没有做完
+                console.log(i)
+                console.log(hotpoint)
+                console.log(hotpoint[i])
+                map.setFitView(new AMap.Marker({
+                    position: [hotpoint[i].longitude, hotpoint[i].latitude]
+                }));
+                releaseEvent() 
+                submit("hot", hotpoint[i].longitude, hotpoint[i].latitude)              
             }
         }
-
     }
 
-    //在地图上点出后台返回的热点数据
+    //用innerhtml解除原来的绑定事件，同时换上新的oncilick事件
+    function releaseEvent() {
+        document.getElementsByClassName("button-contaniner")[0].innerHTML = 
+        " <div class='clear-routes-btn'>清除路线</div><div class='search-btn' name='loadroute'>搜索</div>"
+        bindClear()
+    }
+
+    // //在地图上点出后台返回的热点数据
     function addpoint(hotpoint) {
         //每次生成点都要清除上一次的点
         map.clearMap();
@@ -411,33 +541,136 @@ define(["require", "route"],function() {
         }
     }
 
-    //车空载状态下的的方案，道路拥挤度的显示
-    // (function() {
-    //     var road_information_arrow = document.getElementsByClassName("method-arrow-icon");
+     //用于接受海量数据的路径规划，加载路径规划插件 
+     function loadplugin(point_arry, type, routecolor, num) {
+        AMapUI.load(['ui/misc/PathSimplifier'], function(PathSimplifier) {
 
-    //     for(let i = 0; i < road_information_arrow.length; i++) {
-    //         road_information_arrow[i].onclick = function() {
-    //             if(this.parentNode.getAttribute("class") == "method-recommand-container") {
-    //                 this.src = "images/shouqi.png";
-    //                 this.parentNode.setAttribute("class", "method-recommand-container-show");
-    //             } else if(this.parentNode.getAttribute("class") == "method-recommand-container-show"){
-    //                 this.src = "images/xiala.png";
-    //                 this.parentNode.setAttribute("class", "method-recommand-container");
-    //             }
-    //         }
-    //     }  
-    // })()
+            if (!PathSimplifier.supportCanvas) {
+                alert('当前环境不支持 Canvas！');
+                return;
+            }
+            //启动路线规划
+            initPage(PathSimplifier, point_arry, type , routecolor, num);
+        });
+    }
+    
+    function loadplugin(point_arry, type, routecolor, num) {
+        AMapUI.load(['ui/misc/PathSimplifier'], function(PathSimplifier) {
 
-//当点击不同方案的时候，改变字体颜色，同时执行对应方案的道路规划
-// (function() {
-//     var road_information = document.getElementsByClassName("method-recommand-container") 
-//     || document.getElementsByClassName("method-recommand-container-show")
-//     for(var i = 0; i < road_information.length; i++) {
-//         road_information[i].onclick = function() {
+            if (!PathSimplifier.supportCanvas) {
+                alert('当前环境不支持 Canvas！');
+                return;
+            }
+            //启动路线规划
+            initPage(PathSimplifier, point_arry, type , routecolor, num);
+        });
+    }
+    
+    //启动路径规划函数
+    function initPage(PathSimplifier,routes, type, routecolor, num) {
+        if(type == "hot") {
+            imagestart(routes[0])
+        } else if(type == "history") {
+            //添加图片
+            addimage(routes[0],routes[routes.length - 1])
+            if(num >= 1 ) {
+                roads[num-1].hide()
+            } else if(num == 0 && roads.length != 0) {
+                roads[2].hide();
+            }
+        }
+        console.log("num=" + num)
 
-//         }
-//     }
-// })()
+        //创建组件实例
+        roads[num] = new PathSimplifier({
+            autoSetFitView: false,
+            zIndex: 100,
+            map: map, //所属的地图实例
+            getPath: function(pathData, pathIndex) {
+                return pathData.path;
+            },
+            renderOptions: {
+                //轨迹线的样式
+                pathLineStyle: {
+                    outlineColor: routecolor,
+                    strokeStyle: routecolor,
+                    lineWidth: 6,
+                    dirArrowStyle: true
+                }
+            }
+        });
+
+        roads[num].setData([{
+            path: routes
+        },    
+        ]);
+        map.setFitView(roads[num]);
+    }
+    
+    //只添加起点的图标
+    function imagestart(startpoint) {
+        // 创建一个 Icon
+        var startIcon = new AMap.Icon({
+            // 图标尺寸
+            size: new AMap.Size(19, 31),
+            // 图标的取图地址
+            image: 'https://webapi.amap.com/theme/v1.3/markers/n/start.png',
+            // 图标所用图片大小
+            imageSize: new AMap.Size(19, 31),
+        });
+
+        var startMarker = new AMap.Marker({
+            position: new AMap.LngLat(startpoint[0],startpoint[1]),
+            icon: startIcon,
+            offset: new AMap.Pixel(-13, -30)
+        });
+
+        map.add([startMarker]);
+    }
+
+
+    //将加入起点终点的图标包装成一个方法类
+    function addimage(startpoint,endpoint) {
+        // 创建一个 Icon
+        var startIcon = new AMap.Icon({
+            // 图标尺寸
+            size: new AMap.Size(19, 31),
+            // 图标的取图地址
+            image: 'https://webapi.amap.com/theme/v1.3/markers/n/start.png',
+            // 图标所用图片大小
+            imageSize: new AMap.Size(19, 31),
+        });
+
+        var startMarker = new AMap.Marker({
+            position: new AMap.LngLat(startpoint[0],startpoint[1]),
+            icon: startIcon,
+            offset: new AMap.Pixel(-13, -30)
+        });
+
+        // 创建一个 icon
+        var endIcon = new AMap.Icon({
+            // 图标尺寸
+            size: new AMap.Size(19, 31),
+            // 图标的取图地址
+            image: 'https://webapi.amap.com/theme/v1.3/markers/n/end.png',
+            // 图标所用图片大小
+            imageSize: new AMap.Size(19, 31),
+        });
+
+        // 将 icon 传入 marker
+        var endMarker = new AMap.Marker({
+            position: new AMap.LngLat(endpoint[0],endpoint[1]),
+            icon: endIcon,
+            offset: new AMap.Pixel(-13, -30)
+        });    
+
+        map.add([startMarker, endMarker]); 
+
+    }
+
+    return {
+        clear: clear
+    }
 });
 
 
