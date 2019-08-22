@@ -63,6 +63,7 @@ input{
 
     overflow: hidden;
 }
+
 .taxi-status-hidden {
     height: 1.8rem;
     color: #999999;
@@ -78,7 +79,7 @@ input{
     /* position: absolute;
     top:100%; */
     margin: 0 auto;
-    width: 30%;
+    width: 73%;
     height: 1.8rem;
     /* border-radius: 6px; */
     cursor: pointer;
@@ -234,9 +235,23 @@ input::-webkit-input-placeholder{
 }
 
 .hot-point-container{
-    height: auto;
     width: 20rem;
     margin: auto;
+    max-height: 21rem;
+}
+
+.hot-point-container::-webkit-scrollbar {
+    width: 7px;    
+}
+
+.hot-point-container::-webkit-scrollbar-thumb {
+    border-radius: 8px;
+    background: rgba(184,184,184);
+}
+
+.hot-point-container::-webkit-scrollbar-track {
+    border-bottom-right-radius: 8px;  
+    background: rgba(235,235,235);
 }
 
 .hot-point-recommand{
@@ -254,6 +269,7 @@ input::-webkit-input-placeholder{
     background-position: left;
     background-size: 60%;
 }
+
 
 .show-lng-lat{
     height: 50%;

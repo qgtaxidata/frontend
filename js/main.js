@@ -114,6 +114,7 @@ define(["require", "tools", "heatmap", "billboard", "route","search"], function 
 		onShow.setAttribute("class", "echartsCon next");
 		next.setAttribute("class", "echartsCon pre");		
 	}
+	
 	formCon.onclick = function() {
 		if(event.target && event.target.getAttribute("click") == "formClose") {
 			formClose();
@@ -127,6 +128,7 @@ define(["require", "tools", "heatmap", "billboard", "route","search"], function 
 		}
 	}
 	
+
 	
 
 });

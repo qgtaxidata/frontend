@@ -12,6 +12,8 @@ define(["require", "tools"], function (require) {
     let carClickJudge = true;
     let carArr = [];
 
+    let carIntervalId = null;
+
     // rightChart.showLoading({
     //     text: '正在努力获取数据中...',		
     // });
@@ -26,7 +28,7 @@ define(["require", "tools"], function (require) {
             //     text: data.title,
             //     left: 'right',
             // },
-            color: "rgba(145, 199, 174, 0.6)",
+            color: "rgba(255, 0, 0, 0.45)",
             grid: {
                 left: 'right',
                 containLabel: true
@@ -87,7 +89,7 @@ define(["require", "tools"], function (require) {
         };
         return option;
     }
-    function createBottomOption(normalData, abnormalData) {
+    function createBottomOption(normalData, abnormalData, index) {
         let timeArr = [];
         let data = abnormalData.distribution;
         let normal = normalData;
@@ -96,7 +98,8 @@ define(["require", "tools"], function (require) {
         }
         let option = {
             title: {
-                text: `异常车辆  ${abnormalData.license}`,
+                text: `异常车辆 ${index} `,
+                subtext: `${abnormalData.license}`,
                 left: 'right',
             },
             grid: {
@@ -163,7 +166,7 @@ define(["require", "tools"], function (require) {
         let bottomForm = bottom.getElementsByClassName("form");
         for (let i = 0; i < abnormal.length; i++) {
             bottomChart[i] = echarts.init(bottomForm[i]);
-            bottomChart[i].setOption(createBottomOption(normal, abnormal[i]));
+            bottomChart[i].setOption(createBottomOption(normal, abnormal[i],i+1));
         }      
     }
 
@@ -179,7 +182,7 @@ define(["require", "tools"], function (require) {
             regClickJudge = true;
         }, 1000)
 
-        if (event.target.nodeName == "LI") {
+        if (event.target.nodeName == "LI" || falseEvent == "") {
             let pre = regChoice.getElementsByClassName("on-choice")[0];
             let now = event.target;
             pre.classList.remove("on-choice");
@@ -189,6 +192,15 @@ define(["require", "tools"], function (require) {
             rightForm[preIndex].classList.remove("on-show");
             rightForm[nowIndex].classList.add("on-show");
         }
+    }
+    
+    bottom.onmouseover = function() {
+        clearInterval(carIntervalId);
+    }
+    bottom.onmouseout = function() {
+        carIntervalId = setInterval(function() {
+            bottomClick();
+        }, 2000);
     }
         
     // 车辆选择
@@ -200,8 +212,13 @@ define(["require", "tools"], function (require) {
         setTimeout(function () {
             carClickJudge = true;
         }, 1000)
-
-        let form = event.target.parentNode.parentNode;
+        
+        let form;
+        if (event) {
+            form = event.target.parentNode.parentNode;
+        } else {
+            form = bottom.getElementsByClassName("car3")[0];
+        }
 
         if (form.classList[1] == "car1") {
             carArr.push(carArr[0]);
@@ -275,7 +292,11 @@ define(["require", "tools"], function (require) {
 
                     let normal = data.data.cars.normal_distribution;
                     let abnormal = data.data.cars.abnormal;
-                    creatCarChart(normal, abnormal)
+                    creatCarChart(normal, abnormal);
+
+                    carIntervalId = setInterval(function() {
+                        bottomClick();
+                    }, 2000);
                     
                 } else {
                     alert(data.msg);

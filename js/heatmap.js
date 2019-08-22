@@ -46,6 +46,8 @@ define(["require", "tools"], function (require) {
   let algValue = algCon.getElementsByClassName('algorithm-value')[0];
   // 热力图数据分析分析按钮
   let regAnaly = heatmapCon.getElementsByClassName('analyse')[0].children[1]; 
+  // loading
+  let fountainG = document.getElementById("fountainG");
 
   function liFun() {
     let input = this.getElementsByTagName("input")[0];
@@ -179,7 +181,7 @@ define(["require", "tools"], function (require) {
   
   
   
-  function hmapNowPass() {
+  function hmapNowPass(prd) {
     let area = regValue.getAttribute('tle');
     let time = heatmapTime.value;
 
@@ -221,6 +223,9 @@ define(["require", "tools"], function (require) {
       success: function (data) {
         console.log(data.data);
         if (data.msg == "success") {
+          if(prd != onHmapPrd) {
+            return;
+          }
           if(heatmap) {
             heatmap.hide();
             heatmap = null;
@@ -229,15 +234,19 @@ define(["require", "tools"], function (require) {
           heatmap.setDataSet({
             data: data.data
           });
-          heatmap.show();   	      	
+          heatmap.show();
+          fountainG.style.display = "none";   	      	
         } else {
           alert(data.msg);
+          fountainG.style.display = "none";
+          changeStaus();
         }
       }
     })
     return true;
   }
   function hmapFuture() {
+    
     let area = regValue.getAttribute('tle');
     let algorithm = algValue.getAttribute('tle');
     let futureTime = heatmapTime.value;
@@ -267,7 +276,7 @@ define(["require", "tools"], function (require) {
     } 
 
     console.log("请求未来热力图",send);
- 
+  
     $.ajax({
     url: serverUrl + "/thermoDiagram/getFutureMap",
     method: "GET",
@@ -289,9 +298,12 @@ define(["require", "tools"], function (require) {
          heatmap.setDataSet({
            data: data.data
          });
-         heatmap.show();            
+         heatmap.show();
+         fountainG.style.display = "none";            
        } else {
          alert(data.msg);
+         fountainG.style.display = "none";
+         changeStaus();
        }
      }
     })
@@ -311,20 +323,26 @@ define(["require", "tools"], function (require) {
     }, 2000);
 
     if (onHmapPrd == "time-future") {
+      fountainG.style.display = "block";
       if(!hmapFuture()) {
+        fountainG.style.display = "none";
         return;
       }
     } else if (onHmapPrd == "time-pass"){
-      if(!hmapNowPass()) {
+      fountainG.style.display = "block";
+      if(!hmapNowPass(onHmapPrd)) {
+        fountainG.style.display = "none";
         return;
       }
     } else {
-      if(!hmapNowPass()) {
+      fountainG.style.display = "block";
+      if(!hmapNowPass(onHmapPrd)) {
+        fountainG.style.display = "none";
         return;
       }
       controlTime = setInterval(function() {
-        hmapNowPass();
-      }, 3000);
+        hmapNowPass(onHmapPrd);
+      }, 1000);
     }
     changeStaus();// 换状态
   }
@@ -396,6 +414,9 @@ define(["require", "tools"], function (require) {
     formCon.innerHTML += `<img title="关闭" class="form-close" src="./images/关闭.png" click="formClose"><div class="echartsCon onShow"></div>`;
     let chartCon = formCon.getElementsByClassName("onShow")[0];
     let chart =  echarts.init(chartCon);
+    chart.showLoading({
+			text: '正在努力获取数据中...',
+		});
 
     let area = regValue.getAttribute('tle');
     let time = heatmapTime.value;
@@ -418,8 +439,10 @@ define(["require", "tools"], function (require) {
         console.log(data);
         if (data.msg == "success") {
           chart.setOption(createOption(data.data));
+          chart.hideLoading();
         } else {
           alert(data.msg);
+          chart.hideLoading();
         }
       }
     })
@@ -513,6 +536,9 @@ define(["require", "tools"], function (require) {
     if (heatmapStatus == "show") {
       changeStaus(); 
     } 
+    if (fountainG.style.display == "block") {
+      fountainG.style.display = "none";
+    }
     for (let i = 0; i < polygons.length; i++) {
       polygons[i].setMap(null);
     }

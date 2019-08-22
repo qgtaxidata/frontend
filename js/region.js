@@ -316,28 +316,49 @@ define(["require", "tools"], function (require) {
                               <div class="echartsCon onShow"></div>
                               <div class="echartsCon next"></div>
                               <div class="echartsCon pre"></div>`;
+
 		let formList = formCon.getElementsByClassName("echartsCon");
 
-		// $.ajax({
-		//   "url":  serverUrl + "",
-		//   "method": "GET",
-		//   "headers": {
-		//     "Content-Type": "application/json"
-		//   },
-		//   "data": send,
-		//   "dataType": "json",
-		//   "async": true,
-		//   "crossDomain": true,
-		//   "success": function(data) {
-		//     console.log(data);
-		//     if (data.code ==1) {
-		//       let con = formCon.getElementsByClassName("onShow")[0];
-		//       // formShow(data.data, data.data.title, con);
-		//     } else {
-		//       alert(data.msg)
-		//     }    
-		//   }
-		// })
+		let chart0 = echarts.init(formList[0]);
+		let chart1 = echarts.init(formList[1]);
+		let chart2 = echarts.init(formList[2]);
+		chart0.showLoading({
+			text: '正在努力获取数据中...',
+		});
+		
+		let area = regValue.getAttribute("tle");
+		let date = dateValue.value
+		let send = {
+			area: area,
+			date: date
+		}
+
+		$.ajax({
+		  "url":  serverUrl + "/analyse/roadAnalysis",
+		  "method": "GET",
+		  "headers": {
+		    "Content-Type": "application/json"
+		  },
+		  "data": send,
+		  "dataType": "json",
+		  "async": true,
+		  "crossDomain": true,
+		  "success": function(data) {
+		    console.log(data);
+		    if (data.code == 1) {
+				let average_time = data.data.average_time;
+				let density = data.data.density;
+				let flow = data.data.flow;
+				formShow(average_time.x, average_time.y, average_time.type, chart0);
+				formShow(density.x, density.y, density.type, chart1);
+				formShow(flow.x, flow.y, flow.type, chart2);
+				chart0.hideLoading();
+			} else {
+				alert(data.msg);
+				chart0.hideLoading();
+			}
+		  }
+		})
 
 	}
 	// 车辆利用率
