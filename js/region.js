@@ -109,6 +109,9 @@ define(["require", "tools"], function (require) {
 		if (!addClickLimit.call(this)) {
 			return;
 		}
+		setTimeout(function () {
+			sendClickJudge = true;
+		}, 1000);
 		console.log("执行【出租车司机收入排行榜】");
 		let area = regValue.getAttribute("tle");
 		let date = dateValue.value
@@ -132,9 +135,10 @@ define(["require", "tools"], function (require) {
 				console.log(data.data);
 				if (data.code == 1) {
 					createDriver(data.data, area, date);
-					sendClickJudge = true;
+					// sendClickJudge = true;
 				} else {
 					alert(data.msg)
+					// sendClickJudge = true;
 				}
 			}
 		})
@@ -206,6 +210,7 @@ define(["require", "tools"], function (require) {
 					sendClickJudge = true;
 				} else {
 					alert(data.msg);
+					sendClickJudge = true;
 				}
 			}
 		})
