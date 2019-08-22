@@ -38,7 +38,7 @@ define(["require", "tools"], function (require) {
       return;
     }    
 
-    if(confirm(`你确定将当前事件设为${timeValue}吗？`)) {
+    if(confirm(`你确定将当前时间设为 ${timeValue} 吗？`)) {
       timeDiffer = Date.now() - (new Date(timeValue)).getTime(); 
       alert("修改时间成功");
     } else {
@@ -46,5 +46,5 @@ define(["require", "tools"], function (require) {
     }
   }
 
-  
+
 });

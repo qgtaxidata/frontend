@@ -33,7 +33,7 @@
  		// else if(htpTimeChoice == '历史' && htpCon.style.display == "block") { return 3;} 
  		// else if(routeTimeChoice == '历史' && routeCon.style.display == "block") { return 3;} 
  		// else { return 3}
- 		return 3;
+ 		return 5;
  	};break;
  case"H":a.max=23,a.min=0;break;
  case"m":case"s":a.max=59,a.min=0;break;

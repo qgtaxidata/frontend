@@ -342,7 +342,7 @@ define(["require", "tools"], function (require) {
       }
       controlTime = setInterval(function() {
         hmapNowPass(onHmapPrd);
-      }, 1000);
+      }, 3000);
     }
     changeStaus();// 换状态
   }

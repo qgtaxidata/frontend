@@ -346,7 +346,6 @@ define(["require", "tools"], function (require) {
                             } else if(data.code == 1) {                                                                                                                              
                                     var realpoint = changform(data.data)
                                     loadplugin(realpoint, "hot", color[index], index);
-                                    // map.setFitView();
                                     storepoint.push(realpoint);
                                     console.log(storepoint)                                          
                                     if(index == 0) {
@@ -362,21 +361,23 @@ define(["require", "tools"], function (require) {
                                             realtimeroute(obj.licenseplateno,2);
                                         },10000)
                                     } 
+                                    map.setFitView();
                                 }                                   
                             }                                                    
                         
                     })
                 } else {
-                    alert("你已经超过三辆车请先清除轨迹后再试")
+                    alert("你已经超过三辆车,请先清除轨迹后再试");
                 }              
             }
         }
     }
 
+    var multiple  = [1,1,1]
     //实时路径查询
     function realtimeroute(taxi, k) {
         var obj = {
-            time:  route.getElementsByClassName("time-value ")[0].value,
+            time:  tools.formatTime((new Date(route.getElementsByClassName("time-value ")[0].value)).getTime() + 50000*(multiple[k]++)),
             licenseplateno: taxi
         }
         $.ajax({
@@ -578,6 +579,7 @@ define(["require", "tools"], function (require) {
             routeCon.getElementsByClassName("taxi-information-container")[0].innerHTML = '<div class="taxi-number-notice">车牌号码</div>' 
             routeCon.getElementsByClassName("taxi-information-container")[0].style.display = "none"
         } 
+        multiple = [1,1,1]
     }
     
 

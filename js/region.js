@@ -48,7 +48,7 @@ define(["require", "tools"], function (require) {
 	}
 
 	dateValue.value = `2017-02-11`;
-	for (let i = 3; i < 22; i++) {
+	for (let i = 5; i < 22; i++) {
 		dateList.innerHTML += `<li tle='${i}'>2017-02-${i < 10 ? ("0" + i) : i}</li>`;
 	}
 	dateChoice[0].onclick = function () {
@@ -88,9 +88,11 @@ define(["require", "tools"], function (require) {
 			return false;
 		}
 		sendClickJudge = false;
-		// setTimeout(function () {
-		// 	sendClickJudge = true;
-		// }, 500);
+		setTimeout(function () {
+			if(!sendClickJudge) {
+				sendClickJudge = true;
+			}
+		}, 3000);
 
 		let pre = barRegList.getElementsByClassName("on-region")[0] || null;
 		let now = this;
@@ -170,9 +172,11 @@ define(["require", "tools"], function (require) {
 			return;
 		}
 		sendClickJudge = false;
-		// setTimeout(function () {
-		// 	sendClickJudge = true;
-		// }, 800);
+		setTimeout(function () {
+			if(!sendClickJudge) {
+				sendClickJudge = true;
+			}
+		}, 3000);
 
 		if (event.target.getAttribute("clk") == "show") {
 			var list = event.target;
@@ -259,6 +263,7 @@ define(["require", "tools"], function (require) {
 		if (!addClickLimit.call(this)) {
 			return;
 		}
+		
 		console.log("执行【出租车收入分析和预测】");
 
 		dataCon.style.display = "none";
