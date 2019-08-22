@@ -289,7 +289,7 @@ define(["require", "tools"], function (require) {
 				console.log(data);
 				if (data.code == 1) {
 					let imcome = data.data.imcome;
-					formShow(imcome.x, imcome.y, data.data.title, chart);
+					formShow(imcome.x, imcome.y, data.data.title, chart, "");
 					chart.hideLoading();
 				} else {
 					alert(data.msg);
@@ -325,7 +325,7 @@ define(["require", "tools"], function (require) {
 		chart0.showLoading({
 			text: '正在努力获取数据中...',
 		});
-		
+
 		let area = regValue.getAttribute("tle");
 		let date = dateValue.value
 		let send = {
@@ -334,30 +334,30 @@ define(["require", "tools"], function (require) {
 		}
 
 		$.ajax({
-		  "url":  serverUrl + "/analyse/roadAnalysis",
-		  "method": "GET",
-		  "headers": {
-		    "Content-Type": "application/json"
-		  },
-		  "data": send,
-		  "dataType": "json",
-		  "async": true,
-		  "crossDomain": true,
-		  "success": function(data) {
-		    console.log(data);
-		    if (data.code == 1) {
-				let average_time = data.data.average_time;
-				let density = data.data.density;
-				let flow = data.data.flow;
-				formShow(average_time.x, average_time.y, average_time.type, chart0);
-				formShow(density.x, density.y, density.type, chart1);
-				formShow(flow.x, flow.y, flow.type, chart2);
-				chart0.hideLoading();
-			} else {
-				alert(data.msg);
-				chart0.hideLoading();
+			"url": serverUrl + "/analyse/roadAnalysis",
+			"method": "GET",
+			"headers": {
+				"Content-Type": "application/json"
+			},
+			"data": send,
+			"dataType": "json",
+			"async": true,
+			"crossDomain": true,
+			"success": function (data) {
+				console.log(data);
+				if (data.code == 1) {
+					let average_time = data.data.average_time;
+					let density = data.data.density;
+					let flow = data.data.flow;
+					formShow(average_time.x, average_time.y, average_time.type, chart0, "一");
+					formShow(density.x, density.y, density.type, chart1, "二");
+					formShow(flow.x, flow.y, flow.type, chart2, "三");
+					chart0.hideLoading();
+				} else {
+					alert(data.msg);
+					chart0.hideLoading();
+				}
 			}
-		  }
 		})
 
 	}
@@ -387,7 +387,7 @@ define(["require", "tools"], function (require) {
 		chart0.showLoading({
 			text: '正在努力获取数据中...',
 		});
-		
+
 		let area = regValue.getAttribute("tle");
 		let date = dateValue.value
 		let send = {
@@ -411,9 +411,9 @@ define(["require", "tools"], function (require) {
 					let pick_up_freq = data.data.pick_up_freq;
 					let mileage_utilization = data.data.mileage_utilization;
 					let time_utilization = data.data.time_utilization;
-					formShow(pick_up_freq.x, pick_up_freq.y, pick_up_freq.type, chart0);
-					formShow(mileage_utilization.x, mileage_utilization.y, mileage_utilization.type, chart1);
-					formShow(time_utilization.x, time_utilization.y, time_utilization.type, chart2);
+					formShow(pick_up_freq.x, pick_up_freq.y, pick_up_freq.type, chart0, "一");
+					formShow(mileage_utilization.x, mileage_utilization.y, mileage_utilization.type, chart1, "二");
+					formShow(time_utilization.x, time_utilization.y, time_utilization.type, chart2, "三");
 					chart0.hideLoading();
 				} else {
 					alert(data.msg);
@@ -462,12 +462,12 @@ define(["require", "tools"], function (require) {
 		}
 	}
 
-	function formShow(x, y, title, chart) {
+	function formShow(x, y, title, chart, index) {
 
 		let dateList = x[0].concat(x[1]);
 		let valueList = y[0].concat(y[1]);
 
-		console.log("adsfsdfs", dateList.length , x[1].length);
+		console.log("adsfsdfs", dateList.length, x[1].length);
 		let option = {
 
 			visualMap: {
@@ -484,7 +484,14 @@ define(["require", "tools"], function (require) {
 			},
 			title: {
 				left: 'center',
-				text: title
+				top: "0",
+				text: title,
+				subtext: index?`图表${index}`:"",
+				subtextStyle: {
+					fontWeight: "lighter",
+					fontSize: 15,
+					color: "#666"
+				}
 			},
 			textStyle: { color: "#000", fontSize: "18" },
 			tooltip: {
@@ -510,7 +517,7 @@ define(["require", "tools"], function (require) {
 				data: valueList,
 				markArea: {
 					data: [
-						[{ name: '预测数据', xAxis: dateList[dateList.length - x[1].length - 24]}, { xAxis: dateList[dateList.length - 1] }]
+						[{ name: '预测数据', xAxis: dateList[dateList.length - x[1].length - 24] }, { xAxis: dateList[dateList.length - 1] }]
 					]
 				}
 			}
@@ -518,8 +525,8 @@ define(["require", "tools"], function (require) {
 
 		chart.setOption(option);
 	}
-	
-	
 
-	
+
+
+
 });
