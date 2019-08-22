@@ -180,10 +180,11 @@ define(["require", "tools"], function (require) {
 			// 给生成的节点绑定地图显示点事件 
 			if (event.target && event.target.nodeName == "SPAN") {
 				var markerData = event.target.parentNode.getAttribute("marker-data");
-				console.log(markerData.split(",")[0], markerData.split(",")[1])
+				console.log(markerData.split(",")[0], markerData.split(",")[1]);
+				let title = event.target.getAttribute("address");
 				var marker = new AMap.Marker({
 					position: new AMap.LngLat(markerData.split(",")[0], markerData.split(",")[1]),   // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
-					title: event.target.getAttribute("address"),
+					title: title.substring(9),
 					offset: new AMap.Pixel(0, 0), // 设置点标记偏移量
 					icon: 'images/定位.png' // 添加 Icon 图标 URL
 				});
