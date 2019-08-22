@@ -166,10 +166,10 @@ define(["require", "route", "tools"],function() {
                 avoid = "inactivated";
                 //进行判断判断按钮的name是hotpoint，还是loadroute，对应发送不同的请求
                 if(single_input.getAttribute("class") == "input-start-hidden") {
+                    avoid = "available";
                     if(tools.isNotNullTrim(couple_end.value) && tools.isNotNullTrim(couple_start.value)) {
                         single_input.value = ""
                         loading.style.display = "block"
-                        avoid = "available";
                         //当点击发送请求的时候清空模糊搜索内容
                         fuzzy_container.innerHTML = "";
                         load_container.innerHTML = "";
@@ -233,11 +233,15 @@ define(["require", "route", "tools"],function() {
                             if(data.code == -1) {
                                 alert(data.msg)
                             } else {
-                                fuzzy_container.innerHTML = ""
-                                console.log(data)
-                                showhotpoint(data.data)
-                                addhotpoint(data.data);
-                                onfcus()
+                                if(data.length == 0) {
+                                    alert("查询无果")
+                                } else {
+                                    fuzzy_container.innerHTML = ""
+                                    console.log(data)
+                                    showhotpoint(data.data)
+                                    addhotpoint(data.data);
+                                    onfcus()
+                                }
                             }
                         }
                     })
@@ -280,17 +284,18 @@ define(["require", "route", "tools"],function() {
                             "async": true,
                             "crossDomain": true,
                             "success": function(data) {
-                                loading.style.display = "none"
-                                setTimeout(function() {
-                                    avoid = "available"
-                                },3000);   
+                                loading.style.display = "none" 
                                 if(data.code == -1) {
                                     console.log(data)
                                     alert(data.msg)
                                 } else if(data.code == 1) {
-                                    fuzzy_container.innerHTML = "" 
-                                    console.log(data);
-                                    noloadroute(data.data)
+                                    if(data.length == 0) {
+                                        alert("查询无果")
+                                    } else {
+                                        fuzzy_container.innerHTML = "" 
+                                        console.log(data);
+                                        noloadroute(data.data)
+                                    }
                                 }
                             }
                         })                                             
@@ -326,9 +331,13 @@ define(["require", "route", "tools"],function() {
                                         console.log(data)
                                         alert(data.msg)
                                     } else if(data.code == 1) { 
-                                        fuzzy_container.innerHTML = ""                                
-                                        console.log(data)
-                                        noloadroute(data.data)
+                                        if(data.length == 0) {
+                                            alert("查询无果")
+                                        } else {
+                                            fuzzy_container.innerHTML = "" 
+                                            console.log(data);
+                                            noloadroute(data.data)
+                                        }
                                     }
                                 }
                             })                                       
@@ -360,6 +369,9 @@ define(["require", "route", "tools"],function() {
                                 "crossDomain": true,
                                 "success": function(data) {
                                     loading.style.display = "none"
+                                    setTimeout(function() {
+                                        avoid = "available"
+                                    },3000);
                                     if(data.code == -1) {
                                         console.log(data)
                                         alert(data.msg)
@@ -370,8 +382,7 @@ define(["require", "route", "tools"],function() {
                                     }
                                 }
                             })                          
-                        }
-                        avoid = "available"   
+                        } 
                     } else{
                         loading.style.display = "none"
                         avoid = "available"

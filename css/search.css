@@ -187,16 +187,18 @@ input::-webkit-input-placeholder{
 
 .red{
     background-color: #ff5c5c;
+    margin-left: 1rem;
 }
 
 .green{
     background-color: #5cff8a;
+    margin-left: 1rem;
 }
 
 .input-departure{
     float: left;
     height: 2rem;
-    width: 16.7rem;
+    width: 17.7rem;
 }
 
 .input-departure input{

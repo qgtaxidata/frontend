@@ -6,7 +6,9 @@ define(["require", "tools"], function (require) {
   let timeSet = setCon.getElementsByClassName("time-value")[0];
   let timeNow = setCon.getElementsByClassName("time-now")[0];
   let setClick  = setCon.getElementsByTagName("button")[0];
-  let clickJudge = true;
+
+  let reg = /^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])\s+(20|21|22|23|[0-1]\d):[0-5]\d:[0-5]\d$/;
+  let regExp = new RegExp(reg);
 
   timeSet.value = "请设置当前时间"; 
   new Picker(timeSet, {
@@ -28,16 +30,21 @@ define(["require", "tools"], function (require) {
   }, 1000);
 
   setClick.onclick = function() {
-    if (!clickJudge) {
-      return;
-    }
-    clickJudge = false;
-    setTimeout(function() {
-      clickJudge = true;
-    }, 1000)
 
     let timeValue = timeSet.value;
-    timeDiffer = Date.now() - (new Date(timeValue)).getTime(); 
-    console.log("修改时间成功");
+
+    if(!regExp.test(timeValue)){
+      alert("请选择一个时间!");
+      return;
+    }    
+
+    if(confirm(`你确定将当前事件设为${timeValue}吗？`)) {
+      timeDiffer = Date.now() - (new Date(timeValue)).getTime(); 
+      alert("修改时间成功");
+    } else {
+      alert("取消成功");
+    }
   }
+
+  
 });

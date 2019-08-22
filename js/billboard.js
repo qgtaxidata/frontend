@@ -159,7 +159,11 @@ define(["require", "tools"], function (require) {
 				if (status === 'complete' && result.regeocode) {
 					var address = result.regeocode.formattedAddress;
 					if (address.length >= 10) {
-						var addressSimple = address.substring(6, 15) + "...";
+						if(address.substring(9, 16).length >= 7) {
+							var addressSimple = address.substring(9, 16) + "...";
+						} else {
+							var addressSimple = address.substring(9);
+						}	
 					} else {
 						var addressSimple = address;
 					}

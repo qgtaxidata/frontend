@@ -145,13 +145,21 @@ define(["require", "tools"], function (require) {
                     routeTime.style.color = "red";                
                 } else {
                     if(avoid == 0 && event.target.getAttribute("class") == "refresh-btn") {
-                        console.log(indexhistory)
-                        avoid = 1;
-                        //调用化函数发送查询历史的请求
-                        routeCon.getElementsByClassName("error-alert")[0].style.display = "none";
-                        routeTime.style.borderColor = "#4c93fd";
-                        routeTime.style.color = "#4c93fd";
-                        sendhistoryreq();
+                        let timeDiffer = allTimeNow.getTime() - (new Date(route.getElementsByClassName("time-value ")[0].value)).getTime();
+                        if(timeDiffer > 0) {
+                            console.log(indexhistory)
+                            avoid = 1;
+                            //调用化函数发送查询历史的请求
+                            routeCon.getElementsByClassName("error-alert")[0].style.display = "none";
+                            routeTime.style.borderColor = "#4c93fd";
+                            routeTime.style.color = "#4c93fd";
+                            sendhistoryreq();
+                        } else {
+                            avoid = 0;
+                            routeCon.getElementsByClassName("error-alert")[0].style.display = "block";
+                            routeTime.style.borderColor = "red";
+                            routeTime.style.color = "red"; 
+                        }                      
                      }  else  {
                         alert("请不要频繁点击");                     
                     }
