@@ -78,6 +78,8 @@ define(["require", "tools"], function (require) {
 		let onRegion = barRegList.getElementsByClassName("on-region")[0] || null;
 		if (onRegion) {
 			onRegion.onclick();
+		} else {
+			barRegList.children[0].onclick();
 		}
 	}
 	// 二级导航栏添加限制
@@ -86,9 +88,9 @@ define(["require", "tools"], function (require) {
 			return false;
 		}
 		sendClickJudge = false;
-		setTimeout(function () {
-			sendClickJudge = true;
-		}, 500);
+		// setTimeout(function () {
+		// 	sendClickJudge = true;
+		// }, 500);
 
 		let pre = barRegList.getElementsByClassName("on-region")[0] || null;
 		let now = this;
@@ -115,6 +117,7 @@ define(["require", "tools"], function (require) {
 			date: date
 		}
 		console.log("司机排行榜send", send);
+		dataCon.innerHTML = ""
 		$.ajax({
 			"url": serverUrl + "/rank/getRank",
 			"method": "GET",
@@ -129,6 +132,7 @@ define(["require", "tools"], function (require) {
 				console.log(data.data);
 				if (data.code == 1) {
 					createDriver(data.data, area, date);
+					sendClickJudge = true;
 				} else {
 					alert(data.msg)
 				}
@@ -138,7 +142,6 @@ define(["require", "tools"], function (require) {
 	}
 	function createDriver(data, area, date) {
 		dataCon.style.display = "block";
-		dataCon.innerHTML = ""
 		dataCon.innerHTML += `<div class="item-name">
 				                	<span style="width: 4rem">排名</span>
 				                	<span style="width: 6rem">司机编号</span>
@@ -163,9 +166,9 @@ define(["require", "tools"], function (require) {
 			return;
 		}
 		sendClickJudge = false;
-		setTimeout(function () {
-			sendClickJudge = true;
-		}, 800);
+		// setTimeout(function () {
+		// 	sendClickJudge = true;
+		// }, 800);
 
 		if (event.target.getAttribute("clk") == "show") {
 			var list = event.target;
@@ -185,6 +188,7 @@ define(["require", "tools"], function (require) {
 			driverID: driverID
 		};
 		console.log("司机具体信息sand", send);
+		formCon.innerHTML = "";
 		$.ajax({
 			"url": serverUrl + "/rank/getSituation",
 			"method": "GET",
@@ -199,6 +203,7 @@ define(["require", "tools"], function (require) {
 				console.log(data.data);
 				if (data.code == 1) {
 					showDriver(data.data, rank, driverID, income)
+					sendClickJudge = true;
 				} else {
 					alert(data.msg);
 				}
@@ -208,7 +213,6 @@ define(["require", "tools"], function (require) {
 	function showDriver(data, rank, driverID, income) {
 		let formCon = document.getElementsByClassName("form-container")[0];
 		formCon.style.display = "block";
-		formCon.innerHTML = "";
 		formCon.innerHTML += `<img title="关闭" class="form-close" src="./images/关闭.png" click="formClose">
     						  <div class="echartsCon onShow">
     						      <img src="./images/driver.png">
@@ -291,9 +295,11 @@ define(["require", "tools"], function (require) {
 					let imcome = data.data.imcome;
 					formShow(imcome.x, imcome.y, data.data.title, chart, "");
 					chart.hideLoading();
+					sendClickJudge = true;
 				} else {
 					alert(data.msg);
 					chart.hideLoading();
+					sendClickJudge = true;
 				}
 			}
 		})
@@ -353,9 +359,11 @@ define(["require", "tools"], function (require) {
 					formShow(density.x, density.y, density.type, chart1, "二");
 					formShow(flow.x, flow.y, flow.type, chart2, "三");
 					chart0.hideLoading();
+					sendClickJudge = true;
 				} else {
 					alert(data.msg);
 					chart0.hideLoading();
+					sendClickJudge = true;
 				}
 			}
 		})
@@ -415,9 +423,11 @@ define(["require", "tools"], function (require) {
 					formShow(mileage_utilization.x, mileage_utilization.y, mileage_utilization.type, chart1, "二");
 					formShow(time_utilization.x, time_utilization.y, time_utilization.type, chart2, "三");
 					chart0.hideLoading();
+					sendClickJudge = true;
 				} else {
 					alert(data.msg);
 					chart0.hideLoading();
+					sendClickJudge = true;
 				}
 			}
 		})

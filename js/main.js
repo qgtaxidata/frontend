@@ -73,9 +73,9 @@ define(["require", "tools", "heatmap", "billboard", "route","search"], function 
 		formCon.style.display = "none";
 		if(onSidebar == "region") {
 			let pre = barRegList.getElementsByClassName("on-region")[0] || null;
-			if (pre) {
-				pre.classList.remove("on-region");
-			}
+			// if (pre && pre.innerText != "出租车司机收入排行榜") {
+			// 	pre.classList.remove("on-region");
+			// }
 		}
 	}
 	function formNext() {
@@ -114,7 +114,7 @@ define(["require", "tools", "heatmap", "billboard", "route","search"], function 
 		onShow.setAttribute("class", "echartsCon next");
 		next.setAttribute("class", "echartsCon pre");		
 	}
-	
+
 	formCon.onclick = function() {
 		if(event.target && event.target.getAttribute("click") == "formClose") {
 			formClose();
