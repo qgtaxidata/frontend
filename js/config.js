@@ -9,7 +9,7 @@ let map = new AMap.Map("map-container", {
 let formCon = document.getElementsByClassName("form-container")[0];
 
 // 服务器地址
-let serverUrl = "http://192.168.31.179:8080";
+let serverUrl = "http://192.168.31.162";
 
 // 吴某人 http://192.168.1.101:8080
 // 子锋 http://192.168.31.89:8080
