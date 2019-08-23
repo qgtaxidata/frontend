@@ -247,6 +247,10 @@ define(["require", "route", "tools"],function() {
                             }
                         }
                     })
+                } else {
+                    alert("请检查你输入的地点");
+                    avoid = "available"
+                    return
                 }
             })
         })        
@@ -299,6 +303,10 @@ define(["require", "route", "tools"],function() {
                                 }
                             }
                         })                                             
+                    } else {
+                        alert("请检查你输入的地点");
+                        loading.style.display = "none"
+                        return
                     }
                 })
             } else {
@@ -338,7 +346,11 @@ define(["require", "route", "tools"],function() {
                                     }
                                 }
                             })                                       
-                        }
+                        } 
+                    } else {
+                        alert("请检查你输入的地点");
+                        loading.style.display = "none"
+                        return
                     }
                 })
                  
@@ -379,7 +391,11 @@ define(["require", "route", "tools"],function() {
                                 }
                             })                          
                         } 
-                    }                       
+                    } else {
+                        alert("请检查你输入的地点");
+                        loading.style.display = "none"
+                        return
+                    }                      
                 })
             }         
         }) 

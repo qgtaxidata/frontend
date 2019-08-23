@@ -188,7 +188,6 @@ define(["require", "tools"], function (require) {
             time : route.getElementsByClassName("time-value ")[0].value,
             area: region_num
         }
-
         console.log(position)
         $.ajax({
             "url":  serverUrl + "/taxiRoute/findTaxi",
@@ -197,10 +196,12 @@ define(["require", "tools"], function (require) {
             "data": position,
             "async": true,
             "crossDomain": true,
-            "success": function(data) {
+            "complete": function() {
                 setTimeout(function() {
                     avoid = "0";
-                }, 5000)            
+                }, 5000)   
+            },
+            "success": function(data) {           
                 if(data.code == -1) {
                     alert(code.msg)
                 } else {
@@ -225,23 +226,31 @@ define(["require", "tools"], function (require) {
         }
 
         console.log(position)
-        $.ajax({
-            "url":  serverUrl + "/taxiRoute/findTaxi",
-            "method": "GET", 
-            "data": position,
-            "dataType": "json",
-            "async": true,
-            "crossDomain": true,
-            "success": function(data) {
-                setTimeout(function(){
-                    avoid_hot = 0;
-                },5000)
-                console.log(data.data);
-                //在页面上显示车牌信息
-                taxinumber(data.data);
-                addhottaxionclick(data.data);
-            }
-        })      
+        if(position.time != "请选择过去的时间") {
+            $.ajax({
+                "url":  serverUrl + "/taxiRoute/findTaxi",
+                "method": "GET",
+                "data": position,
+                "dataType": "json",
+                "async": true,
+                "crossDomain": true,
+                "complete": function() {
+                    setTimeout(function(){
+                        avoid_hot = 0;
+                    },5000)
+                },
+                "success": function(data) {
+                    console.log(data.data);
+                    //在页面上显示车牌信息
+                    taxinumber(data.data);
+                    addhottaxionclick(data.data);
+                }
+            })     
+        } else {
+            alert("别急等实时时间出来再请求")
+            avoid_hot = 0;
+        }
+         
     }
 
     //动态添加出租车的车牌号码
@@ -288,15 +297,21 @@ define(["require", "tools"], function (require) {
                     "dataType": "json",
                     "async": true,
                     "crossDomain": true,
-                    "success": function(data) {
+                    "complete": function() {
                         loading.style.display = "none";
+                    },
+                    "success": function(data) {
                         if(data.code == -1) {
                             alert(data.msg);
                             document.getElementsByClassName("taxi-number")[i].style.color = "black";
                             indexhistory = indexhistory - 1;
                         } else if(data.code == 1) {
-                            console.log(data.data);                             
-                            loadplugin(changform(data.data), "history", color[indexhistory], indexhistory);                                                 
+                            if(data == null) {
+                                alert("查询无果")
+                            } else {
+                                console.log(data.data);                             
+                                loadplugin(changform(data.data), "history", color[indexhistory], indexhistory);     
+                            }                                            
                         }                                                       
                     }
                 })            
@@ -337,8 +352,10 @@ define(["require", "tools"], function (require) {
                         },
                         "async": true,
                         "crossDomain": true,
-                        "success": function(data) {
+                        "complete": function() {
                             loading.style.display = "none";
+                        },
+                        "success": function(data) {
                             if(data.code == -1) {
                                 alert(data.msg)   
                                 document.getElementsByClassName("taxi-number")[i].style.color = "black";   
@@ -346,6 +363,7 @@ define(["require", "tools"], function (require) {
                             } else if(data.code == 1) {                                                                                                                              
                                     var realpoint = changform(data.data)
                                     loadplugin(realpoint, "hot", color[index], index);
+                                    map.setFitView();
                                     storepoint.push(realpoint);
                                     console.log(storepoint)                                          
                                     if(index == 0) {
@@ -361,7 +379,6 @@ define(["require", "tools"], function (require) {
                                             realtimeroute(obj.licenseplateno,2);
                                         },10000)
                                     } 
-                                    map.setFitView();
                                 }                                   
                             }                                                    
                         
@@ -397,7 +414,6 @@ define(["require", "tools"], function (require) {
                         console.log(changform(data.data))
                         mergeary(changform(data.data),k)
                         console.log(storepoint);
-                        //把json对象转为路线规划参数符合的形式
                         pathSimplifierIns[k].hide();
                         loadplugin(storepoint[k], "hot", color[k], k);     
                     } 
