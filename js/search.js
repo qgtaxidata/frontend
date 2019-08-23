@@ -138,8 +138,10 @@ define(["require", "route", "tools"],function() {
         map.plugin('AMap.Autocomplete',function() {
             var autoOptions = {
                 // input 为绑定输入提示功能的input的DOM ID
+                city: "广州市",
                 input: inputid,
-                output: 'fuzzy-search-contanier'
+                output: 'fuzzy-search-contanier',
+                citylimit: "true",
             }
            new AMap.Autocomplete(autoOptions); 
         })
@@ -213,8 +215,7 @@ define(["require", "route", "tools"],function() {
                         longitude: result.geocodes[0].location.lng,
                         latitude: result.geocodes[0].location.lat,
                     } 
-                    console.log(position);
-                    
+                    console.log(position);                
                     $.ajax({
                         "url":  serverUrl + "/hotspot/findHotspot",
                         "method": "POST",
@@ -225,11 +226,12 @@ define(["require", "route", "tools"],function() {
                         "dataType": "json",
                         "async": true,
                         "crossDomain": true,
-                        "success": function(data) {
-                            loading.style.display = "none"
+                        "complete": function() {
                             setTimeout(function() {
                                 avoid = "available"
-                            },3000);                       
+                            },3000); 
+                        },
+                        "success": function(data) {                      
                             if(data.code == -1) {
                                 alert(data.msg)
                             } else {
@@ -245,10 +247,6 @@ define(["require", "route", "tools"],function() {
                             }
                         }
                     })
-                } else{
-                    avoid = "available"
-                    alert("查询不到这个地方")
-                    return
                 }
             })
         })        
@@ -283,8 +281,10 @@ define(["require", "route", "tools"],function() {
                             "dataType": "json",
                             "async": true,
                             "crossDomain": true,
+                            "complete": function() {
+                                loading.style.display = "none"
+                            },
                             "success": function(data) {
-                                loading.style.display = "none" 
                                 if(data.code == -1) {
                                     console.log(data)
                                     alert(data.msg)
@@ -299,11 +299,6 @@ define(["require", "route", "tools"],function() {
                                 }
                             }
                         })                                             
-                    } else {
-                        loading.style.display = "none"
-                        avoid = "available"
-                        alert("查询不到这个地方")
-                        return
                     }
                 })
             } else {
@@ -325,13 +320,15 @@ define(["require", "route", "tools"],function() {
                                 "dataType": "json",
                                 "async": true,
                                 "crossDomain": true,
-                                "success": function(data) {
+                                "complete": function() {
                                     loading.style.display = "none"
+                                },
+                                "success": function(data) {
                                     if(data.code == -1) {
                                         console.log(data)
                                         alert(data.msg)
                                     } else if(data.code == 1) { 
-                                        if(data.length == 0) {
+                                        if(data.data.length == 0) {
                                             alert("查询无果")
                                         } else {
                                             fuzzy_container.innerHTML = "" 
@@ -342,11 +339,6 @@ define(["require", "route", "tools"],function() {
                                 }
                             })                                       
                         }
-                    } else {
-                        loading.style.display = "none"
-                        avoid = "available"
-                        alert("查询不到这个地方")
-                        return
                     }
                 })
                  
@@ -367,28 +359,27 @@ define(["require", "route", "tools"],function() {
                                 "dataType": "json",
                                 "async": true,
                                 "crossDomain": true,
-                                "success": function(data) {
+                                "complete": function() {
                                     loading.style.display = "none"
-                                    setTimeout(function() {
-                                        avoid = "available"
-                                    },3000);
+                                },
+                                "success": function(data) {
                                     if(data.code == -1) {
                                         console.log(data)
                                         alert(data.msg)
                                     } else if(data.code == 1) {
-                                        fuzzy_container.innerHTML = "" 
-                                        console.log(data);
-                                        noloadroute(data.data)
+                                        if(data.data.length != 0) {
+                                            fuzzy_container.innerHTML = "" 
+                                            console.log(data);
+                                            noloadroute(data.data)
+                                        } else {
+                                            alert("查询不到结果")
+                                        }
+                                        
                                     }
                                 }
                             })                          
                         } 
-                    } else{
-                        loading.style.display = "none"
-                        avoid = "available"
-                        alert("查询不到这个地方")
-                        return
-                    }                                   
+                    }                       
                 })
             }         
         }) 

@@ -69,6 +69,10 @@ define(["require", "tools"], function (require) {
 
             },
             color: ["#d48265", " #91c7ae"],
+            tooltip : {
+                trigger: 'item',
+                formatter: "{b} : {d}%"
+            },
             legend: {
                 orient: 'vertical',
                 left: 'right',
@@ -77,13 +81,19 @@ define(["require", "tools"], function (require) {
             },
             series: [
                 {
-                    name: '访问来源',
                     type: 'pie',
-                    radius: "60%",
+                    radius: "65%",
                     data: [
                         { name: '异常指数', value: data.abnormal },
                         { name: '正常指数', value: data.normal }
-                    ]
+                    ],
+                    itemStyle: {
+                        emphasis: {
+                            shadowBlur: 8,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(1, 1, 1, 0.2)'
+                        }
+                    }
                 },
             ]
         };
@@ -123,7 +133,8 @@ define(["require", "tools"], function (require) {
                 },
             },
             yAxis: {
-                type: 'value'
+                type: 'value',
+                max: 0.1
             },
             series: [{
                 name: "异常情况",
