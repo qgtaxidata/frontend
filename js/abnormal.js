@@ -134,7 +134,7 @@ define(["require", "tools"], function (require) {
             },
             yAxis: {
                 type: 'value',
-                max: 0.1
+                max: 0.12
             },
             series: [{
                 name: "异常情况",
