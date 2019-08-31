@@ -221,9 +221,10 @@ define(["require", "tools"], function (require) {
       async: true,
       "crossDomain": true,
       success: function (data) {
-        console.log(data.data);
+        console.log("热力图",data);
         if (data.msg == "success") {
-          if(prd != onHmapPrd) {
+          if(heatmapStatus == "hide" || prd != onHmapPrd) {
+            console.log("该热力图不显示");
             return;
           }
           if(heatmap) {
@@ -342,7 +343,7 @@ define(["require", "tools"], function (require) {
       }
       controlTime = setInterval(function() {
         hmapNowPass(onHmapPrd);
-      }, 3000);
+      }, 1000);
     }
     changeStaus();// 换状态
   }
@@ -354,7 +355,7 @@ define(["require", "tools"], function (require) {
     heatmapClickJudge = false;
     setTimeout(function() {
       heatmapClickJudge = true;
-    }, 1000);
+    }, 3000);
 
     if (hmapButJudge.innerText != "") {
       hmapButJudge.innerText = "";
@@ -495,15 +496,31 @@ define(["require", "tools"], function (require) {
     var option = {
       title: {
         text: data.graph_title,
+        subtext: "区域需求量: 指该区域一小时内的总出租车需求量",
+				subtextStyle: {
+					fontWeight: "lighter",
+					fontSize: 13,
+					color: "#666"
+        },
+        left: 'center'
       },
-      tooltip: {},
-      legend: {
-        data:["line"],
+      tooltip: {
+        trigger: 'axis',
+        formatter: "{b} : {c} 辆"
       },
+      // legend: {
+      //   data: ["line"],
+      //   left: 'right'
+      // },
       xAxis: {
-        data:[data.graph_data[0].title, data.graph_data[1].title, data.graph_data[2].title]
+        data:[`${data.graph_data[0].title} `, `${data.graph_data[1].title} `, `${data.graph_data[2].title} `]
       },
-      yAxis: {},
+      yAxis: {
+        type: "value",
+				axisLabel: {
+					formatter: `{value} 辆`
+				}
+      },
       series: [
         {
           name:'line',

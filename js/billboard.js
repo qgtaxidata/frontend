@@ -213,7 +213,7 @@ define(["require", "tools"], function (require) {
 		var arrivalRate = [];
 		for (let i = 0; i < billboardLi.length; i++) {
 			vehicleFlow.push(billboardLi[i].getAttribute("vehicle-flow"));
-			arrivalRate.push(billboardLi[i].getAttribute("arrival-rate"));
+			arrivalRate.push((billboardLi[i].getAttribute("arrival-rate")*100).toFixed(2));
 		}
 		// 插入数据
 		formCon.innerHTML += `<img title="关闭" class="form-close" src="./images/关闭.png" click="formClose"><div class="echartsCon onShow"></div>`;
@@ -221,29 +221,43 @@ define(["require", "tools"], function (require) {
 		let chart = echarts.init(chartCon);
 		var option = {
 			title: {
-				text: '对比图表'
+				text: '对比图表',
+				subtext: "车流量: 经过该位置的车辆数目\n抵达率: 车流量中抵达该位置的车辆比例",
+				subtextStyle: {
+					fontWeight: "lighter",
+					fontSize: 13,
+					color: "#666",
+					lineHeight: 15
+				}
 			},
 			tooltip: {
 				trigger: 'axis',
 				axisPointer: {
 					type: 'shadow'
-				}
+				},
+				formatter: "{a0} : {c0}% <br/>{a1} : {c1}辆"
 			},
 			legend: {
-				data: ['到达率(%)', '车流量(辆)']
+				data: ['到达率(%)', '车流量(辆)'],
+				left: "right"
 			},
 			grid: {
-				left: '3%',
-				right: '4%',
-				bottom: '3%',
+				left: '0',
+				right: '5%',
+				top: '20%',
+				bottom: '0',
 				containLabel: true
 			},
 			xAxis: [{
 					type: 'value',
-					boundaryGap: [0, 0.01]
+					axisLabel: {
+						formatter: `{value} %`
+					}
 				},{
 					type: 'value',
-					boundaryGap: [0, 0.01]
+					axisLabel: {
+						formatter: `{value} 辆`
+					}
 				}],
 			yAxis: {
 				type: 'category',
@@ -254,13 +268,13 @@ define(["require", "tools"], function (require) {
 					name: '到达率(%)',
 					xAxisIndex:0,
 					type: 'bar',
-					data: [arrivalRate[0], arrivalRate[1], arrivalRate[2], arrivalRate[3], arrivalRate[4]]
+					data: arrivalRate
 				},
 				{
 					name: '车流量(辆)',
 					xAxisIndex: 1,
 					type: 'bar',
-					data: [vehicleFlow[0], vehicleFlow[1], vehicleFlow[2], vehicleFlow[3], vehicleFlow[4]]
+					data: vehicleFlow
 				}
 			]
 		};
@@ -311,6 +325,7 @@ define(["require", "tools"], function (require) {
 		let formCon = document.getElementsByClassName("form-container")[0];
 
 		dataCon.innerHTML = "";
+		dataCon.style.display = "none";
 		formCon.innerHTML = "";
 		for(let i = 0; i < arr.length; i++) {
 			map.remove(arr[i]);

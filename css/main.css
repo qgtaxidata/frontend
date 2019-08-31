@@ -173,3 +173,22 @@ html {
 	text-align: center;
 	border-bottom: 0.5px solid #fff;
 }
+.form-container .page {
+	position: absolute;
+	bottom: 0.3rem;
+	z-index: 100;
+	width: 100%;
+	text-align: center;
+}
+.form-container .page li {
+	display: inline-block;
+	margin: 0 0;
+	padding: 0.2rem 1rem;
+	cursor: pointer;
+	transition: all 0.5s;
+}
+.form-container .page .onPage,
+.form-container .page li:hover {
+	color: #fff;
+	background-color: rgba(76, 147, 253, 1);
+}

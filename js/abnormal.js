@@ -37,14 +37,18 @@ define(["require", "tools"], function (require) {
                 trigger: 'axis',
                 axisPointer: {
                     type: 'shadow'
-                }
+                },
+                formatter: "{b} : {c}辆"
             },
             angleAxis: {
                 type: 'category',
                 data: xArr,
-                z: 10
+                z: 10,
             },
             radiusAxis: {
+                axisLabel: {
+                    formatter: `{value}辆`,
+				}
             },
             polar: {
             },
@@ -60,7 +64,7 @@ define(["require", "tools"], function (require) {
     function createRightOption(data) {
         var option = {
             title: {
-                text: `${toArea(data.area)}异常车辆概率分布`,
+                text: `${toArea(data.area)} 异常车辆概率分布`,
                 left: 'center',
                 textStyle: {
                     fontSize: "15",
@@ -77,15 +81,15 @@ define(["require", "tools"], function (require) {
                 orient: 'vertical',
                 left: 'right',
                 top: 'top',
-                data: ['异常指数', '正常指数']
+                data: ['异常比例(%)', '正常比例(%)']
             },
             series: [
                 {
                     type: 'pie',
                     radius: "65%",
                     data: [
-                        { name: '异常指数', value: data.abnormal },
-                        { name: '正常指数', value: data.normal }
+                        { name: '异常比例(%)', value: data.abnormal },
+                        { name: '正常比例(%)', value: data.normal }
                     ],
                     itemStyle: {
                         emphasis: {
@@ -99,52 +103,65 @@ define(["require", "tools"], function (require) {
         };
         return option;
     }
-    function createBottomOption(normalData, abnormalData, index) {
+    function createBottomOption(normalData, abnormalData) {
         let timeArr = [];
         let data = abnormalData.distribution;
         let normal = normalData;
         for (let i = 0; i < 24; i++) {
             timeArr[i] = `${i > 9 ? i : ("0" + i)}:00`;
+            data[i] = (100 * data[i]).toFixed(2);
         }
         let option = {
             title: {
-                text: `异常车辆 ${index} `,
-                subtext: `${abnormalData.license}`,
+                text: `${abnormalData.license}`,
+                subtext: `规律分布: 指该车辆在此刻载客的概率`,
                 left: 'right',
+                subtextStyle: {
+					color: "#666"
+				}
             },
+            tooltip: {
+                trigger: 'axis',
+                formatter: "正常：{c1}%的概率在{b1}载客 <br/>异常：{c0}%的概率在{b0}载客 "
+			},
             grid: {
                 bottom: '0',
                 containLabel: true
             },
             legend: {
+                orient: 'vertical',
                 left: 'left',
                 top: 'top',
-                data: ['异常情况', '正常情况']
+                data: ['异常车辆规律分布', '正常车辆规律分布']
             },
             xAxis: {
                 type: 'category',
                 data: timeArr,
                 axisTick: {
-                    // alignWithLabel: true,   
-                    interval: 6
+                    alignWithLabel: true,   
+                    // interval: 1
                 },
-                axisLabel: {
-                    interval: 6
-                },
+                // axisLabel: {
+                //     interval: 1
+                //     formatter: `{value}h`
+                // },
             },
             yAxis: {
                 type: 'value',
-                max: 0.12
+                max: 12,
+                axisLabel: {
+					formatter: `{value} %`
+				}
             },
             series: [{
-                name: "异常情况",
+                name: "异常车辆规律分布",
                 data: data,
                 smooth: true,
                 showSymbol: false,
                 type: 'line',
                 color: "#ff9966"
             }, {
-                name: "正常情况",
+                name: "正常车辆规律分布",
                 data: normal,
                 smooth: true,
                 showSymbol: false,
@@ -158,6 +175,11 @@ define(["require", "tools"], function (require) {
     }
     
     function creatCarChart(normal, abnormal) {
+
+        for(let i = 0; i < normal.length; i++) {
+            normal[i] = (100 * normal[i]).toFixed(2);
+        }
+
         bottom.innerHTML = "";
         let str = "";
         for(let i = 0; i < abnormal.length; i++) {
@@ -177,7 +199,7 @@ define(["require", "tools"], function (require) {
         let bottomForm = bottom.getElementsByClassName("form");
         for (let i = 0; i < abnormal.length; i++) {
             bottomChart[i] = echarts.init(bottomForm[i]);
-            bottomChart[i].setOption(createBottomOption(normal, abnormal[i],i+1));
+            bottomChart[i].setOption(createBottomOption(normal, abnormal[i]));
         }      
     }
 

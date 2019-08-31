@@ -303,7 +303,7 @@ define(["require", "tools"], function (require) {
 				console.log(data);
 				if (data.code == 1) {
 					let imcome = data.data.imcome;
-					formShow(imcome.x, imcome.y, data.data.title, chart, "");
+					formShow(imcome.x, imcome.y, data.data.title, chart,"元", "");
 					chart.hideLoading();
 					sendClickJudge = true;
 				} else {
@@ -331,7 +331,12 @@ define(["require", "tools"], function (require) {
                               <img class="form-next" src="./images/下一个.png" click="formNext">
                               <div class="echartsCon onShow"></div>
                               <div class="echartsCon next"></div>
-                              <div class="echartsCon pre"></div>`;
+							  <div class="echartsCon pre"></div>
+							  <ul class="page">
+									<li class="onPage" click="pageClick">1</li>
+									<li class="nextPage" click="pageClick">2</li>
+									<li class="prePage" click="pageClick">3</li>
+							  </ul>`;
 
 		let formList = formCon.getElementsByClassName("echartsCon");
 
@@ -365,9 +370,9 @@ define(["require", "tools"], function (require) {
 					let average_time = data.data.average_time;
 					let density = data.data.density;
 					let flow = data.data.flow;
-					formShow(average_time.x, average_time.y, average_time.type, chart0, "一");
-					formShow(density.x, density.y, density.type, chart1, "二");
-					formShow(flow.x, flow.y, flow.type, chart2, "三");
+					formShow(average_time.x, average_time.y, average_time.type, chart0, "km/h", "道路平均速度: 该区域内所有道路上的车辆速度的平均值");
+					formShow(density.x, density.y, density.type, chart1, "辆", "车辆密度: 该区域内每平方公里内的车辆数目的平均值");
+					formShow(flow.x, flow.y, flow.type, chart2, "辆", "车流量: 该区域内所经过的车辆数目");
 					chart0.hideLoading();
 					sendClickJudge = true;
 				} else {
@@ -395,8 +400,13 @@ define(["require", "tools"], function (require) {
 						        <img class="form-next" src="./images/下一个.png" click="formNext">
 						        <div class="echartsCon onShow"></div>
 						        <div class="echartsCon next"></div>
-						        <div class="echartsCon pre"></div>`;
-
+								<div class="echartsCon pre"></div>
+								<ul class="page">
+									<li class="onPage" click="pageClick">1</li>
+									<li class="nextPage" click="pageClick">2</li>
+									<li class="prePage" click="pageClick">3</li>
+								</ul>`;
+								
 		let formList = formCon.getElementsByClassName("echartsCon");
 
 		let chart0 = echarts.init(formList[0]);
@@ -429,9 +439,9 @@ define(["require", "tools"], function (require) {
 					let pick_up_freq = data.data.pick_up_freq;
 					let mileage_utilization = data.data.mileage_utilization;
 					let time_utilization = data.data.time_utilization;
-					formShow(pick_up_freq.x, pick_up_freq.y, pick_up_freq.type, chart0, "一");
-					formShow(mileage_utilization.x, mileage_utilization.y, mileage_utilization.type, chart1, "二");
-					formShow(time_utilization.x, time_utilization.y, time_utilization.type, chart2, "三");
+					formShow(pick_up_freq.x, pick_up_freq.y, pick_up_freq.type, chart0, "人/小时", "载客频率: 该区域内所有车辆每小时的载客数量");
+					formShow(mileage_utilization.x, mileage_utilization.y, mileage_utilization.type, chart1, "%", "里程利用率: 该区域内所有车辆载客里程与总里程的比值");
+					formShow(time_utilization.x, time_utilization.y, time_utilization.type, chart2, "%", "出车率: 全称为出车时间利用率, 指该区域内车辆载客时间与总时间的比值的平均值");
 					chart0.hideLoading();
 					sendClickJudge = true;
 				} else {
@@ -482,10 +492,11 @@ define(["require", "tools"], function (require) {
 		}
 	}
 
-	function formShow(x, y, title, chart, index) {
+	function formShow(x, y, title, chart, unit, subtext) {
 
 		let dateList = x[0].concat(x[1]);
 		let valueList = y[0].concat(y[1]);
+
 
 		console.log("adsfsdfs", dateList.length, x[1].length);
 		let option = {
@@ -506,16 +517,24 @@ define(["require", "tools"], function (require) {
 				left: 'center',
 				top: "0",
 				text: title,
-				subtext: index?`图表${index}`:"",
+				subtext: subtext,
 				subtextStyle: {
 					fontWeight: "lighter",
-					fontSize: 15,
+					fontSize: 13,
 					color: "#666"
 				}
 			},
 			textStyle: { color: "#000", fontSize: "18" },
 			tooltip: {
-				trigger: 'axis'
+				trigger: 'axis',
+				formatter: `{c} ${unit}`
+			},
+			grid: {
+				left: '0',
+				right: '0',
+				top: '20%',
+				bottom: '0',
+				containLabel: true
 			},
 			xAxis: {
 				axisTick: {
@@ -528,6 +547,10 @@ define(["require", "tools"], function (require) {
 				data: dateList
 			},
 			yAxis: {
+				type: "value",
+				axisLabel: {
+					formatter: `{value} ${unit}`
+				}
 			},
 			series: {
 				type: 'line',

@@ -91,10 +91,19 @@ define(["require", "tools", "heatmap", "billboard", "route","search"], function 
 		let onShow = formCon.getElementsByClassName("onShow")[0];
 		let pre = formCon.getElementsByClassName("pre")[0];
 		let next = formCon.getElementsByClassName("next")[0];
+
+		let page = formCon.getElementsByClassName("page")[0];
+		let onPage = page.getElementsByClassName("onPage")[0];
+		let nextPage = page.getElementsByClassName("nextPage")[0];
+		let prePage = page.getElementsByClassName("prePage")[0];
 		
 		next.setAttribute("class", "echartsCon onShow");
 		onShow.setAttribute("class", "echartsCon pre");
 		pre.setAttribute("class", "echartsCon next");
+
+		nextPage.setAttribute("class", "onPage");
+		onPage.setAttribute("class", "prePage");
+		prePage.setAttribute("class", "nextPage");
 	}
 	function formPre() {
 
@@ -109,10 +118,30 @@ define(["require", "tools", "heatmap", "billboard", "route","search"], function 
 		let onShow = formCon.getElementsByClassName("onShow")[0];
 		let pre = formCon.getElementsByClassName("pre")[0];
 		let next = formCon.getElementsByClassName("next")[0];
+
+		let page = formCon.getElementsByClassName("page")[0];
+		let onPage = page.getElementsByClassName("onPage")[0];
+		let nextPage = page.getElementsByClassName("nextPage")[0];
+		let prePage = page.getElementsByClassName("prePage")[0];
 		
 		pre.setAttribute("class", "echartsCon onShow");
 		onShow.setAttribute("class", "echartsCon next");
-		next.setAttribute("class", "echartsCon pre");		
+		next.setAttribute("class", "echartsCon pre");	
+
+		prePage.setAttribute("class", "onPage");
+		onPage.setAttribute("class", "nextPage");
+		nextPage.setAttribute("class", "prePage");	
+	}
+	function pageClick() {
+		
+		let clickChoice = event.target.getAttribute("class");
+		if(clickChoice == "prePage") {
+			formPre();
+		} else if(clickChoice == "nextPage") {
+			formNext();
+		} else {
+			return;
+		}
 	}
 
 	formCon.onclick = function() {
@@ -124,6 +153,9 @@ define(["require", "tools", "heatmap", "billboard", "route","search"], function 
 			event.stopPropagation();
 		} else if(event.target && event.target.getAttribute("click") == "formPre") {
 			formPre();
+			event.stopPropagation();
+		} else if(event.target && event.target.getAttribute("click") == "pageClick") {
+			pageClick();
 			event.stopPropagation();
 		}
 	}
